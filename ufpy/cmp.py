@@ -1,8 +1,13 @@
 __all__ = (
     'cmp_generator',
+    'Comparable',
 )
 
-def cmp_generator(t: type):
+from typing import Generic, Protocol, Type, TypeVar
+
+T = TypeVar('T', bound=type)
+
+def cmp_generator(t: Type[T]) -> Type[T]:
     '''
     Decorator for auto generate compare magic methods (`__eq__()`, `__ne__()`, `__lt__()`, `__le__()`, `__gt__()`, `__ge__()`).
     You should add `__cmp__()` method in your class. If your object more that other, `__cmp__()` should return positive number.
@@ -45,3 +50,8 @@ def cmp_generator(t: type):
         t.__ge__ = lambda self, x: t.__cmp__(self, x) >= 0
     
     return t
+
+CT = TypeVar('CT')
+
+class Comparable(Protocol, Generic[CT]):
+    def __cmp__(self, other: CT) -> int: ...
