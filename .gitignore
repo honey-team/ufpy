@@ -161,3 +161,6 @@ cython_debug/
 
 # Vscode
 .vscode
+
+# Tests
+tests.py
