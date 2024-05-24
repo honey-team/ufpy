@@ -1,5 +1,6 @@
-from typing import Generic, Iterator, Literal, overload, TypeVar
+from typing import Generic, Iterator, overload, TypeVar
 
+from . import set_items_for_several_keys
 from .cmp import cmp_generator
 from .i import i_generator
 from .utils import get_items_for_several_keys
@@ -72,15 +73,25 @@ class UDict(Generic[KT, VT]):
         l = get_items_for_several_keys(self.__dict, keys, self.__default)
         return l if len(l) > 1 else l[0]
 
-    # def __setitem__(self, key: KT | int | slice, value: VT): ...
+    def __setitem__(self, key: KT | int | slice, value: VT | list[VT]):
+        keys = self.__get_keys_from_slice_or_int(key)
+        values = [value] if not isinstance(value, list) else value
+
+        self.__dict = set_items_for_several_keys(self.__dict, keys, values)
+
+
+    # TODO: make __delitem__()
     # def __delitem__(self, key: KT | int | slice): ...
-    
-    
+
+    # TODO: make __getattr__()
     # def __getattr__(self, name: str): ...
+
+    # TODO: make __getattr__()
     # def __setattr__(self, name: str, value: VT): ...
+
+    # TODO: make __delattr__()
     # def __delattr__(self, name: str): ...
 
-        
     # Len, iterator and reversed version
     def __len__(self) -> int:
         return len(self.__dict.keys())
