@@ -1,4 +1,4 @@
-from typing import Generic, Iterator, overload, TypeVar
+from typing import Generic, Iterator, overload, TypeVar, Iterable
 
 from .cmp import cmp_generator
 from .i import i_generator
@@ -36,6 +36,31 @@ class UDict(Generic[KT, VT]):
         if isinstance(value, UDict):
             value = value.dictionary
         self.__dict = value
+
+    # keys
+    @property
+    def keys(self) -> list[KT]:
+        return list(self.__dict.keys())
+
+    @keys.setter
+    def keys(self, value: Iterable[KT]):
+        values = list(self.__dict.values())
+        self.__dict = dict(list(zip(value, values)))
+
+    # values
+    @property
+    def values(self) -> list[VT]:
+        return list(self.__dict.values())
+
+    @values.setter
+    def values(self, value: Iterable[VT]):
+        keys = list(self.__dict.keys())
+        self.__dict = dict(list(zip(keys, value)))
+
+    # items
+    @property
+    def items(self) -> list[tuple[KT, VT]]:
+        return list(zip(self.keys, self.values))
     
     # default
     @property
@@ -56,6 +81,9 @@ class UDict(Generic[KT, VT]):
         return UDict(dict(list(zip(keys, values))))
     
     def __neg__(self) -> 'UDict[KT, VT]':
+        return self.reversed()
+
+    def __reversed__(self) -> 'UDict[KT, VT]':
         return self.reversed()
 
     # get/set/del items
@@ -92,24 +120,15 @@ class UDict(Generic[KT, VT]):
 
     # Len, iterator and reversed version
     def __len__(self) -> int:
-        return len(self.__dict.keys())
+        return len(self.items)
     
     def __iter__(self) -> Iterator[tuple[KT, VT]]:
-        res = []
-        
-        for k, v in self.__dict.items():
-            res.append((k, v))
-        
-        return iter(res)
-
-    def __reversed__(self) -> 'UDict[KT, VT]':
-        return self.reversed()
+        return iter(self.items)
     
     # Booleans
     def __nonzero__(self) -> bool:
         return len(self) > 0
 
-    # TODO: make __contains__()
     def __contains__(self, item: tuple[KT, VT] | list[KT | VT] | KT) -> bool:
         if isinstance(item, (list, tuple)):
             k, v = item
@@ -117,8 +136,14 @@ class UDict(Generic[KT, VT]):
         return item in self.__dict
     
     # Transform to other types
+    def __str__(self) -> str:
+        return str(self.__dict)
+
     def __repr__(self) -> str:
         return f'''u{self.__dict}'''
+
+    def __hash__(self) -> int:
+        return hash(self.__repr__())
     
     # Comparing
     def __cmp__(self, other: 'dict[KT, VT] | UDict') -> int:
@@ -134,7 +159,7 @@ class UDict(Generic[KT, VT]):
         new_dict = self.__dict
         
         if isinstance(other, UDict):
-            other = other.dictionary
+            other: dict[KT, VT] = other.dictionary
         
         for k, v in other.items():
             new_dict[k] = v
@@ -144,7 +169,7 @@ class UDict(Generic[KT, VT]):
         new_dict = self.__dict
         
         if isinstance(other, UDict):
-            other = other.dictionary
+            other: dict[KT, VT] = other.dictionary
         
         for k, v in other.items():
             if new_dict.get(k) == v:
@@ -155,7 +180,7 @@ class UDict(Generic[KT, VT]):
         new_dict = self.__dict
         
         if isinstance(other, UDict):
-            other = other.dictionary
+            other: dict[KT, VT] = other.dictionary
         if isinstance(other, (int, float)):
             other = dict([(k, other) for k in new_dict.keys()])
         
@@ -168,7 +193,7 @@ class UDict(Generic[KT, VT]):
         new_dict = self.__dict
         
         if isinstance(other, UDict):
-            other = other.dictionary
+            other: dict[KT, VT] = other.dictionary
         if isinstance(other, (int, float)):
             other = dict([(k, other) for k in new_dict.keys()])
         

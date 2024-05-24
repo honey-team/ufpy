@@ -11,6 +11,8 @@ KT = TypeVar('KT')
 VT = TypeVar('VT')
 DV = TypeVar('DV')
 
+T = TypeVar('T')
+
 class SupportsGetItem(Protocol, Generic[KT, VT]):
     def __getitem__(self, key: KT) -> VT: ...
 
