@@ -2,6 +2,7 @@ from typing import Generic, Iterator, Literal, overload, TypeVar
 
 from .cmp import cmp_generator
 from .i import i_generator
+from .utils import get_items_for_several_keys
 
 __all__ = (
     'UDict',
@@ -16,9 +17,14 @@ class UDict(Generic[KT, VT]):
     @overload
     def __init__(self, dictionary: dict[KT, VT]): ...
     @overload
+    def __init__(self, dictionary: dict[KT, VT], *, default: VT): ...
+    @overload
     def __init__(self, **kwargs: VT): ...
-    def __init__(self, dictionary = None, **kwargs):
-        self.__dict = dictionary if dictionary else kwargs
+    @overload
+    def __init__(self, *, default: VT, **kwargs: VT): ...
+    def __init__(self, dictionary = None, *, default = None, **kwargs):
+        self.__dict = dictionary if dictionary is not None else kwargs
+        self.__default = default
     
     # dictionary
     @property
@@ -30,16 +36,49 @@ class UDict(Generic[KT, VT]):
         if isinstance(value, UDict):
             value = value.dictionary
         self.__dict = value
+    
+    # default
+    @property
+    def default(self) -> VT:
+        return self.__default
+    
+    @default.setter
+    def default(self, value: VT):
+        self.__default = value
+    
+    # Reverse
+    def reverse(self) -> "UDict[KT, VT]":
+        keys, values = list(self.__dict.keys())[::-1], list(self.__dict.values())[::-1]
+        self.__dict = dict(list(zip(keys, values)))
+        return UDict(self.__dict)
+    
+    def __neg__(self) -> "UDict[KT, VT]":
+        d = self
+        return d.reverse()
 
     # Get items
-    def __getitem__(self, key: KT | int | slice): ...
-    def __setitem__(self, key: KT | int | slice, value: VT): ...
-    def __delitem__(self, key: KT | int | slice): ...
+    def __get_keys_from_slice_or_int(self, key: KT | int | slice) -> list[KT]:
+        if isinstance(key, int) and key not in self.__dict:
+            return [list(self.__dict.keys())[key - 1]]
+        if isinstance(key, slice):
+            start, stop, step = key.indices(len(self) + 1)
+            indexes = list(range(start, stop + 1, step))
+            return [list(self.__dict.keys())[i - 1] for i in indexes]
+        return [key]
+    
+    def __getitem__(self, key: KT | int | slice) -> "UDict[KT, VT] | VT":
+        keys = self.__get_keys_from_slice_or_int(key)
+
+        l = get_items_for_several_keys(self.__dict, keys, self.__default)
+        return l if len(l) > 1 else l[0]
+
+    # def __setitem__(self, key: KT | int | slice, value: VT): ...
+    # def __delitem__(self, key: KT | int | slice): ...
     
     
-    def __getattr__(self, name: str): ...
-    def __setattr__(self, name: str, value: VT): ...
-    def __delattr__(self, name: str): ...
+    # def __getattr__(self, name: str): ...
+    # def __setattr__(self, name: str, value: VT): ...
+    # def __delattr__(self, name: str): ...
 
         
     # Len, iterator and reversed version
@@ -58,6 +97,10 @@ class UDict(Generic[KT, VT]):
     
     # Booleans
     def __contains__(self, item: tuple[KT, VT] | KT) -> bool: ...
+    
+    # Transform to other types
+    def __repr__(self) -> str:
+        return f'''u{self.__dict}'''
     
     # Comparing
     def __cmp__(self, other: "dict[KT, VT] | UDict") -> int:
