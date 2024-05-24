@@ -90,16 +90,6 @@ class UDict(Generic[KT, VT]):
 
         self.__dict = del_items_for_several_keys(self.__dict, keys)
 
-    # get/set/del attrs
-    def __getattr__(self, name: str):
-        return self.__dict.get(name, self.__default)
-
-    # TODO: make __getattr__()
-    # def __setattr__(self, name: str, value: VT): ...
-
-    # TODO: make __delattr__()
-    # def __delattr__(self, name: str): ...
-
     # Len, iterator and reversed version
     def __len__(self) -> int:
         return len(self.__dict.keys())
