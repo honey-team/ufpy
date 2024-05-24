@@ -91,8 +91,8 @@ class UDict(Generic[KT, VT]):
         self.__dict = del_items_for_several_keys(self.__dict, keys)
 
     # get/set/del attrs
-    # TODO: make __getattr__()
-    # def __getattr__(self, name: str): ...
+    def __getattr__(self, name: str):
+        return self.__dict.get(name, self.__default)
 
     # TODO: make __getattr__()
     # def __setattr__(self, name: str, value: VT): ...
@@ -120,7 +120,11 @@ class UDict(Generic[KT, VT]):
         return len(self) > 0
 
     # TODO: make __contains__()
-    def __contains__(self, item: tuple[KT, VT] | KT) -> bool: ...
+    def __contains__(self, item: tuple[KT, VT] | list[KT | VT] | KT) -> bool:
+        if isinstance(item, (list, tuple)):
+            k, v = item
+            return k in self.__dict and self.__dict.get(k, self.__default) == v
+        return item in self.__dict
     
     # Transform to other types
     def __repr__(self) -> str:
