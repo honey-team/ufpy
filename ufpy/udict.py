@@ -1,9 +1,8 @@
 from typing import Generic, Iterator, overload, TypeVar
 
-from . import set_items_for_several_keys
 from .cmp import cmp_generator
 from .i import i_generator
-from .utils import get_items_for_several_keys
+from .utils import set_items_for_several_keys, get_items_for_several_keys
 
 __all__ = (
     'UDict',
@@ -73,9 +72,12 @@ class UDict(Generic[KT, VT]):
         l = get_items_for_several_keys(self.__dict, keys, self.__default)
         return l if len(l) > 1 else l[0]
 
-    def __setitem__(self, key: KT | int | slice, value: VT | list[VT]):
+    def __setitem__(self, key: KT | int | slice, value: VT | list[VT]) -> None:
         keys = self.__get_keys_from_slice_or_int(key)
-        values = [value] if not isinstance(value, list) else value
+        values = [value] if not isinstance(value, (list, tuple)) else value
+
+        if len(keys) > len(values):
+            values.extend([values[-1] for _ in range(len(keys) - len(values) + 1)])
 
         self.__dict = set_items_for_several_keys(self.__dict, keys, values)
 
