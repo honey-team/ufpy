@@ -1,7 +1,7 @@
-from typing import Generic, Iterator, overload, TypeVar, Iterable
+from typing import Generic, Iterator, overload, TypeVar, Iterable, Callable
 
 from .cmp import cmp_generator
-from .i import i_generator
+from .math_op import i_generator, r_generator
 from .utils import set_items_for_several_keys, get_items_for_several_keys, del_items_for_several_keys
 
 __all__ = (
@@ -10,18 +10,20 @@ __all__ = (
 
 KT = TypeVar('KT')
 VT = TypeVar('VT')
+DV = TypeVar('DV')
 
 @cmp_generator
 @i_generator
-class UDict(Generic[KT, VT]):
+@r_generator
+class UDict(Generic[KT, VT, DV]):
     @overload
     def __init__(self, dictionary: dict[KT, VT]): ...
     @overload
-    def __init__(self, dictionary: dict[KT, VT], *, default: VT): ...
+    def __init__(self, dictionary: dict[KT, VT], *, default: DV): ...
     @overload
     def __init__(self, **kwargs: VT): ...
     @overload
-    def __init__(self, *, default: VT, **kwargs: VT): ...
+    def __init__(self, *, default: DV, **kwargs: VT): ...
     def __init__(self, dictionary = None, *, default = None, **kwargs):
         self.__dict = dictionary if dictionary is not None else kwargs
         self.__default = default
@@ -32,7 +34,7 @@ class UDict(Generic[KT, VT]):
         return self.__dict
     
     @dictionary.setter
-    def dictionary(self, value: 'dict[KT, VT] | UDict'):
+    def dictionary(self, value: 'dict[KT, VT] | UDict[KT, VT]'):
         if isinstance(value, UDict):
             value = value.dictionary
         self.__dict = value
@@ -64,27 +66,44 @@ class UDict(Generic[KT, VT]):
     
     # default
     @property
-    def default(self) -> VT:
+    def default(self) -> DV:
         return self.__default
     
     @default.setter
-    def default(self, value: VT):
+    def default(self, value: DV):
         self.__default = value
+
+    # call
+    def __call__(self, func: Callable[[KT, VT], VT]) -> 'UDict[KT, VT, DV]':
+        new_dict = self.__dict
+        for k, v in self:
+            new_dict[k] = func(k, v)
+        return UDict(new_dict, default=self.__default)
     
     # reverse
-    def reverse(self) -> 'UDict[KT, VT]':
+    def reverse(self) -> 'UDict[KT, VT, DV]':
         self.__dict = self.reversed().__dict
         return self
 
-    def reversed(self) -> 'UDict[KT, VT]':
+    def reversed(self) -> 'UDict[KT, VT, DV]':
         keys, values = list(self.__dict.keys())[::-1], list(self.__dict.values())[::-1]
         return UDict(dict(list(zip(keys, values))))
     
-    def __neg__(self) -> 'UDict[KT, VT]':
+    def __neg__(self) -> 'UDict[KT, VT, DV]':
         return self.reversed()
 
-    def __reversed__(self) -> 'UDict[KT, VT]':
+    def __reversed__(self) -> 'UDict[KT, VT, DV]':
         return self.reversed()
+
+    # sort
+    def sort(self) -> 'UDict[KT, VT, DV]':
+        self.__dict = self.sorted().__dict
+        return self
+
+    def sorted(self) -> 'UDict[KT, VT, DV]':
+        keys = sorted(list(self.__dict.keys()))
+        values = get_items_for_several_keys(self.__dict, keys)
+        return UDict(dict(list(zip(keys, values))))
 
     # get/set/del items
     def __get_keys_from_slice_or_int(self, key: KT | int | slice) -> list[KT]:
@@ -98,7 +117,7 @@ class UDict(Generic[KT, VT]):
             return [list(self.__dict.keys())[i - 1] for i in indexes]
         return [key]
     
-    def __getitem__(self, key: KT | int | slice) -> 'UDict[KT, VT] | VT':
+    def __getitem__(self, key: KT | int | slice) -> 'UDict[KT, VT, DV] | VT':
         keys = self.__get_keys_from_slice_or_int(key)
 
         l = get_items_for_several_keys(self.__dict, keys, self.__default)
@@ -113,7 +132,7 @@ class UDict(Generic[KT, VT]):
 
         self.__dict = set_items_for_several_keys(self.__dict, keys, values)
 
-    def __delitem__(self, key: KT | int | slice):
+    def __delitem__(self, key: KT | int | slice) -> None:
         keys = self.__get_keys_from_slice_or_int(key)
 
         self.__dict = del_items_for_several_keys(self.__dict, keys)
@@ -146,16 +165,16 @@ class UDict(Generic[KT, VT]):
         return hash(self.__repr__())
     
     # Comparing
-    def __cmp__(self, other: 'dict[KT, VT] | UDict') -> int:
+    def __cmp__(self, other: 'dict[KT, VT] | UDict[KT, VT, DV]') -> int:
         return len(self) - len(other)
     
-    def __eq__(self, other: 'dict[KT, VT] | UDict') -> bool:
+    def __eq__(self, other: 'dict[KT, VT] | UDict[KT, VT, DV]') -> bool:
         if isinstance(other, UDict):
             other = other.dictionary
         return self.__dict == other
     
     # Math operations
-    def __add__(self, other: 'dict[KT, VT] | UDict') -> 'UDict':
+    def __add__(self, other: 'dict[KT, VT] | UDict[KT, VT, DV]') -> 'UDict[KT, VT, DV]':
         new_dict = self.__dict
         
         if isinstance(other, UDict):
@@ -165,7 +184,7 @@ class UDict(Generic[KT, VT]):
             new_dict[k] = v
         return UDict(new_dict)
     
-    def __sub__(self, other: 'dict[KT, VT] | UDict') -> 'UDict':
+    def __sub__(self, other: 'dict[KT, VT] | UDict[KT, VT, DV]') -> 'UDict[KT, VT, DV]':
         new_dict = self.__dict
         
         if isinstance(other, UDict):
@@ -176,7 +195,7 @@ class UDict(Generic[KT, VT]):
                 del new_dict[k]
         return UDict(new_dict)
     
-    def __mul__(self, other: 'dict[KT, float | int] | UDict[KT, float | int] | float | int') -> 'UDict':
+    def __mul__(self, other: 'dict[KT, float | int] | UDict[KT, float | int, DV] | float | int') -> 'UDict[KT, VT, DV]':
         new_dict = self.__dict
         
         if isinstance(other, UDict):
@@ -189,7 +208,9 @@ class UDict(Generic[KT, VT]):
         
         return UDict(new_dict)
 
-    def __truediv__(self, other: 'dict[KT, float | int] | UDict[KT, float | int] | float | int') -> 'UDict':
+    def __truediv__(
+            self, other: 'dict[KT, float | int] | UDict[KT, float | int, DV] | float | int'
+    ) -> 'UDict[KT, VT, DV]':
         new_dict = self.__dict
         
         if isinstance(other, UDict):
