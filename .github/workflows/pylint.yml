@@ -39,4 +39,4 @@ jobs:
         python -m pip install -r ./requirements.txt
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files 'pytecord/*.py') --fail-under=7.0
+        pylint $(git ls-files 'ufpy/*.py') --fail-under=7.0
