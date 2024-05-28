@@ -137,6 +137,23 @@ class UDict(Generic[KT, VT, DV]):
 
         self.__dict = del_items_for_several_keys(self.__dict, keys)
 
+    # get
+    def get(self, *, key: KT | None = None, index: int | None = None) -> VT | DV:
+        """
+        Get a value with key or it's index.
+
+        :param key: Key of value in dict (optional)
+        :param index: Index of value in dict (optional)
+        :return: Value or default value
+
+        :exception ValueError: You defined both key and index params
+        """
+        if key and index:
+            raise ValueError('You defined both key and index params. Please cancel the definition one of this params.')
+        if index and index > len(self):
+            raise IndexError('Index is bigger that length of UDict.')
+        return self[self.keys[index-1]] if index else self[key]
+
     # Len, iterator and reversed version
     def __len__(self) -> int:
         return len(self.items)

@@ -74,6 +74,20 @@ class UDictTestCase(unittest.TestCase):
         d[:] = [1, 2]
         self.assertDictEqual(d.dictionary, {'hello': 1, 'hi': 2})
 
+    def test_get(self):
+        d = UDict({2: 1, 4: 91, 1: 12})
+        self.assertEqual(d.get(index=1), d.get(key=2))
+        self.assertEqual(d.get(index=2), d.get(key=4))
+        self.assertEqual(d.get(index=3), d.get(key=1))
+
+    # TODO: test_del_item
+    # TODO: test_len_and_iter
+    # TODO: test_bool
+    # TODO: test_contains
+    # TODO: test_str_and_repr
+    # TODO: test_cmp_and_eq
+    # TODO: test_math_operations
+
 
 if __name__ == '__main__':
     unittest.main()
