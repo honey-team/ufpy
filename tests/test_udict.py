@@ -40,7 +40,7 @@ class UDictTestCase(unittest.TestCase):
 
         self.assertDictEqual(d2, ud.reversed().dictionary)
         self.assertEqual(reversed(ud), ud.reversed())
-        self.assertEqual(-ud, ud.reverse())
+        self.assertEqual(~ud, ud.reverse())
 
     def test_sort(self):
         d = {'hi': 2, 'hello': 1}
@@ -87,6 +87,7 @@ class UDictTestCase(unittest.TestCase):
     # TODO: test_str_and_repr
     # TODO: test_cmp_and_eq
     # TODO: test_math_operations
+    # TODO: test_neg
 
 
 if __name__ == '__main__':

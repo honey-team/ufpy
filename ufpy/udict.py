@@ -79,6 +79,10 @@ class UDict(Generic[KT, VT, DV]):
         for k, v in self:
             new_dict[k] = func(k, v)
         return UDict(new_dict, default=self.__default)
+
+    # reverse integers
+    def __neg__(self) -> 'UDict[KT, VT, DV]':
+        return self(lambda k, v: -v)
     
     # reverse
     def reverse(self) -> 'UDict[KT, VT, DV]':
@@ -88,8 +92,8 @@ class UDict(Generic[KT, VT, DV]):
     def reversed(self) -> 'UDict[KT, VT, DV]':
         keys, values = list(self.__dict.keys())[::-1], list(self.__dict.values())[::-1]
         return UDict(dict(list(zip(keys, values))))
-    
-    def __neg__(self) -> 'UDict[KT, VT, DV]':
+
+    def __invert__(self) -> 'UDict[KT, VT, DV]':
         return self.reversed()
 
     def __reversed__(self) -> 'UDict[KT, VT, DV]':
