@@ -39,6 +39,17 @@ d[1] # 2
 d[:] # u{'id': 2, 'content': 'hello, world'} (UDict object)
 ```
 
+You can also use `get()` method.
+You can get item by its key using `key` kwarg,
+and you can get item by its index using `index` kwarg.
+Example:
+```python
+d = UDict({2: 3, 1: 4})
+d[2] # 3
+d.get(index=2) # 4
+d.get(key=1) # also 4
+```
+
 ## Set items
 
 For setting items you should use the way you use in lists and dicts:
