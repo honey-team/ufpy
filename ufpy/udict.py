@@ -196,7 +196,7 @@ class UDict(Generic[KT, VT, DV]):
     
     # Math operations
     def __add__(self, other: 'dict[KT, VT] | UDict[KT, VT, DV]') -> 'UDict[KT, VT, DV]':
-        new_dict = self.__dict
+        new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
             other: dict[KT, VT] = other.dictionary
@@ -206,7 +206,7 @@ class UDict(Generic[KT, VT, DV]):
         return UDict(new_dict)
     
     def __sub__(self, other: 'dict[KT, VT] | UDict[KT, VT, DV]') -> 'UDict[KT, VT, DV]':
-        new_dict = self.__dict
+        new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
             other: dict[KT, VT] = other.dictionary
@@ -217,7 +217,7 @@ class UDict(Generic[KT, VT, DV]):
         return UDict(new_dict)
     
     def __mul__(self, other: 'dict[KT, float | int] | UDict[KT, float | int, DV] | float | int') -> 'UDict[KT, VT, DV]':
-        new_dict = self.__dict
+        new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
             other: dict[KT, VT] = other.dictionary
@@ -232,7 +232,7 @@ class UDict(Generic[KT, VT, DV]):
     def __truediv__(
             self, other: 'dict[KT, float | int] | UDict[KT, float | int, DV] | float | int'
     ) -> 'UDict[KT, VT, DV]':
-        new_dict = self.__dict
+        new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
             other: dict[KT, VT] = other.dictionary

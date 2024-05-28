@@ -74,20 +74,73 @@ class UDictTestCase(unittest.TestCase):
         d[:] = [1, 2]
         self.assertDictEqual(d.dictionary, {'hello': 1, 'hi': 2})
 
+    def test_del_item(self):
+        d = UDict(hello=1, hi=2)
+        del d[1]
+        self.assertDictEqual(d.dictionary, {'hi': 2})
+
     def test_get(self):
         d = UDict({2: 1, 4: 91, 1: 12})
         self.assertEqual(d.get(index=1), d.get(key=2))
         self.assertEqual(d.get(index=2), d.get(key=4))
         self.assertEqual(d.get(index=3), d.get(key=1))
 
-    # TODO: test_del_item
-    # TODO: test_len_and_iter
-    # TODO: test_bool
-    # TODO: test_contains
-    # TODO: test_str_and_repr
-    # TODO: test_cmp_and_eq
-    # TODO: test_math_operations
-    # TODO: test_neg
+    def test_len_and_iter(self):
+        d = UDict(hello=1, hi=2)
+        self.assertEqual(len(d), 2)
+
+        l = []
+        for k, v in d:
+            l.append((k, v))
+
+        self.assertEqual(l, [
+            ('hello', 1), ('hi', 2)
+        ])
+
+    def test_bool(self):
+        d = UDict(hello=1, hi=2)
+        self.assertTrue(bool(d))
+
+    def test_contains(self):
+        d = UDict(hello=1, hi=2)
+        self.assertTrue('hello' in d)
+        self.assertTrue('hi' in d)
+        self.assertTrue(('hello', 1) in d)
+        self.assertTrue(('hi', 2) in d)
+
+    def test_str_and_repr(self):
+        d = {'hello': 1, 'hi': 2}
+        ud = UDict(d)
+
+        self.assertEqual(str(ud), str(d))
+        self.assertEqual(repr(ud), f'u{repr(d)}')
+
+    def test_cmp_and_eq(self):
+        d = {'hello': 1, 'hi': 2}
+        ud = UDict(d)
+
+        ud2 = UDict(hello=1, hi=2, world=3)
+
+        self.assertTrue(ud2 != ud)
+        self.assertTrue(ud2 > ud)
+        self.assertTrue(ud2 >= ud)
+        self.assertTrue(ud < ud2)
+        self.assertTrue(ud <= ud2)
+
+        self.assertEqual(d, ud)
+
+    def test_math_operations(self):
+        d = UDict(hello=1, hi=2)
+
+        self.assertEqual(d + {'world': 3}, UDict(hello=1, hi=2, world=3))
+        self.assertEqual(d - {'hi': 2}, UDict(hello=1))
+
+        self.assertEqual(d * 2, UDict(hello=2, hi=4))
+        self.assertEqual(d / 2, UDict(hello=0.5, hi=1))
+
+    def test_neg(self):
+        d = UDict(hello=1, hi=2)
+        self.assertEqual((-d).dictionary, {'hello': -1, 'hi': -2})
 
 
 if __name__ == '__main__':
