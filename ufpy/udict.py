@@ -112,6 +112,8 @@ class UDict(Generic[KT, VT, DV]):
     # get/set/del items
     def __get_keys_from_slice_or_int(self, key: KT | int | slice) -> list[KT]:
         if isinstance(key, int) and key not in self.__dict:
+            if key == 0:
+                raise IndexError("You can't use 0 as index in UDict")
             return [list(self.__dict.keys())[key - 1]]
         if isinstance(key, slice):
             start, stop, step = key.indices(len(self) + 1)
@@ -180,7 +182,7 @@ class UDict(Generic[KT, VT, DV]):
         return str(self.__dict)
 
     def __repr__(self) -> str:
-        return f'''u{self.__dict}'''
+        return f'u{self.__dict}'
 
     def __hash__(self) -> int:
         return hash(self.__repr__())
