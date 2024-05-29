@@ -144,20 +144,50 @@ class UDict(Generic[KT, VT, DV]):
         self.__dict = del_items_for_several_keys(self.__dict, keys)
 
     # get
-    def get(self, *, key: KT | None = None, index: int | None = None) -> VT | DV:
+    @overload
+    def get(self, *, key: KT) -> VT | DV: ...
+    @overload
+    def get(self, *, index: int) -> VT | DV: ...
+    @overload
+    def get(self, *, value: VT) -> KT: ...
+    def get(self, *, key: KT | None = None, index: int | None = None, value: VT | None = None) -> KT | VT | DV:
         """
         Get a value with key or it's index.
 
+        If value is defined, returns key
+
         :param key: Key of value in dict (optional)
         :param index: Index of value in dict (optional)
+        :param value: Value in dict (optional)
         :return: Value or default value
 
-        :exception ValueError: You defined both key and index params
+        :exception ValueError: You defined 0 or 2 or 3 params
+        :exception IndexError: index is bigger that length of dict
         """
+        if key and index and value:
+            raise ValueError(
+                'You defined both key, index and value params. Please cancel the definition one of this params.'
+            )
+        if not key and not index and not value:
+            raise ValueError(
+                "You don't defined neither key, not index, not value params." +
+                " Please cancel the definition one of this params."
+            )
+        if key and value:
+            raise ValueError('You defined both key and value params. Please cancel the definition one of this params.')
         if key and index:
             raise ValueError('You defined both key and index params. Please cancel the definition one of this params.')
+        if index and value:
+            raise ValueError(
+                'You defined both index and value params. Please cancel the definition one of this params.'
+            )
+
         if index and index > len(self):
             raise IndexError('Index is bigger that length of UDict.')
+
+        if value:
+            i = self.values.index(value)
+            return self.keys[i]
         return self[self.keys[index-1]] if index else self[key]
 
     # Len, iterator and reversed version

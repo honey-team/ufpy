@@ -85,6 +85,10 @@ class UDictTestCase(unittest.TestCase):
         self.assertEqual(d.get(index=2), d.get(key=4))
         self.assertEqual(d.get(index=3), d.get(key=1))
 
+        self.assertEqual(d.get(value=1), 2)
+        self.assertEqual(d.get(value=91), 4)
+        self.assertEqual(d.get(value=12), 1)
+
     def test_len_and_iter(self):
         d = UDict(hello=1, hi=2)
         self.assertEqual(len(d), 2)
