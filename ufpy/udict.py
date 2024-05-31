@@ -1,7 +1,8 @@
-from typing import Generic, Iterator, overload, TypeVar, Iterable, Callable
+from typing import Generic, Iterator, overload, TypeVar, Callable
 
 from .cmp import cmp_generator
 from .math_op import i_generator, r_generator
+from .typ import AnyDict, AnyCollection
 from .utils import set_items_for_several_keys, get_items_for_several_keys, del_items_for_several_keys
 
 __all__ = (
@@ -17,15 +18,18 @@ DV = TypeVar('DV')
 @r_generator
 class UDict(Generic[KT, VT, DV]):
     @overload
-    def __init__(self, dictionary: dict[KT, VT]): ...
+    def __init__(self, dictionary: AnyDict[KT, VT]): ...
     @overload
-    def __init__(self, dictionary: dict[KT, VT], *, default: DV): ...
+    def __init__(self, dictionary: AnyDict[KT, VT], *, default: DV): ...
     @overload
     def __init__(self, **kwargs: VT): ...
     @overload
     def __init__(self, *, default: DV, **kwargs: VT): ...
-    def __init__(self, dictionary = None, *, default = None, **kwargs):
-        self.__dict = dictionary if dictionary is not None else kwargs
+
+    def __init__(self, dictionary: AnyDict[KT, VT] = None, *, default: DV = None, **kwargs: VT):
+        if isinstance(dictionary, UDict):
+            dictionary = dictionary.dictionary
+        self.__dict = dictionary if dictionary else kwargs
         self.__default = default
     
     # dictionary
@@ -34,7 +38,7 @@ class UDict(Generic[KT, VT, DV]):
         return self.__dict
     
     @dictionary.setter
-    def dictionary(self, value: 'dict[KT, VT] | UDict[KT, VT]'):
+    def dictionary(self, value: AnyDict[KT, VT]):
         if isinstance(value, UDict):
             value = value.dictionary
         self.__dict = value
@@ -45,9 +49,8 @@ class UDict(Generic[KT, VT, DV]):
         return list(self.__dict.keys())
 
     @keys.setter
-    def keys(self, value: Iterable[KT]):
-        values = list(self.__dict.values())
-        self.__dict = dict(list(zip(value, values)))
+    def keys(self, value: AnyCollection[KT]):
+        self.__dict = dict(list(zip(value, self.values)))
 
     # values
     @property
@@ -55,14 +58,17 @@ class UDict(Generic[KT, VT, DV]):
         return list(self.__dict.values())
 
     @values.setter
-    def values(self, value: Iterable[VT]):
-        keys = list(self.__dict.keys())
-        self.__dict = dict(list(zip(keys, value)))
+    def values(self, value: AnyCollection[VT]):
+        self.__dict = dict(list(zip(self.keys, value)))
 
     # items
     @property
     def items(self) -> list[tuple[KT, VT]]:
         return list(zip(self.keys, self.values))
+
+    @items.setter
+    def items(self, value: AnyCollection[tuple[KT, VT] | list[KT | VT]]):
+        self.__dict = dict(value)
     
     # default
     @property

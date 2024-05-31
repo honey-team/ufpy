@@ -1,13 +1,12 @@
 __all__ = (
     'get_items_for_several_keys',
     'set_items_for_several_keys',
+    'del_items_for_several_keys',
 )
 
 from typing import TypeVar
 
-from .protocols import SupportsGet, SupportsSetItem, SupportsDelItem
-
-type AnyCollection[T] = tuple[T, ...] | list[T]
+from .typ import SupportsGet, SupportsSetItem, SupportsDelItem, AnyCollection
 
 KT = TypeVar('KT')
 VT = TypeVar('VT')

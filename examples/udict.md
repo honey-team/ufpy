@@ -32,8 +32,11 @@ use `UDict[key]` syntax:
 d['id'] # 2
 ```
 
-You can also use index of key or slice of indexes of keys
-(warning: in this class first index is 1):
+You can also use index of key or slice of indexes of keys:
+
+> [!CAUTION]
+> In this class first index is 1
+
 ```python
 d[1] # 2
 d[:] # u{'id': 2, 'content': 'hello, world'} (UDict object)
@@ -56,4 +59,11 @@ For setting items you should use the way you use in lists and dicts:
 use `UDict[key] = value` syntax:
 ```python
 d['id'] = 3
+```
+
+Also you can use indexes and slices when you are setting items:
+```python
+d[1] = 2
+d[2:6:2] = 8
+d[:3] = 1, 2, 3
 ```
