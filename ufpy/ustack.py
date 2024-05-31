@@ -21,8 +21,17 @@ class UStack():
             return self.__list[-1]
         else:
             return False
+    
+    def top(self) -> Any | bool:
+        if self:
+            return self.__list[-1]
+        else:
+            return False
 
     @property
+    def empty(self) -> bool:
+        return len(self.__list) == 0
+    
     def empty(self) -> bool:
         return len(self.__list) == 0
 
