@@ -35,9 +35,8 @@ class UStack(Generic[VT]):
         
     def append(self, *items) -> UStack:
         """Append items to stack"""
-        for item in items:
-            self.__list.append(item)
-        return self.__list
+        self.__list.extend(items)
+        return UStack(self.__list)
     
     def is_empty(self) -> bool:
         return len(self) == 0
@@ -52,18 +51,4 @@ class UStack(Generic[VT]):
         return len(self.__list)
     
     def __nonzero__(self) -> bool:
-        return self.is_empty()
-    
-    # iteration
-
-    def __iter__(self) -> UStack:
-        self.__index = 0
-        return self
-
-    def __next__(self) -> VT:
-        if self.__index > len(self.__list) - 1:
-            raise StopIteration
-        else:
-            value = self.__list[self.__index] 
-            self.__index += 1
-            return value
+        return not self.is_empty()
