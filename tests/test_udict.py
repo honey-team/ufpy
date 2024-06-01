@@ -78,6 +78,8 @@ class UDictTestCase(unittest.TestCase):
         d = UDict(hello=1, hi=2)
         del d[1]
         self.assertDictEqual(d.dictionary, {'hi': 2})
+        del d[:]
+        self.assertDictEqual(d.dictionary, {})
 
     def test_get(self):
         d = UDict({2: 1, 4: 91, 1: 12})
