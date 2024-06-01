@@ -111,8 +111,12 @@ class UDictTestCase(unittest.TestCase):
         d = UDict(hello=1, hi=2)
         self.assertTrue('hello' in d)
         self.assertTrue('hi' in d)
+
         self.assertTrue(('hello', 1) in d)
+        self.assertFalse(('hello', 2) in d)
+
         self.assertTrue(('hi', 2) in d)
+        self.assertFalse(('hi', 1) in d)
 
     def test_str_and_repr(self):
         d = {'hello': 1, 'hi': 2}
