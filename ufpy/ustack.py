@@ -38,6 +38,9 @@ class UStack(Generic[VT]):
         for item in items:
             self.__list.append(item)
         return self.__list
+    
+    def is_empty(self) -> bool:
+        return len(self) == 0
 
     def __add__(self, stack: UStack) -> UStack:
         return UStack(self.__list + stack.__list)
