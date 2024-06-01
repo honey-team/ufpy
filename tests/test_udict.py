@@ -103,7 +103,7 @@ class UDictTestCase(unittest.TestCase):
             ('hello', 1), ('hi', 2)
         ])
 
-    def test_bool(self):
+    def test_nonzero(self):
         d = UDict(hello=1, hi=2)
         self.assertTrue(bool(d))
 
