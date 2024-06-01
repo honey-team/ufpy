@@ -204,8 +204,11 @@ class UDict(Generic[KT, VT, DV]):
         return iter(self.items)
     
     # Booleans
+    def is_empty(self) -> bool:
+        return len(self) == 0
+
     def __nonzero__(self) -> bool:
-        return len(self) > 0
+        return not self.is_empty()
 
     def __contains__(self, item: tuple[KT, VT] | list[KT | VT] | KT) -> bool:
         if isinstance(item, (list, tuple)):
