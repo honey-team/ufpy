@@ -20,11 +20,6 @@ class UStack(Generic[VT]):
     def pop(self) -> VT:
         """Return and remove top element."""
         return self.__list.pop()
-
-    @property
-    def top(self) -> VT:
-        """Top element of stack."""
-        return self.top()
     
     def top(self) -> VT:
         """Gets top element of stack."""
