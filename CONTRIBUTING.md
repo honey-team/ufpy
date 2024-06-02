@@ -1,6 +1,6 @@
 # 📖 Contributing rules in `ufpy` repository
 
-If you want to contribute, you have to read this rules and follow they.
+If you want to contribute the project, you must read this rules and follow they.
 
 ## 💻 Code style
 
@@ -9,7 +9,7 @@ If you want to contribute, you have to read this rules and follow they.
 - Linter: `Pylint`
 - Generic style: `True`
 
-Generic style is style where are using `typing.Generic` class in all `useful classes`
+Use `typing.Generic`s in your useful classes.
 
 For example,
 ```python
@@ -23,7 +23,8 @@ class A(Generic[T]):
 
 - `@overload`s: `True`
 
-You must define `@typing.overload`s in public methods when your method has two and more ways to define arguments
+Use decorator `@typing.overload` in public methods if your method
+has two and more variants to define arguments
 For example,
 ```python
 @overload
