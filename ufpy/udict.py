@@ -14,6 +14,8 @@ VT = TypeVar('VT')
 CDV = TypeVar('CDV')
 DV = TypeVar('DV')
 
+class _ClassDefault: ...
+
 @cmp_generator
 @i_generator
 @r_generator
@@ -167,8 +169,8 @@ class UDict(Generic[KT, VT, CDV]):
     def get(self, *, value: VT, default: DV) -> KT | DV: ...
 
     def get(
-            self, *, key: KT | None = None, index: int | None = None, value: VT | None = None,
-            default: DV | CDV = 'class default'
+            self, *, key: KT = None, index: int = None, value: VT = None,
+            default: DV | CDV = _ClassDefault
     ) -> KT | VT | CDV | DV:
         """
         Get a value with key or it's index.
@@ -205,7 +207,7 @@ class UDict(Generic[KT, VT, CDV]):
         if index and index > len(self):
             raise IndexError('Index is bigger that length of UDict.')
 
-        if default == 'class default':
+        if default == _ClassDefault:
             default = self.__default
 
         if value:
