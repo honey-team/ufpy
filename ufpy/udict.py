@@ -11,22 +11,23 @@ __all__ = (
 
 KT = TypeVar('KT')
 VT = TypeVar('VT')
+CDV = TypeVar('CDV')
 DV = TypeVar('DV')
 
 @cmp_generator
 @i_generator
 @r_generator
-class UDict(Generic[KT, VT, DV]):
+class UDict(Generic[KT, VT, CDV]):
     @overload
     def __init__(self, dictionary: AnyDict[KT, VT]): ...
     @overload
-    def __init__(self, dictionary: AnyDict[KT, VT], *, default: DV): ...
+    def __init__(self, dictionary: AnyDict[KT, VT], *, default: CDV): ...
     @overload
     def __init__(self, **kwargs: VT): ...
     @overload
-    def __init__(self, *, default: DV, **kwargs: VT): ...
+    def __init__(self, *, default: CDV, **kwargs: VT): ...
 
-    def __init__(self, dictionary: AnyDict[KT, VT] = None, *, default: DV = None, **kwargs: VT):
+    def __init__(self, dictionary: AnyDict[KT, VT] = None, *, default: CDV = None, **kwargs: VT):
         if isinstance(dictionary, UDict):
             dictionary = dictionary.dictionary
         self.__dict = dictionary if dictionary else kwargs
@@ -72,45 +73,45 @@ class UDict(Generic[KT, VT, DV]):
     
     # default
     @property
-    def default(self) -> DV:
+    def default(self) -> CDV:
         return self.__default
     
     @default.setter
-    def default(self, value: DV):
+    def default(self, value: CDV):
         self.__default = value
 
     # call
-    def __call__(self, func: Callable[[KT, VT], VT]) -> 'UDict[KT, VT, DV]':
+    def __call__(self, func: Callable[[KT, VT], VT]) -> 'UDict[KT, VT, CDV]':
         new_dict = self.__dict
         for k, v in self:
             new_dict[k] = func(k, v)
         return UDict(new_dict, default=self.__default)
 
     # reverse integers
-    def __neg__(self) -> 'UDict[KT, VT, DV]':
+    def __neg__(self) -> 'UDict[KT, VT, CDV]':
         return self(lambda k, v: -v)
     
     # reverse
-    def reverse(self) -> 'UDict[KT, VT, DV]':
+    def reverse(self) -> 'UDict[KT, VT, CDV]':
         self.__dict = self.reversed().__dict
         return self
 
-    def reversed(self) -> 'UDict[KT, VT, DV]':
+    def reversed(self) -> 'UDict[KT, VT, CDV]':
         keys, values = list(self.__dict.keys())[::-1], list(self.__dict.values())[::-1]
         return UDict(dict(list(zip(keys, values))))
 
-    def __invert__(self) -> 'UDict[KT, VT, DV]':
+    def __invert__(self) -> 'UDict[KT, VT, CDV]':
         return self.reversed()
 
-    def __reversed__(self) -> 'UDict[KT, VT, DV]':
+    def __reversed__(self) -> 'UDict[KT, VT, CDV]':
         return self.reversed()
 
     # sort
-    def sort(self) -> 'UDict[KT, VT, DV]':
+    def sort(self) -> 'UDict[KT, VT, CDV]':
         self.__dict = self.sorted().__dict
         return self
 
-    def sorted(self) -> 'UDict[KT, VT, DV]':
+    def sorted(self) -> 'UDict[KT, VT, CDV]':
         keys = sorted(list(self.__dict.keys()))
         values = get_items_for_several_keys(self.__dict, keys)
         return UDict(dict(list(zip(keys, values))))
@@ -119,12 +120,14 @@ class UDict(Generic[KT, VT, DV]):
     def __get_keys_from_slice_or_int(self, key: KT | int | slice) -> list[KT]:
         if isinstance(key, int) and key not in self.__dict:
             if key == 0:
-                raise IndexError("You can't use 0 as index in UDict")
+                raise IndexError("You can't use 0 as index in UDict. Use 1 index instead.")
             return [list(self.__dict.keys())[key - 1]]
         if isinstance(key, slice):
             start, stop, step = key.indices(len(self) + 1)
-            if start == 0: start += 1
-            if stop == len(self) + 1: stop -= 1
+            if start == 0:
+                start += 1
+            if stop == len(self) + 1:
+                stop -= 1
             indexes = list(range(start, stop + 1, step))
             return [list(self.__dict.keys())[i - 1] for i in indexes]
         return [key]
@@ -151,12 +154,22 @@ class UDict(Generic[KT, VT, DV]):
 
     # get
     @overload
-    def get(self, *, key: KT) -> VT | DV: ...
+    def get(self, *, key: KT) -> VT | CDV: ...
     @overload
-    def get(self, *, index: int) -> VT | DV: ...
+    def get(self, *, key: KT, default: DV) -> VT | DV: ...
     @overload
-    def get(self, *, value: VT) -> KT: ...
-    def get(self, *, key: KT | None = None, index: int | None = None, value: VT | None = None) -> KT | VT | DV:
+    def get(self, *, index: int) -> VT | CDV: ...
+    @overload
+    def get(self, *, index: int, default: DV) -> VT | DV: ...
+    @overload
+    def get(self, *, value: VT) -> KT | CDV: ...
+    @overload
+    def get(self, *, value: VT, default: DV) -> KT | DV: ...
+
+    def get(
+            self, *, key: KT | None = None, index: int | None = None, value: VT | None = None,
+            default: DV | CDV = 'class default'
+    ) -> KT | VT | CDV | DV:
         """
         Get a value with key or it's index.
 
@@ -165,6 +178,7 @@ class UDict(Generic[KT, VT, DV]):
         :param key: Key of value in dict (optional)
         :param index: Index of value in dict (optional)
         :param value: Value in dict (optional)
+        :param default: Default value (if none -> UDict.default) (optional)
         :return: Value or default value
 
         :exception ValueError: You defined 0 or 2 or 3 params
@@ -191,10 +205,15 @@ class UDict(Generic[KT, VT, DV]):
         if index and index > len(self):
             raise IndexError('Index is bigger that length of UDict.')
 
+        if default == 'class default':
+            default = self.__default
+
         if value:
+            if value not in self.values:
+                return default
             i = self.values.index(value)
             return self.keys[i]
-        return self[self.keys[index-1]] if index else self[key]
+        return self.__dict.get(self.keys[index-1], default) if index else self.__dict.get(key, default)
 
     # Len, iterator and reversed version
     def __len__(self) -> int:
@@ -227,16 +246,16 @@ class UDict(Generic[KT, VT, DV]):
         return hash(self.__repr__())
     
     # Comparing
-    def __cmp__(self, other: 'dict[KT, VT] | UDict[KT, VT, DV]') -> int:
+    def __cmp__(self, other: 'dict[KT, VT] | UDict[KT, VT, CDV]') -> int:
         return len(self) - len(other)
     
-    def __eq__(self, other: 'dict[KT, VT] | UDict[KT, VT, DV]') -> bool:
+    def __eq__(self, other: 'dict[KT, VT] | UDict[KT, VT, CDV]') -> bool:
         if isinstance(other, UDict):
             other = other.dictionary
         return self.__dict == other
     
     # Math operations
-    def __add__(self, other: 'dict[KT, VT] | UDict[KT, VT, DV]') -> 'UDict[KT, VT, DV]':
+    def __add__(self, other: 'dict[KT, VT] | UDict[KT, VT, CDV]') -> 'UDict[KT, VT, CDV]':
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
@@ -246,7 +265,7 @@ class UDict(Generic[KT, VT, DV]):
             new_dict[k] = v
         return UDict(new_dict)
     
-    def __sub__(self, other: 'dict[KT, VT] | UDict[KT, VT, DV]') -> 'UDict[KT, VT, DV]':
+    def __sub__(self, other: 'dict[KT, VT] | UDict[KT, VT, CDV]') -> 'UDict[KT, VT, CDV]':
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
@@ -257,7 +276,9 @@ class UDict(Generic[KT, VT, DV]):
                 del new_dict[k]
         return UDict(new_dict)
     
-    def __mul__(self, other: 'dict[KT, float | int] | UDict[KT, float | int, DV] | float | int') -> 'UDict[KT, VT, DV]':
+    def __mul__(
+            self, other: 'dict[KT, float | int] | UDict[KT, float | int, DV] | float | int'
+    ) -> 'UDict[KT, VT, CDV]':
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
@@ -272,7 +293,7 @@ class UDict(Generic[KT, VT, DV]):
 
     def __truediv__(
             self, other: 'dict[KT, float | int] | UDict[KT, float | int, DV] | float | int'
-    ) -> 'UDict[KT, VT, DV]':
+    ) -> 'UDict[KT, VT, CDV]':
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):

@@ -82,7 +82,7 @@ class UDictTestCase(unittest.TestCase):
         self.assertDictEqual(d.dictionary, {})
 
     def test_get(self):
-        d = UDict({2: 1, 4: 91, 1: 12})
+        d = UDict({2: 1, 4: 91, 1: 12}, default=None)
         self.assertEqual(d.get(index=1), d.get(key=2))
         self.assertEqual(d.get(index=2), d.get(key=4))
         self.assertEqual(d.get(index=3), d.get(key=1))
@@ -90,6 +90,11 @@ class UDictTestCase(unittest.TestCase):
         self.assertEqual(d.get(value=1), 2)
         self.assertEqual(d.get(value=91), 4)
         self.assertEqual(d.get(value=12), 1)
+
+        self.assertEqual(d.get(key=3, default='missing'), 'missing')
+        self.assertEqual(d.get(key=3), None)
+        self.assertEqual(d.get(value=3, default='missing'), 'missing')
+        self.assertEqual(d.get(value=3), None)
 
     def test_len_and_iter(self):
         d = UDict(hello=1, hi=2)

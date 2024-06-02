@@ -46,13 +46,19 @@ You can also use `get()` method.
 You can get item by its key using `key` kwarg,
 you can get item by its index using `index` kwarg,
 and you get item key by its value using `value` kwarg.
+
+Also you can define `default` only for this calling of `get()` using `default` kwarg.
+
 Example:
 ```python
-d = UDict({2: 3, 1: 4})
+d = UDict({2: 3, 1: 4}, default=None)
 d[2] # 3
 d.get(index=2) # 4
 d.get(key=1) # also 4
 d.get(value=3) # 2
+
+d.get(key=3) # None
+d.get(key=3, default='null') # 'null'
 ```
 
 ## Set items
