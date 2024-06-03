@@ -7,7 +7,7 @@ If you want to contribute the project, you must read this rules and follow they.
 - Formatter: `black`
 - Optimizer of imports: `isort`
 - Linter: `Pylint`
-- Generic style: `True`
+- `Generic`
 
 Use `typing.Generic`s in your useful classes.
 
@@ -21,7 +21,7 @@ class A(Generic[T]):
     def __init__(self, a: T): ...
 ```
 
-- `@overload`s: `True`
+- `@overload`s
 
 Use decorator `@typing.overload` in public methods if your method
 has two and more variants to define arguments
@@ -36,8 +36,43 @@ def a(x: dict): ...
 def a(x: int | list | dict): ...
 ```
 
-- `__all__` variable: `True`
+- `__all__`
 
 `__all__` variable is variable with names of every class,
 function and variable in module which needs to import.
 When you use `from x import *` syntax, you import all names from `x.__all__` variable.
+Example:
+```python
+__all__ = (
+    'abc',
+    'Abc',
+)
+
+def abc(): ...
+class Abc: ...
+```
+
+- `__future__.annotations`
+
+If you use your class in annotations in method's signatures of this, you should import
+`__future__.annotations`. Don't use string annotations!
+
+```python
+# don't this
+class A:
+    def a(self, b: 'A') -> 'A': ...
+
+# do this
+from __future__ import annotations
+
+class A:
+    def a(self, b: A) -> A: ...
+```
+
+## ✅ Tests rules
+
+...
+
+## 📺 Examples rules
+
+...
