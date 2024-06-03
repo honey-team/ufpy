@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Generic, Iterator, overload, TypeVar, Callable
 
 from .cmp import cmp_generator
@@ -14,7 +16,8 @@ VT = TypeVar('VT')
 CDV = TypeVar('CDV')
 DV = TypeVar('DV')
 
-class _ClassDefault: ...
+class _ClassDefault:
+    ...
 
 @cmp_generator
 @i_generator
@@ -83,37 +86,37 @@ class UDict(Generic[KT, VT, CDV]):
         self.__default = value
 
     # call
-    def __call__(self, func: Callable[[KT, VT], VT]) -> 'UDict[KT, VT, CDV]':
+    def __call__(self, func: Callable[[KT, VT], VT]) -> UDict[KT, VT, CDV]:
         new_dict = self.__dict
         for k, v in self:
             new_dict[k] = func(k, v)
         return UDict(new_dict, default=self.__default)
 
     # reverse integers
-    def __neg__(self) -> 'UDict[KT, VT, CDV]':
+    def __neg__(self) -> UDict[KT, VT, CDV]:
         return self(lambda k, v: -v)
     
     # reverse
-    def reverse(self) -> 'UDict[KT, VT, CDV]':
+    def reverse(self) -> UDict[KT, VT, CDV]:
         self.__dict = self.reversed().__dict
         return self
 
-    def reversed(self) -> 'UDict[KT, VT, CDV]':
+    def reversed(self) -> UDict[KT, VT, CDV]:
         keys, values = list(self.__dict.keys())[::-1], list(self.__dict.values())[::-1]
         return UDict(dict(list(zip(keys, values))))
 
-    def __invert__(self) -> 'UDict[KT, VT, CDV]':
+    def __invert__(self) -> UDict[KT, VT, CDV]:
         return self.reversed()
 
-    def __reversed__(self) -> 'UDict[KT, VT, CDV]':
+    def __reversed__(self) -> UDict[KT, VT, CDV]:
         return self.reversed()
 
     # sort
-    def sort(self) -> 'UDict[KT, VT, CDV]':
+    def sort(self) -> UDict[KT, VT, CDV]:
         self.__dict = self.sorted().__dict
         return self
 
-    def sorted(self) -> 'UDict[KT, VT, CDV]':
+    def sorted(self) -> UDict[KT, VT, CDV]:
         keys = sorted(list(self.__dict.keys()))
         values = get_items_for_several_keys(self.__dict, keys)
         return UDict(dict(list(zip(keys, values))))
@@ -134,7 +137,7 @@ class UDict(Generic[KT, VT, CDV]):
             return [list(self.__dict.keys())[i - 1] for i in indexes]
         return [key]
     
-    def __getitem__(self, key: KT | int | slice) -> 'UDict[KT, VT, DV] | VT':
+    def __getitem__(self, key: KT | int | slice) -> UDict[KT, VT, DV] | VT:
         keys = self.__get_keys_from_slice_or_int(key)
 
         l = get_items_for_several_keys(self.__dict, keys, self.__default)
@@ -248,16 +251,16 @@ class UDict(Generic[KT, VT, CDV]):
         return hash(self.__repr__())
     
     # Comparing
-    def __cmp__(self, other: 'dict[KT, VT] | UDict[KT, VT, CDV]') -> int:
+    def __cmp__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> int:
         return len(self) - len(other)
     
-    def __eq__(self, other: 'dict[KT, VT] | UDict[KT, VT, CDV]') -> bool:
+    def __eq__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> bool:
         if isinstance(other, UDict):
             other = other.dictionary
         return self.__dict == other
     
     # Math operations
-    def __add__(self, other: 'dict[KT, VT] | UDict[KT, VT, CDV]') -> 'UDict[KT, VT, CDV]':
+    def __add__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> UDict[KT, VT, CDV]:
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
@@ -267,7 +270,7 @@ class UDict(Generic[KT, VT, CDV]):
             new_dict[k] = v
         return UDict(new_dict)
     
-    def __sub__(self, other: 'dict[KT, VT] | UDict[KT, VT, CDV]') -> 'UDict[KT, VT, CDV]':
+    def __sub__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> UDict[KT, VT, CDV]:
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
@@ -279,8 +282,8 @@ class UDict(Generic[KT, VT, CDV]):
         return UDict(new_dict)
     
     def __mul__(
-            self, other: 'dict[KT, float | int] | UDict[KT, float | int, DV] | float | int'
-    ) -> 'UDict[KT, VT, CDV]':
+            self, other: dict[KT, float | int] | UDict[KT, float | int, DV] | float | int
+    ) -> UDict[KT, VT, CDV]:
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
@@ -294,8 +297,8 @@ class UDict(Generic[KT, VT, CDV]):
         return UDict(new_dict)
 
     def __truediv__(
-            self, other: 'dict[KT, float | int] | UDict[KT, float | int, DV] | float | int'
-    ) -> 'UDict[KT, VT, CDV]':
+            self, other: dict[KT, float | int] | UDict[KT, float | int, DV] | float | int
+    ) -> UDict[KT, VT, CDV]:
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
