@@ -154,9 +154,9 @@ How it's looking:
 Code:
 ```markdown
 > [!NOTE]
-> This is caution!
+> This is note!
 ```
 
 How it's looking:
 > [!NOTE]
-> This is caution!
+> This is note!
