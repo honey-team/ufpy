@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Any, Generic, TypeVar
+from .math_op import r_generator
 
 VT = TypeVar("VT")
 
@@ -7,8 +8,9 @@ __all__ =  (
     "UStack",
 )
 
+@r_generator
 class UStack(Generic[VT]):
-    def __init__(self, __list: list[VT] = list()) -> UStack:
+    def __init__(self, __list: list[VT] = []):
         """
         UStack's methods:
             append(*items) - to add item to begin.
@@ -36,11 +38,10 @@ class UStack(Generic[VT]):
     def is_empty(self) -> bool:
         return len(self) == 0
 
-    def __add__(self, stack: UStack) -> UStack:
+    def __add__(self, stack: UStack[VT] | VT) -> UStack:
+        if not isinstance(stack, UStack):
+            stack = UStack(stack)
         return UStack(self.__list + stack.__list)
-
-    def __radd__(self, stack: UStack) -> UStack:
-        return UStack(stack.__list + self.__list)
     
     def __len__(self) -> int:
         return len(self.__list)
