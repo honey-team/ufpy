@@ -1,10 +1,13 @@
 # Getting started
 To start, install ufpy lib by command
 ### Windows
+```
 pip install ufpy
+```
 ### Linux
-
-
+```
+sudo pip install ufpy
+```
 ## Examples
 To create stack, use UStack class.
 ```python
