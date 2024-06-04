@@ -71,7 +71,25 @@ class A:
 
 ## ✅ Tests rules
 
-...
+When you create new class for library you should add tests. All tests must be Unittests and
+contains all public features of class.
+[How to write unittest?](https://realpython.com/python-testing/#how-to-structure-a-simple-test)
+
+Example of test for UDict class:
+```python
+import unittest
+
+from ufpy import UDict
+
+
+class UDictTestCase(unittest.TestCase):
+    def test_init(self):
+        d = UDict(hello=1, hi=2, default=10)
+        d2 = UDict({'hello': 1, 'hi': 2})
+        self.assertEqual(d.default, 10)
+        self.assertDictEqual(d.dictionary, d2.dictionary)
+        self.assertEqual(d, d2)
+```
 
 ## 📺 Examples rules
 
