@@ -71,7 +71,7 @@ class UStack(Generic[T]):
         """
         return self.__elements.pop()
 
-    def append(self, *items: T) -> UStack[T]:
+    def push(self, *items: T) -> UStack[T]:
         """Append items to stack"""
         self.__elements.extend(items)
         return UStack(iterable=self.__elements)
@@ -98,7 +98,7 @@ class UStack(Generic[T]):
     def __add__(self, other: UStack[T2] | AnyCollection[T2] | T2) -> UStack[T | T2]:
         other = convert_to_stack(other)
         result = self.copy()
-        return result.append(*other.elements)
+        return result.push(*other.elements)
 
     def __sub__(self, other: UStack[T] | AnyCollection[T] | T) -> UStack[T]:
         other = convert_to_stack(other)
