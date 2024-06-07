@@ -5,11 +5,19 @@ from ufpy import UDict
 
 class UDictTestCase(unittest.TestCase):
     def test_init(self):
-        d = UDict(hello=1, hi=2, default=10)
-        d2 = UDict({'hello': 1, 'hi': 2})
+        d = UDict(hello=1, hi='world', default=10)
+        d2 = UDict({'hello': 1, 'hi': 'world'})
+        d3 = UDict()
         self.assertEqual(d.default, 10)
+        self.assertEqual(d2.default, None)
+        self.assertEqual(d3.default, None)
+
         self.assertDictEqual(d.dictionary, d2.dictionary)
+        self.assertDictEqual(d3.dictionary, {})
+
         self.assertEqual(d, d2)
+        self.assertNotEqual(d, d3)
+        self.assertNotEqual(d2, d3)
 
     def test_keys_values_items(self):
         d = UDict(hello=1, hi=2)
@@ -63,6 +71,9 @@ class UDictTestCase(unittest.TestCase):
 
         self.assertEqual(d[1], d['hello'])
 
+        # not existent key
+        self.assertEqual(d['hey'], None)
+
     def test_set_item(self):
         d = UDict(hello=1, hi=2)
         d['hi'] = 3
@@ -95,6 +106,19 @@ class UDictTestCase(unittest.TestCase):
         self.assertEqual(d.get(key=3), None)
         self.assertEqual(d.get(value=3, default='missing'), 'missing')
         self.assertEqual(d.get(value=3), None)
+
+        with self.assertRaises(ValueError):
+            d.get()
+        with self.assertRaises(ValueError):
+            d.get(index=2, value=1)
+        with self.assertRaises(ValueError):
+            d.get(index=2, key=2)
+        with self.assertRaises(ValueError):
+            d.get(value=1, key=4)
+        with self.assertRaises(ValueError):
+            d.get(value=1, key=4, index=3)
+        with self.assertRaises(IndexError):
+            d.get(index=4)
 
     def test_len_and_iter(self):
         d = UDict(hello=1, hi=2)
