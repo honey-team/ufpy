@@ -62,6 +62,10 @@ class UStack(Generic[T]):
     def top(self, value: T):
         self.__elements[-1] = value
 
+    @top.deleter
+    def top(self):
+        del self.__elements[-1]
+
     # public methods
     def pop(self) -> T:
         """
