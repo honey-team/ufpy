@@ -148,6 +148,9 @@ class UStack(Generic[T]):
     def __nonzero__(self) -> bool:
         return not self.is_empty()
 
+    def __eq__(self, other: UStack[T2]) -> bool:
+        return self.elements == other.elements
+
     # Transform to other types
     def __repr__(self) -> str:
         return f's{self.__elements}'
