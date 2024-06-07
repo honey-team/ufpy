@@ -4,7 +4,7 @@ from typing import Generic, TypeVar, Iterable, Callable
 
 from .cmp import cmp_generator
 from .math_op import r_generator, i_generator
-from .typ import AnyCollection, NumberLiteral, SupportsMul, SupportsTrueDiv
+from .typ import AnyCollection, NumberLiteral, SupportsMul, SupportsTrueDiv, Empty
 
 __all__ = (
     "UStack",
@@ -89,6 +89,11 @@ class UStack(Generic[T]):
             self.__elements.remove(i)
         return UStack(iterable=self.__elements)
 
+    def clear(self) -> Empty[UStack]:
+        del self.elements
+        return self
+
+    # copying
     def copy(self) -> UStack[T]:
         return UStack(iterable=self.__elements.copy())
 
