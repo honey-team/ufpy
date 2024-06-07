@@ -1,18 +1,18 @@
 extensions = [
     "myst_parser",
-    "sphinx.ext.autodoc"
+    "sphinx.ext.autodoc",
 ]
 
 myst_enable_extensions = [
     'colon_fence',
     'deflist',
-    'dollarmath'
+    'dollarmath',
 ]
 myst_heading_anchors = 2
 
 project = 'ufpy'
 # html_logo = "l.png"
-html_favicon = 'favicon.ico'
+# html_favicon = 'favicon.ico'
 html_theme = 'furo'
 
 html_theme_options = {
