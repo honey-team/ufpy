@@ -18,6 +18,7 @@ KT = TypeVar('KT')
 VT = TypeVar('VT')
 DV = TypeVar('DV')
 
+
 class SupportsGetItem(Protocol, Generic[KT, VT]):
     def __getitem__(self, key: KT) -> VT: ...
 
@@ -42,7 +43,6 @@ class LikeDict(
     Generic[KT, VT]
 ):
     ...
-
 
 # math operations
 OT = TypeVar("OT")

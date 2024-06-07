@@ -8,4 +8,5 @@ __all__ = (
 
 type AnyCollection[T] = tuple[T, ...] | list[T]
 type AnyDict[KT, VT] = dict[KT, VT] | LikeDict[KT, VT]
+
 type NumberLiteral = int | float
