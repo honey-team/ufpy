@@ -35,7 +35,7 @@ class UDict(Generic[KT, VT, CDV]):
     def __init__(self, dictionary: AnyDict[KT, VT] = None, *, default: CDV = None, **kwargs: VT):
         if isinstance(dictionary, UDict):
             dictionary = dictionary.dictionary
-        self.__dict = dictionary if dictionary else kwargs
+        self.__dict = dictionary or kwargs
         self.__default = default
     
     # dictionary
@@ -145,7 +145,7 @@ class UDict(Generic[KT, VT, CDV]):
 
     def __setitem__(self, key: KT | int | slice, value: VT | list[VT]) -> None:
         keys = self.__get_keys_from_slice_or_int(key)
-        values = [value] if not isinstance(value, (list, tuple)) else value
+        values = value if isinstance(value, (list, tuple)) else [value]
 
         if len(keys) > len(values):
             values.extend([values[-1] for _ in range(len(keys) - len(values) + 1)])
@@ -222,16 +222,16 @@ class UDict(Generic[KT, VT, CDV]):
 
     # Len, iterator and reversed version
     def __len__(self) -> int:
-        return len(self.items)
+        return len(self.__dict)
     
     def __iter__(self) -> Iterator[tuple[KT, VT]]:
-        return iter(self.items)
+        return iter(self.__dict.items())
     
     # Booleans
     def is_empty(self) -> bool:
         return len(self) == 0
 
-    def __nonzero__(self) -> bool:
+    def __bool__(self) -> bool:
         return not self.is_empty()
 
     def __contains__(self, item: tuple[KT, VT] | list[KT | VT] | KT) -> bool:
