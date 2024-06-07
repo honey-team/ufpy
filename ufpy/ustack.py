@@ -48,6 +48,10 @@ class UStack(Generic[T]):
     def elements(self, value: Iterable[T]):
         self.__elements = list(value)
 
+    @elements.deleter
+    def elements(self):
+        self.__elements.clear()
+
     # top
     @property
     def top(self) -> T | None:
