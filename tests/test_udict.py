@@ -9,7 +9,12 @@ class UDictTestCase(unittest.TestCase):
         d2 = UDict({'hello': 1, 'hi': 'world'})
         d3 = UDict()
         self.assertEqual(d.default, 10)
+        self.assertEqual(d2.default, None)
+        self.assertEqual(d3.default, None)
+
         self.assertDictEqual(d.dictionary, d2.dictionary)
+        self.assertDictEqual(d3.dictionary, {})
+
         self.assertEqual(d, d2)
         self.assertNotEqual(d, d3)
         self.assertNotEqual(d2, d3)

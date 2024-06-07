@@ -145,6 +145,8 @@ class UDict(Generic[KT, VT, CDV]):
 
     def __setitem__(self, key: KT | int | slice, value: VT | list[VT]) -> None:
         keys = self.__get_keys_from_slice_or_int(key)
+
+        # Ensure 'values' is always a list for consistent processing
         values = value if isinstance(value, (list, tuple)) else [value]
 
         if len(keys) > len(values):
