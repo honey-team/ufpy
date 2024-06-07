@@ -144,8 +144,8 @@ class UStack(Generic[T]):
 
     def is_empty(self) -> bool:
         return len(self) == 0
-    
-    def __nonzero__(self) -> bool:
+
+    def __bool__(self) -> bool:
         return not self.is_empty()
 
     def __eq__(self, other: UStack[T2]) -> bool:
