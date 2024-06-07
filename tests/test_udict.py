@@ -113,7 +113,7 @@ class UDictTestCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             d.get(value=1, key=4, index=3)
         with self.assertRaises(IndexError):
-            d.get(value=4)
+            d.get(index=4)
 
     def test_len_and_iter(self):
         d = UDict(hello=1, hi=2)
