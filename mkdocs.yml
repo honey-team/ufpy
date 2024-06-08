@@ -1,1 +1,28 @@
 site_name: Ufpy
+site_url: https://ufpy.readthedocs.io/en/latest/
+repo_url: https://github.com/honey-team/ufpy
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - content.action.edit
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+plugins:
+  - search
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - markdown_include.include:
+      base_path: .
+  - admonition
