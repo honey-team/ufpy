@@ -16,6 +16,10 @@ theme:
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
+    tag:
+      typec: material/code-braces
+      info: octicons/info-16
+      useful: simple/python
   palette:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
@@ -30,8 +34,15 @@ theme:
         icon: material/brightness-4
         name: Switch to system preference
 
+extra:
+  tags:
+    type check: typec
+    information: info
+    useful class: useful
+
 plugins:
   - search
+  - tags
 
 markdown_extensions:
   - abbr
@@ -52,3 +63,6 @@ markdown_extensions:
   - markdown_include.include:
       base_path: .
   - admonition
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg

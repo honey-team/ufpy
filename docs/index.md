@@ -1,5 +1,8 @@
 ---
 title: Getting started
+
+tags:
+  - information
 ---
 
 # `ufpy` package
