@@ -10,12 +10,20 @@ theme:
   features:
     - content.action.edit
     - content.code.copy
+    - content.code.annotate
     - content.tooltips
     - header.autohide
     - search.suggest
+    - toc.follow
+    - toc.integrate
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
+    annotation: fontawesome/solid/circle-info
     tag:
       typec: material/code-braces
       info: octicons/info-16
