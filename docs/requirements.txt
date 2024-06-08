@@ -1,2 +1,3 @@
-myst-parser
-furo
+mkdocs-autorefs
+markdown-include
+mkdocs-material
