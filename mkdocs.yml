@@ -1,6 +1,8 @@
 site_name: Ufpy
 site_url: https://ufpy.readthedocs.io/en/latest/
+
 repo_url: https://github.com/honey-team/ufpy
+repo_name: honey-team/ufpy
 edit_uri: edit/main/docs/
 
 theme:
@@ -8,21 +10,45 @@ theme:
   features:
     - content.action.edit
     - content.code.copy
+    - content.tooltips
+    - header.autohide
+    - search.suggest
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
-    view: material/eye
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
 plugins:
   - search
+
 markdown_extensions:
+  - abbr
+  - attr_list
+  - md_in_html
   - pymdownx.highlight:
       anchor_linenums: true
-      anchor_linenums: true
       line_spans: __span
+      use_pygments: true
       pygments_lang_class: true
+  - pymdownx.details
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - pymdownx.keys
+  - pymdownx.tabbed:
+      alternate_style: true
   - markdown_include.include:
       base_path: .
   - admonition
