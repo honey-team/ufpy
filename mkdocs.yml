@@ -39,6 +39,7 @@ extra:
     type check: typec
     information: info
     useful class: useful
+    useful feature: useful
 
 plugins:
   - search
