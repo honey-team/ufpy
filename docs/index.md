@@ -24,8 +24,8 @@ Now Ufpy has these features:
 
 ## Installing
 
-For installing `ufpy` you should to install `python 3.12+` and `pip`. After installing just
-use this command in your `cmd`/`bash` terminal:
+To install `ufpy`, you need `python 3.12+` and `pip`.
+After installing, use this command in your `cmd`/`bash` terminal:
 
 === "You have one python version"
     ```shell
@@ -58,8 +58,8 @@ Enjoy!
 ## About the site
 
 Site was made using `mkdocs` with `mkdocs material` theme. You can use search: just click `Search`
-text input in up of page or use ++s++ or ++f++ hotkey. You can switch themes using button more
-left and go to `ufpy` repository more right.
+text input at the top of the page or use the ++s++ or ++f++ hotkeys. You can switch themes using the
+button on the left and access the `ufpy` repository using the button on the right.
 
 ## Contribute
 
