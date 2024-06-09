@@ -1,4 +1,4 @@
-__version__ = '1.0-alpha'
+__version__ = '0.1'
 
 from .cmp import *
 from .math_op import *
