@@ -8,5 +8,3 @@ py -3.12 -m twine upload dist\*
 rd /s /q ufpy.egg-info
 rd /s /q dist
 rd /s /q build
-
-pause
