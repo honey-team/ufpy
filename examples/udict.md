@@ -176,7 +176,7 @@ print(('hi', 11) in d) # False
 
 ## Using `repr()` and `print()`
 
-`print()` uses `repr()` therefore you can use `UDict`s in `print()`
+Since `print()` uses `repr()`, you can directly print `UDict` objects.
 
 ```python
 d = UDict(hi=1, hello=2)
