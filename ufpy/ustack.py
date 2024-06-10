@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import Generic, TypeVar, Iterable, Callable
 
-from .cmp import cmp_generator
-from .math_op import r_generator, i_generator
-from .typ import AnyCollection, NumberLiteral, SupportsMul, SupportsTrueDiv, Empty
+from ufpy.cmp import cmp_generator
+from ufpy.math_op import r_generator, i_generator
+from ufpy.typ import AnyCollection, NumberLiteral, SupportsMul, SupportsTrueDiv, Empty
 
 __all__ = (
     "UStack",
