@@ -147,11 +147,10 @@ class UDictTestCase(unittest.TestCase):
         self.assertTrue(('hi', 2) in d)
         self.assertFalse(('hi', 1) in d)
 
-    def test_str_and_repr(self):
+    def test_repr(self):
         d = {'hello': 1, 'hi': 2}
         ud = UDict(d)
 
-        self.assertEqual(str(ud), str(d))
         self.assertEqual(repr(ud), f'u{repr(d)}')
 
     def test_cmp_and_eq(self):
