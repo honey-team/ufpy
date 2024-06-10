@@ -174,7 +174,7 @@ print(('hi', 1) in d) # True
 print(('hi', 11) in d) # False
 ```
 
-## Using in `repr()` method
+## Using `repr()` and `print()`
 
 `print()` uses `repr()` therefore you can use `UDict`s in `print()`
 
