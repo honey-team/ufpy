@@ -6,7 +6,7 @@ __all__ = (
 
 from typing import TypeVar
 
-from .typ import SupportsGet, SupportsSetItem, SupportsDelItem, AnyCollection
+from ufpy.typ import SupportsGet, SupportsSetItem, SupportsDelItem, AnyCollection
 
 KT = TypeVar('KT')
 VT = TypeVar('VT')

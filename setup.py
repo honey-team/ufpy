@@ -5,8 +5,9 @@ from ufpy import __version__
 with open('README.md', 'r', encoding='utf-8') as mdf:
     long_description = mdf.read()
 
-with open('requirements.txt', 'r', encoding='utf-8') as rqf:
-    install_requires = rqf.readlines()
+install_requires = [
+
+]
 
 organization_name = 'honey-team'
 author, author_email = 'bleudev', 'aitiiigg1@gmail.com'
@@ -23,7 +24,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url=github_url,
-    packages=[project_name],
+    packages=[project_name, f'{project_name}.typ'],
     classifiers=[
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.12',

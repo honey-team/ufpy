@@ -1,6 +1,6 @@
 from typing import Never
 
-from .protocols import LikeDict
+from ufpy.typ.protocols import LikeDict
 
 __all__ = (
     'AnyCollection',

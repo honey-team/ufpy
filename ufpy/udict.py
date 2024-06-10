@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import Generic, Iterator, overload, TypeVar, Callable
 
-from .cmp import cmp_generator
-from .math_op import i_generator, r_generator
-from .typ import AnyDict, AnyCollection
-from .utils import set_items_for_several_keys, get_items_for_several_keys, del_items_for_several_keys
+from ufpy.cmp import cmp_generator
+from ufpy.math_op import i_generator, r_generator
+from ufpy.typ import AnyDict, AnyCollection
+from ufpy.utils import set_items_for_several_keys, get_items_for_several_keys, del_items_for_several_keys
 
 __all__ = (
     'UDict',
@@ -243,9 +243,6 @@ class UDict(Generic[KT, VT, CDV]):
         return item in self.__dict
     
     # Transform to other types
-    def __str__(self) -> str:
-        return str(self.__dict)
-
     def __repr__(self) -> str:
         return f'u{self.__dict}'
 

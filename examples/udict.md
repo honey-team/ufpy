@@ -174,25 +174,14 @@ print(('hi', 1) in d) # True
 print(('hi', 11) in d) # False
 ```
 
-## Convert to `str` type and using in `print`
+## Using `repr()` and `print()`
 
-### Print dict
-
-`print` uses `repr()` therefore `UDict` supports `repr()`
+Since `print()` uses `repr()`, you can directly print `UDict` objects.
 
 ```python
 d = UDict(hi=1, hello=2)
 print(d) # u{'hi': 1, 'hello': 2}
 print(repr(d)) # u{'hi': 1, 'hello': 2}
-```
-
-### Convert to str
-
-You can use inbuilt `str()` class for converting `UDict` to `str` type
-
-```python
-d = UDict(hi=1, hello=2)
-print(str(d)) # {'hi': 1, 'hello': 2}
 ```
 
 ## Comparing dicts
