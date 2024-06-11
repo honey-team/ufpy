@@ -4,6 +4,8 @@ __all__ = (
 
 from typing import Callable, TypeVar, Generic, Literal, overload
 
+from ufpy.utils import mul
+
 VT = TypeVar('VT', int, float, int | float)
 KT = TypeVar('KT', int, float, int | float)
 
@@ -58,10 +60,10 @@ class FunctionSequence(Generic[VT, KT]):
         raise Exception("__init__ can't get k")
 
     @overload
-    def __call__(self, n: int): ...
+    def __call__(self, n: int) -> VT: ...
     @overload
-    def __call__(self, start: int, end: int): ...
-    def __call__(self, start_or_end: int, end: int = None) -> VT | list[VT]:
+    def __call__(self, start: int, end: int) -> list[VT]: ...
+    def __call__(self, start_or_end: int, end: int = None):
         start = start_or_end
         if not end:
             end = start_or_end
@@ -73,26 +75,20 @@ class FunctionSequence(Generic[VT, KT]):
 
         return r if len(r) > 1 else r[0]
 
+    @overload
+    def __getitem__(self, n: int) -> VT: ...
+    @overload
+    def __getitem__(self, n: slice) -> list[VT]: ...
     def __getitem__(self, n: int | slice):
         if isinstance(n, slice):
-            start, end = n.start, n.stop
+            start, end = x if (x := n.start) else 1, n.stop
             print(start, end)
             return self(start, end)
         return self(n)
 
     def s(self, n: int) -> VT:
-        r = self.first
-
-        for i in range(2, n+1):
-            r += self(i)
-
-        return self.__process_float(r)
+        return sum(self.__getitem__(slice(n)))
 
     def p(self, n: int) -> VT:
-        r = self.first
-
-        for i in range(2, n + 1):
-            r *= self(i)
-
-        return self.__process_float(r)
+        return mul(self.__getitem__(slice(n)))
 
