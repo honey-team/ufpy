@@ -6,7 +6,7 @@ with open('README.md', 'r', encoding='utf-8') as mdf:
     long_description = mdf.read()
 
 install_requires = [
-
+    'requests~=2.31.0',
 ]
 
 organization_name = 'honey-team'

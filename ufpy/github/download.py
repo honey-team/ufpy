@@ -1,4 +1,6 @@
 import os
+from shutil import copy, copytree, rmtree
+from zipfile import ZipFile
 
 from requests import get
 
@@ -30,7 +32,49 @@ def folder(repo: str, folder_path: str, download_path: str, branch_name: str = '
     ...
 
 def repo(repo: str, download_path: str, branch_name: str = 'main'):
-    ...
+    filename = f'{download_path}/repo_temp.zip'
+    url = f'https://github.com/{repo}/archive/{branch_name}.zip'
+
+    r = get(url)
+
+    with open(filename, 'wb') as f:
+        f.write(r.content)
+
+    repo_name = repo.split('/')[-1]
+    main_directory_name = f'{repo_name}-{branch_name}'
+
+    with ZipFile(filename) as archive:
+        for file in archive.namelist():
+            if file.startswith(main_directory_name):
+                archive.extract(file, download_path)
+
+    if os.path.exists(filename):
+        os.remove(filename)
+
+    repo_dir = f'{download_path}/{main_directory_name}'
+    for file in os.listdir(repo_dir):
+        file_path = f'{repo_dir}/{file}'
+        new_file_path = f'{download_path}/{file}'
+        if os.path.isdir(file_path):
+            if os.path.exists(new_file_path):
+                print(
+                    f"Warning ({new_file_path}): Currently we don't support editing recursive folders if it's exists"
+                    "when repo directory was downloaded. Sorry, you can just delete all folders with same name as in"
+                    "repo before you use this function instead."
+                )
+                continue
+            copytree(file_path, new_file_path)
+        else:
+            if os.path.exists(new_file_path):
+                with open(new_file_path, 'w') as nf:
+                    with open(file_path, 'r') as f:
+                        nf.write(f.read())
+            else:
+                copy(file_path, new_file_path)
+
+    if os.path.exists(f'{download_path}/{main_directory_name}'):
+        rmtree(f'{download_path}/{main_directory_name}')
+
 
 class UGithubDownloader:
     def __init__(self, repo: str, branch_name: str = 'main'):
