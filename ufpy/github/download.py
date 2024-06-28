@@ -28,7 +28,9 @@ def file(repo: str, file_path: str, download_path: str, branch_name: str = 'main
     with open(path, 'w+') as f:
         f.write(r.text)
 
-def folder(repo: str, folder_path: str, download_path: str, branch_name: str = 'main'):
+def folder(repo: str, folder_path: str | list[str], download_path: str, branch_name: str = 'main'):
+    if isinstance(folder_path, str):
+        folder_path = [folder_path]
     filename = f'{download_path}/repo_temp.zip'
     url = f'https://github.com/{repo}/archive/{branch_name}.zip'
 
@@ -46,18 +48,18 @@ def folder(repo: str, folder_path: str, download_path: str, branch_name: str = '
     if os.path.exists(filename):
         os.remove(filename)
 
-    repo_dir = f'{download_path}/{main_directory_name}'
-    dir = f'{download_path}/{main_directory_name}/{folder_path}'
-    new_dir = f'{download_path}/{folder_path}'
+    for fpath in folder_path:
+        dir = f'{download_path}/{main_directory_name}/{fpath}'
+        new_dir = f'{download_path}/{fpath}'
 
-    if os.path.exists(new_dir):
-        print(
-            f"Warning ({new_dir}): Currently we don't support editing recursive folders if it's exists"
-            "when repo directory was downloaded. Sorry, you can just delete all folders with same name as in"
-            "repo before you use this function instead."
-        )
-    else:
-        copytree(dir, new_dir)
+        if os.path.exists(new_dir):
+            print(
+                f"Warning ({new_dir}): Currently we don't support editing recursive folders if it's exists"
+                "when repo directory was downloaded. Sorry, you can just delete all folders with same name as in"
+                "repo before you use this function instead."
+            )
+        else:
+            copytree(dir, new_dir)
 
     if os.path.exists(f'{download_path}/{main_directory_name}'):
         rmtree(f'{download_path}/{main_directory_name}')
@@ -113,7 +115,7 @@ class UGithubDownloader:
     def download_file(self, file_path: str, download_path: str):
         file(self.__repo, file_path, download_path, self.__branch)
 
-    def download_folder(self, folder_path: str, download_path: str):
+    def download_folder(self, folder_path: str | list[str], download_path: str):
         folder(self.__repo, folder_path, download_path, self.__branch)
 
     def download_repo(self, download_path: str):
