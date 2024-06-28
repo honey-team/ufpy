@@ -19,5 +19,4 @@ from ufpy.path import *
 # GitHub package
 __github_version__ = '0.1'
 from ufpy import github
-from ufpy.github.download import UGithubDownloader
-from ufpy.github import download_file, download_folder, download_repo, download
+from ufpy.github import UGithubDownloader, download_file, download_folder, download_repo
