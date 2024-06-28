@@ -1,4 +1,5 @@
 import os
+import warnings
 from shutil import copy, copytree, rmtree
 from zipfile import ZipFile
 
@@ -16,6 +17,9 @@ def file(repo: str, file_path: str, download_path: str, branch_name: str = 'main
 
     url = f'https://raw.githubusercontent.com/{repo}/{branch_name}/{file_path}'
     r = get(url)
+
+    if not r.ok:
+        raise Exception("Error with getting file from GitHub. Check that repo is public and that file path is correct.")
 
     download_path = download_path.replace('\\', '/')
     path = f'{download_path}/{file_path}'
@@ -49,17 +53,17 @@ def folder(repo: str, folder_path: str | list[str], download_path: str, branch_n
         os.remove(filename)
 
     for fpath in folder_path:
-        dir = f'{download_path}/{main_directory_name}/{fpath}'
-        new_dir = f'{download_path}/{fpath}'
+        folder_dir = f'{download_path}/{main_directory_name}/{fpath}'
+        new_folder_dir = f'{download_path}/{fpath}'
 
-        if os.path.exists(new_dir):
-            print(
-                f"Warning ({new_dir}): Currently we don't support editing recursive folders if it's exists"
+        if os.path.exists(new_folder_dir):
+            warnings.warn(
+                f"Warning ({new_folder_dir}): Currently we don't support editing recursive folders if it's exists"
                 "when repo directory was downloaded. Sorry, you can just delete all folders with same name as in"
                 "repo before you use this function instead."
             )
         else:
-            copytree(dir, new_dir)
+            copytree(folder_dir, new_folder_dir)
 
     if os.path.exists(f'{download_path}/{main_directory_name}'):
         rmtree(f'{download_path}/{main_directory_name}')
@@ -95,13 +99,12 @@ def repo(repo: str, download_path: str, branch_name: str = 'main'):
                 )
                 continue
             copytree(file_path, new_file_path)
+        elif os.path.exists(new_file_path):
+            with open(new_file_path, 'w') as nf:
+                with open(file_path, 'r') as f:
+                    nf.write(f.read())
         else:
-            if os.path.exists(new_file_path):
-                with open(new_file_path, 'w') as nf:
-                    with open(file_path, 'r') as f:
-                        nf.write(f.read())
-            else:
-                copy(file_path, new_file_path)
+            copy(file_path, new_file_path)
 
     if os.path.exists(f'{download_path}/{main_directory_name}'):
         rmtree(f'{download_path}/{main_directory_name}')

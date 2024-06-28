@@ -6,7 +6,7 @@ with open('README.md', 'r', encoding='utf-8') as mdf:
     long_description = mdf.read()
 
 install_requires = [
-    'requests~=2.31.0',
+    'requests>=2.31.0',
 ]
 
 organization_name = 'honey-team'
@@ -14,7 +14,7 @@ author, author_email = 'bleudev', 'aitiiigg1@gmail.com'
 project_name = 'ufpy'
 github_url = f'https://github.com/{organization_name}/{project_name}'
 
-def package(name: str) -> str:
+def _package(name: str) -> str:
     return f'{project_name}.{name}'
 
 setup(
@@ -29,8 +29,8 @@ setup(
     url=github_url,
     packages=[
         project_name,
-        package('typ'),
-        package('github'),
+        _package('typ'),
+        _package('github'),
     ],
     classifiers=[
         'Programming Language :: Python :: 3',

@@ -1,3 +1,3 @@
-from .download import file as download_file
-from .download import folder as download_folder
-from .download import repo as download_repo
+from ufpy.github.download import file as download_file
+from ufpy.github.download import folder as download_folder
+from ufpy.github.download import repo as download_repo
