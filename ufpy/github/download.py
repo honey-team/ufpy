@@ -6,6 +6,7 @@ from typing import Iterable, TypeAlias
 from zipfile import ZipFile
 
 from requests import get
+from requests.exceptions import RequestException
 
 from ufpy.path import UOpen
 
@@ -67,7 +68,7 @@ class UGithubDownloader:
         r = get(url)
 
         if not r.ok:
-            raise Exception(
+            raise RequestException(
                 "Error with getting file from GitHub. Check that repo is public and that file path is correct.")
         self.__zip = ZipFile(io.BytesIO(r.content))
 
@@ -95,7 +96,7 @@ class UGithubDownloader:
         r = get(url)
 
         if not r.ok:
-            raise Exception(
+            raise RequestExceptio(
                 "Error with getting file from GitHub. Check that repo is public and that file path is correct.")
 
         path = f'{download_path}/{file_path}'
