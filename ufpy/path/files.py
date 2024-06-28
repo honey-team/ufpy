@@ -15,21 +15,20 @@ class UOpen:
         self.__encoding = encoding
 
     def __enter__(self):
-        directory = '/'.join(self.__path.split('/')[:-1])
-        if not directory:
-            directory = '\\'.join(self.__path.split('\\')[:-1])
+        directory = '/'.join(self.__path.split('/')[:-1]) or '\\'.join(self.__path.split('\\')[:-1])
 
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        os.makedirs(directory, exist_ok=True)
 
         self.__f = open(file=self.__path, mode=self.__mode, encoding=self.__encoding)
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.__f.close()
+        if not self.__f.closed:
+            self.__f.close()
 
     def __del__(self):
-        self.__f.close()
+        if not self.__f.closed:
+            self.__f.close()
 
     def write(self, data: AnyStr):
         self.__f.write(data)

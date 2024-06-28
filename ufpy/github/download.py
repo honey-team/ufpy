@@ -35,7 +35,7 @@ def repo(repo: str, download_path: str, branch_name: str = 'main'):
         gd.download_repo()
 
 
-def format_paths(*paths: str | list[str]) -> list[str] | list[list[str]] | list[str | list[str]] | str:
+def format_paths(*paths: str | list[str]) -> list[str] | list[list[str]]:
     new_paths = []
     for path in paths:
         if isinstance(path, list):
