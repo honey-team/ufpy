@@ -35,7 +35,7 @@ def repo(repo: str, download_path: str, branch_name: str = 'main'):
         gd.download_repo()
 
 
-def format_paths(*paths: str | list[str]) -> list[str] | list[list[str]]:
+def format_paths(*paths: str | list[str]) -> str | list[str] | list[list[str]]:
     new_paths = []
     for path in paths:
         if isinstance(path, list):
@@ -64,7 +64,12 @@ class UGithubDownloader:
 
     def __enter__(self):
         url = f'https://github.com/{self.__repo}/archive/{self.__branch}.zip'
-        self.__zip = ZipFile(io.BytesIO(get(url).content))
+        r = get(url)
+
+        if not r.ok:
+            raise Exception(
+                "Error with getting file from GitHub. Check that repo is public and that file path is correct.")
+        self.__zip = ZipFile(io.BytesIO(r.content))
 
         temp_dir = format_paths(gettempdir())
         self.__zip.extractall(temp_dir)

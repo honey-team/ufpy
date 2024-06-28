@@ -23,8 +23,7 @@ class UOpen:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if not self.__f.closed:
-            self.__f.close()
+        self.__f.close()
 
     def __del__(self):
         if not self.__f.closed:
