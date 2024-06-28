@@ -3,7 +3,7 @@ import os
 import warnings
 from shutil import copy, copytree, rmtree
 from tempfile import gettempdir
-from typing import Iterable
+from typing import Iterable, TypeAlias
 from zipfile import ZipFile
 
 from requests import get
@@ -132,8 +132,12 @@ def format_paths(*paths: str | list[str]) -> list[str] | list[list[str]] | list[
     return new_paths[0] if len(new_paths) <= 1 else new_paths
 
 
+CWD: TypeAlias = None
+
 class UGithubDownloader:
-    def __init__(self, repo: str, base_download_path: str = 'C:/', branch_name: str = 'main'):
+    def __init__(self, repo: str, base_download_path: str = CWD, branch_name: str = 'main'):
+        if base_download_path == CWD:
+            base_download_path = format_paths(os.getcwd())
         self.__repo = repo
         self.__base_download_path = format_paths(base_download_path)
         self.__branch = branch_name
@@ -180,7 +184,19 @@ class UGithubDownloader:
             self.download_file(file_path, download_path)
 
     def download_folder(self, folder_path: str | list[str], download_path: str):
-        folder(self.__repo, folder_path, download_path, self.__branch)
+        ...
 
-    def download_repo(self, download_path: str):
-        repo(self.__repo, download_path, self.__branch)
+    def download_repo(self, download_path: str = ''):
+        download_path = format_paths(download_path)
+        download_path = f'{self.__base_download_path}/{download_path}'
+
+        for filename in os.listdir(self.__repo_path):
+            src, dst = f'{self.__repo_path}/{filename}', f'{download_path}/{filename}'
+            if os.path.isdir(src):
+                if os.path.exists(dst):
+                    rmtree(dst)
+                copytree(src, dst)
+            else:
+                if os.path.exists(dst):
+                    os.remove(dst)
+                copy(src, dst)
