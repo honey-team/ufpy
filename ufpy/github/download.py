@@ -29,16 +29,45 @@ def file(repo: str, file_path: str, download_path: str, branch_name: str = 'main
         f.write(r.text)
 
 def folder(repo: str, folder_path: str, download_path: str, branch_name: str = 'main'):
-    ...
+    filename = f'{download_path}/repo_temp.zip'
+    url = f'https://github.com/{repo}/archive/{branch_name}.zip'
+
+    with open(filename, 'wb') as f:
+        f.write(get(url).content)
+
+    repo_name = repo.split('/')[-1]
+    main_directory_name = f'{repo_name}-{branch_name}'
+
+    with ZipFile(filename) as archive:
+        for file in archive.namelist():
+            if file.startswith(main_directory_name):
+                archive.extract(file, download_path)
+
+    if os.path.exists(filename):
+        os.remove(filename)
+
+    repo_dir = f'{download_path}/{main_directory_name}'
+    dir = f'{download_path}/{main_directory_name}/{folder_path}'
+    new_dir = f'{download_path}/{folder_path}'
+
+    if os.path.exists(new_dir):
+        print(
+            f"Warning ({new_dir}): Currently we don't support editing recursive folders if it's exists"
+            "when repo directory was downloaded. Sorry, you can just delete all folders with same name as in"
+            "repo before you use this function instead."
+        )
+    else:
+        copytree(dir, new_dir)
+
+    if os.path.exists(f'{download_path}/{main_directory_name}'):
+        rmtree(f'{download_path}/{main_directory_name}')
 
 def repo(repo: str, download_path: str, branch_name: str = 'main'):
     filename = f'{download_path}/repo_temp.zip'
     url = f'https://github.com/{repo}/archive/{branch_name}.zip'
 
-    r = get(url)
-
     with open(filename, 'wb') as f:
-        f.write(r.content)
+        f.write(get(url).content)
 
     repo_name = repo.split('/')[-1]
     main_directory_name = f'{repo_name}-{branch_name}'
