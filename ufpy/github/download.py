@@ -1,9 +1,13 @@
+import io
 import os
 import warnings
 from shutil import copy, copytree, rmtree
 from zipfile import ZipFile
 
 from requests import get
+
+from ufpy.path import UOpen
+from ufpy.typ import Empty
 
 __all__ = (
     'file',
@@ -110,13 +114,52 @@ def repo(repo: str, download_path: str, branch_name: str = 'main'):
         rmtree(f'{download_path}/{main_directory_name}')
 
 
+def format_paths(*paths: str) -> list[str] | str | Empty[list]:
+    new_paths = []
+    for path in paths:
+        path = path.replace('\\', '/')
+
+        if path.startswith('/'):
+            path = path[1:]
+        if path.endswith('/'):
+            path = path[:-1]
+
+        new_paths.append(path)
+    return new_paths[0] if len(new_paths) <= 1 else new_paths
+
+
 class UGithubDownloader:
-    def __init__(self, repo: str, branch_name: str = 'main'):
+    def __init__(self, repo: str, base_download_path: str = 'C:/', branch_name: str = 'main'):
         self.__repo = repo
+        self.__base_download_path = format_paths(base_download_path)
         self.__branch = branch_name
 
-    def download_file(self, file_path: str, download_path: str):
-        file(self.__repo, file_path, download_path, self.__branch)
+    def __enter__(self):
+        url = f'https://github.com/{self.__repo}/archive/{self.__branch}.zip'
+        self.__zip = ZipFile(io.BytesIO(get(url).content))
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.__zip.close()
+
+    def __del__(self):
+        self.__zip.close()
+
+    def download_file(self, file_path: str, download_path: str = ''):
+        file_path, download_path = format_paths(file_path, download_path)
+        download_path = f'{self.__base_download_path}/{download_path}'
+
+        url = f'https://raw.githubusercontent.com/{self.__repo}/{self.__branch}/{file_path}'
+        r = get(url)
+
+        if not r.ok:
+            raise Exception(
+                "Error with getting file from GitHub. Check that repo is public and that file path is correct.")
+
+        path = f'{download_path}{file_path}'
+
+        with UOpen(path, 'w+') as f:
+            f.write(r.text)
 
     def download_folder(self, folder_path: str | list[str], download_path: str):
         folder(self.__repo, folder_path, download_path, self.__branch)
