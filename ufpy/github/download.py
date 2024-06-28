@@ -96,7 +96,7 @@ class UGithubDownloader:
         r = get(url)
 
         if not r.ok:
-            raise RequestExceptio(
+            raise RequestException(
                 "Error with getting file from GitHub. Check that repo is public and that file path is correct.")
 
         path = f'{download_path}/{file_path}'

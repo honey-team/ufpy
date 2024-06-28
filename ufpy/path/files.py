@@ -26,7 +26,7 @@ class UOpen:
         self.__f.close()
 
     def __del__(self):
-        if not self.__f.closed:
+        if self.__f and not self.__f.closed:
             self.__f.close()
 
     def write(self, data: AnyStr):
