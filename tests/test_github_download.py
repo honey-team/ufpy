@@ -11,7 +11,7 @@ class UGithubDownloadTestCase(unittest.TestCase):
         file = 'README.md'
 
         download_path = ''
-        file_path = f'{download_path}/README.md'
+        file_path = f'{download_path}README.md'
 
         # mkdir(download_path)
 
