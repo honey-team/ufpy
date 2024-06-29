@@ -37,7 +37,7 @@ You can use `download_file()` function, `ufpy.github.download.file()` function
 (they're the same, but with different names) and `UGithubDownloader.download_file()` method.
 
 > [!NOTE]
-> You can use any iterable of strings in `download_file()` function for downloading several files.
+> You can use any iterable of strings in the `download_file()` function to download several files.
 > In `UGithubDownloader`, there is a `download_files()` method.
 
 One file:
@@ -71,7 +71,7 @@ You can use `download_folder()` function, `ufpy.github.download.folder()` functi
 
 > [!NOTE]
 > You can use any iterable of strings in `download_folder()` function for downloading several folders.
-> In `UGithubDownloader` there are `download_folders()` method.
+> In `UGithubDownloader`, there is a `download_folders()` method.
 
 One folder:
 ```python
@@ -117,6 +117,6 @@ After changing `<name>` to your username and running this code you'll get this:
 > [!NOTE]
 > The repository code shown reflects the state before merging pull request
 > [#37](https://github.com/honey-team/ufpy/pull/37).
-> When this pull request was merged, repository was changed.
+> When this pull request was merged, the repository was changed.
 
 ![Download all repository](.assets/download5.png)
