@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In `ufpy` there are 3 functions and 1 class for downloading things from public GitHub repositories.
+In `ufpy` there are 3 functions and 1 class for downloading resources from public GitHub repositories.
 You can download an entire repository, a folder or multiple folders, and a file or multiple files without
 a GitHub token. You can use the `UGithubDownloader` class for all these actions or the other 3 functions.
 The class is more optimized for multiple requests. If you need to download multiple times, use it. It uses
@@ -98,7 +98,7 @@ with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
 After changing `<name>` to your username and running this code you'll get the following result:
 ![Download two folders](.assets/download4.png)
 
-## Download all repository
+## Download the entire repository
 
 You can use `download_repo()` function, `ufpy.github.download.repo()` function
 (they're the same, but with different names) and `UGithubDownloader.download_repo()` method:
