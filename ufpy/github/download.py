@@ -2,7 +2,7 @@ import io
 import os
 from shutil import copy, copytree, rmtree
 from tempfile import gettempdir
-from typing import Iterable, TypeAlias
+from typing import Iterable
 from zipfile import ZipFile
 
 from requests import get
@@ -52,19 +52,17 @@ def format_paths(*paths: str | list[str]) -> str | list[str] | list[list[str]]:
     return new_paths[0] if len(new_paths) <= 1 else new_paths
 
 
-CWD: TypeAlias = None
+CWD = os.getcwd()
 
 class UGithubDownloader:
     def __init__(self, repo: str, base_download_path: str = CWD, branch_name: str = 'main'):
-        if base_download_path == CWD:
-            base_download_path = format_paths(os.getcwd())
         self.__repo = repo
         self.__base_download_path = format_paths(base_download_path)
         self.__branch = branch_name
 
     def __enter__(self):
         url = f'https://github.com/{self.__repo}/archive/{self.__branch}.zip'
-        r = get(url)
+        r = get(url, timeout=10)
 
         if not r.ok:
             r.raise_for_status()

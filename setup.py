@@ -14,7 +14,7 @@ author, author_email = 'bleudev', 'aitiiigg1@gmail.com'
 project_name = 'ufpy'
 github_url = f'https://github.com/{organization_name}/{project_name}'
 
-def _package(name: str) -> str:
+def __package(name: str) -> str:
     return f'{project_name}.{name}'
 
 setup(
@@ -29,8 +29,8 @@ setup(
     url=github_url,
     packages=[
         project_name,
-        _package('typ'),
-        _package('github'),
+        __package('typ'),
+        __package('github'),
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
