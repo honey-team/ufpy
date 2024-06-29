@@ -114,7 +114,8 @@ with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
 After changing `<name>` to your username and running this code you'll get this:
 
 > [!NOTE]
-> Repository code is code before merging this pull request (#37).
+> Repository code is code before merging this pull request
+> ([#37](https://github.com/honey-team/ufpy/pull/37)).
 > When this pull request was merged, repository was changed.
 
 ![Download all repository](.assets/download5.png)
