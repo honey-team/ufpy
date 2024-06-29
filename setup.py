@@ -6,13 +6,16 @@ with open('README.md', 'r', encoding='utf-8') as mdf:
     long_description = mdf.read()
 
 install_requires = [
-
+    'requests>=2.31.0',
 ]
 
 organization_name = 'honey-team'
 author, author_email = 'bleudev', 'aitiiigg1@gmail.com'
 project_name = 'ufpy'
 github_url = f'https://github.com/{organization_name}/{project_name}'
+
+def __package(name: str) -> str:
+    return f'{project_name}.{name}'
 
 setup(
     name=project_name,
@@ -24,7 +27,11 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url=github_url,
-    packages=[project_name, f'{project_name}.typ'],
+    packages=[
+        project_name,
+        __package('typ'),
+        __package('github'),
+    ],
     classifiers=[
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.12',
