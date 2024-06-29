@@ -42,21 +42,27 @@ You can use `download_file()` function, `ufpy.github.download.file()` function
 
 One file:
 ```python
-download_file("honey-team/ufpy", "README.md", "C:/Users/<name>")
-# copy README.md from main branch in C:/Users/<name> directory
+download_file("honey-team/ufpy", "README.md", "C:/Users/<name>/ufpy-tests")
+# copy README.md from main branch in C:/Users/<name>/ufpy-tests directory
 
-with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
+with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
     gd.download_file("README.md") # Same
 ```
 
+After changing `<name>` to your username and running this code you'll get this:
+![Download one file](.assets/download1.png)
+
 Two files:
 ```python
-download_file("honey-team/ufpy", ["README.md", "mkdocs.yml"], "C:/Users/<name>")
-# copy README.md and mkdocs.yml from main branch in C:/Users/<name> directory
+download_file("honey-team/ufpy", ["README.md", "mkdocs.yml"], "C:/Users/<name>/ufpy-tests")
+# copy README.md and mkdocs.yml from main branch in C:/Users/<name>/ufpy-tests directory
 
-with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
+with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
     gd.download_files(["README.md", "mkdocs.yml"]) # Same
 ```
+
+After changing `<name>` to your username and running this code you'll get this:
+![Download two files](.assets/download2.png)
 
 ## Download folder(s)
 
@@ -69,32 +75,46 @@ You can use `download_folder()` function, `ufpy.github.download.folder()` functi
 
 One folder:
 ```python
-download_folder("honey-team/ufpy", "examples", "C:/Users/<name>")
+download_folder("honey-team/ufpy", "examples", "C:/Users/<name>/ufpy-tests")
 # create C:/Users/<name>/examples folder
 # and copy origin/examples contents from main branch in this folder
 
-with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
-    gd.download_folder() # Same
+with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
+    gd.download_folder("examples") # Same
 ```
+
+After changing `<name>` to your username and running this code you'll get this:
+![Download one folder](.assets/download3.png)
 
 Two folders:
 ```python
-download_folder("honey-team/ufpy", ["examples", ".github"], "C:/Users/<name>")
+download_folder("honey-team/ufpy", ["examples", ".github"], "C:/Users/<name>/ufpy-tests")
 # create C:/Users/<name>/examples and C:/Users/<name>/.github folders
 # and copy origin/examples contents and origin/.github contents from main branch in this folders
 
-with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
+with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
     gd.download_folders(["examples", ".github"]) # Same
 ```
+
+After changing `<name>` to your username and running this code you'll get this:
+![Download two folders](.assets/download4.png)
 
 ## Download all repository
 
 You can use `download_repo()` function, `ufpy.github.download.repo()` function
 (they're same, but with different names) and `UGithubDownloader.download_repo()` method:
 ```python
-download_repo("honey-team/ufpy", "C:/Users/<name>")
-# copy all repository files and folders with its contents from main branch in C:/Users/<name> directory.
+download_repo("honey-team/ufpy", "C:/Users/<name>/ufpy-tests")
+# copy all repository files and folders with its contents from main branch in C:/Users/<name>/ufpy-tests directory.
 
-with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
+with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
     gd.download_repo() # Same
 ```
+
+After changing `<name>` to your username and running this code you'll get this:
+
+> [!NOTE]
+> Repository code is code before merging this pull request (#37).
+> When this pull request was merged, repository was changed.
+
+![Download all repository](.assets/download5.png)
