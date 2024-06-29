@@ -10,8 +10,8 @@ class UGithubDownloadTestCase(unittest.TestCase):
         repo = 'honey-team/ufpy'
         file = 'README.md'
 
-        download_path = ''
-        file_path = f'{download_path}README.md'
+        download_path = '/usr/ufpy-tests'
+        file_path = f'{download_path}/README.md'
 
         # mkdir(download_path)
 
