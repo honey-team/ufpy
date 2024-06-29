@@ -12,7 +12,7 @@ multiple times, use the functions instead.
 Import functions and class from `ufpy`:
 ```python
 import ufpy
-from ufpy import UGithubDownloader, download_file, download_folder, download_repo, UGithubDownloader
+from ufpy import UGithubDownloader, download_file, download_folder, download_repo
 ```
 
 > [!CAUTION]
@@ -67,7 +67,7 @@ After changing `<name>` to your username and running this code you'll get this:
 ## Download folder(s)
 
 You can use `download_folder()` function, `ufpy.github.download.folder()` function
-(they're same, but with different names) and `UGithubDownloader.download_folder()` method.
+(they're the same, but with different names) and `UGithubDownloader.download_folder()` method.
 
 > [!NOTE]
 > You can use any iterable of strings in `download_folder()` function for downloading several folders.
@@ -102,10 +102,11 @@ After changing `<name>` to your username and running this code you'll get this:
 ## Download all repository
 
 You can use `download_repo()` function, `ufpy.github.download.repo()` function
-(they're same, but with different names) and `UGithubDownloader.download_repo()` method:
+(they're the same, but with different names) and `UGithubDownloader.download_repo()` method:
 ```python
 download_repo("honey-team/ufpy", "C:/Users/<name>/ufpy-tests")
-# copy all repository files and folders with its contents from main branch in C:/Users/<name>/ufpy-tests directory.
+# copy all files and folders from the repository along with their contents
+# from the main branch to the C:/Users/<name>/ufpy-tests directory.
 
 with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
     gd.download_repo() # Same
