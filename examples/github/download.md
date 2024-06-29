@@ -31,10 +31,10 @@ with UGithubDownloader("honey-team/ufpy", "C:/Ufpy-Test", "0.1") as gd:
     gd.download_repo("ufpy-0.1") # In C:/Ufpy-Test/ufpy-0.1 will appear all files from 0.1 tag in this repository
 ```
 
-## Download file/files
+## Download file(s)
 
 You can use `download_file()` function, `ufpy.github.download.file()` function
-(they're same, but with different names) and `UGithubDownloader.download_file()` method
+(they're same, but with different names) and `UGithubDownloader.download_file()` method.
 
 > [!NOTE]
 > You can use any iterable of strings in `download_file()` function for downloading several files.
@@ -42,7 +42,8 @@ You can use `download_file()` function, `ufpy.github.download.file()` function
 
 One file:
 ```python
-download_file("honey-team/ufpy", "README.md", "C:/Users/<name>") # copy README.md from main branch in C:/Users/<name> directory
+download_file("honey-team/ufpy", "README.md", "C:/Users/<name>")
+# copy README.md from main branch in C:/Users/<name> directory
 
 with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
     gd.download_file("README.md") # Same
@@ -50,8 +51,50 @@ with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
 
 Two files:
 ```python
-download_file("honey-team/ufpy", ["README.md", "mkdocs.yml"], "C:/Users/<name>") # copy README.md and mkdocs.yml from main branch in C:/Users/<name> directory
+download_file("honey-team/ufpy", ["README.md", "mkdocs.yml"], "C:/Users/<name>")
+# copy README.md and mkdocs.yml from main branch in C:/Users/<name> directory
 
 with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
     gd.download_files(["README.md", "mkdocs.yml"]) # Same
+```
+
+## Download folder(s)
+
+You can use `download_folder()` function, `ufpy.github.download.folder()` function
+(they're same, but with different names) and `UGithubDownloader.download_folder()` method.
+
+> [!NOTE]
+> You can use any iterable of strings in `download_folder()` function for downloading several folders.
+> In `UGithubDownloader` there are `download_folders()` method.
+
+One folder:
+```python
+download_folder("honey-team/ufpy", "examples", "C:/Users/<name>")
+# create C:/Users/<name>/examples folder
+# and copy origin/examples contents from main branch in this folder
+
+with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
+    gd.download_folder() # Same
+```
+
+Two folders:
+```python
+download_folder("honey-team/ufpy", ["examples", ".github"], "C:/Users/<name>")
+# create C:/Users/<name>/examples and C:/Users/<name>/.github folders
+# and copy origin/examples contents and origin/.github contents from main branch in this folders
+
+with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
+    gd.download_folders(["examples", ".github"]) # Same
+```
+
+## Download all repository
+
+You can use `download_repo()` function, `ufpy.github.download.repo()` function
+(they're same, but with different names) and `UGithubDownloader.download_repo()` method:
+```python
+download_repo("honey-team/ufpy", "C:/Users/<name>")
+# copy all repository files and folders with its contents from main branch in C:/Users/<name> directory.
+
+with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>") as gd:
+    gd.download_repo() # Same
 ```
