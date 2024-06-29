@@ -1,12 +1,12 @@
-# Github / Download
+# GitHub / Download
 
 ## Introduction
 
 In `ufpy` there are 3 functions and 1 class for downloading things from public GitHub repositories.
-You can without GitHub token download all repository, folder or several folders, and file or several
-files. You can use `UGithubDownloader` class for all this actions or other 3 functions. Class is more
-optimized for multi-requesting. If you want to download anything several times: use it. He is using 1]
-unpacked zip archive for all operations and by the end deletes it. If you don't want to download anything
+You can download an entire repository, a folder or multiple folders, and a file or multiple files without
+a GitHub token. You can use the `UGithubDownloader` class for all these actions or the other 3 functions.
+The class is more optimized for multiple requests. If you need to download multiple times, use it. It uses
+an unpacked zip archive for all operations and deletes it at the end. If you don't want to download anything
 several times -> use functions.
 
 Import functions and class from `ufpy`:
@@ -24,8 +24,8 @@ For opening this class you should use `with` operator as you do with files and o
 ```python
 with UGithubDownloader("honey-team/ufpy", "C:/Ufpy-Test", "0.1") as gd:
     # First argument - "repository owner"/"repository name"
-    # Second - Base download path (in all methods is using download paths from base download path. How in cmd
-    # for example: base path: C:\; cd ufpy -> final path: C:\ufpy.) (default is cwd (current working directory)
+    # Second - Base download path (all methods use download paths relative to the base download path, similar to how it works in the command line.
+    # For example: base path: C:\; cd ufpy -> final path: C:\ufpy.) (default is the current working directory)
     # Third argument: Branch or tag name (default is "main" (not master!))
     gd.download_repo() # In C:/Ufpy-Test will appear all files from 0.1 tag in this repository.
     gd.download_repo("ufpy-0.1") # In C:/Ufpy-Test/ufpy-0.1 will appear all files from 0.1 tag in this repository
@@ -38,7 +38,7 @@ You can use `download_file()` function, `ufpy.github.download.file()` function
 
 > [!NOTE]
 > You can use any iterable of strings in `download_file()` function for downloading several files.
-> In `UGithubDownloader` there are `download_files()` method.
+> In `UGithubDownloader` there is a `download_files()` method.
 
 One file:
 ```python

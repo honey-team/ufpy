@@ -6,7 +6,6 @@ from typing import Iterable, TypeAlias
 from zipfile import ZipFile
 
 from requests import get
-from requests.exceptions import RequestException
 
 from ufpy.path import UOpen
 
@@ -68,8 +67,8 @@ class UGithubDownloader:
         r = get(url)
 
         if not r.ok:
-            raise RequestException(
-                "Error with getting file from GitHub. Check that repo is public and that file path is correct.")
+            r.raise_for_status()
+
         self.__zip = ZipFile(io.BytesIO(r.content))
 
         temp_dir = format_paths(gettempdir())
@@ -83,11 +82,6 @@ class UGithubDownloader:
         if os.path.exists(self.__repo_path):
             rmtree(self.__repo_path)
 
-    def __del__(self):
-        self.__zip.close()
-        if os.path.exists(self.__repo_path):
-            rmtree(self.__repo_path)
-
     def download_file(self, file_path: str, download_path: str = ''):
         file_path, download_path = format_paths(file_path, download_path)
         download_path = f'{self.__base_download_path}/{download_path}'
@@ -96,8 +90,7 @@ class UGithubDownloader:
         r = get(url)
 
         if not r.ok:
-            raise RequestException(
-                "Error with getting file from GitHub. Check that repo is public and that file path is correct.")
+            r.raise_for_status()
 
         path = f'{download_path}/{file_path}'
 
