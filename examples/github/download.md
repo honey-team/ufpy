@@ -77,7 +77,7 @@ One folder:
 ```python
 download_folder("honey-team/ufpy", "examples", "C:/Users/<name>/ufpy-tests")
 # create the C:/Users/<name>/ufpy-tests/examples folder
-# and copy origin/examples contents from main branch in this folder
+# and copy the contents of origin/examples from the main branch into this folder
 
 with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
     gd.download_folder("examples") # Same
@@ -90,7 +90,7 @@ Two folders:
 ```python
 download_folder("honey-team/ufpy", ["examples", ".github"], "C:/Users/<name>/ufpy-tests")
 # create C:/Users/<name>/ufpy-tests/examples and C:/Users/<name>/ufpy-tests/.github folders
-# and copy origin/examples contents and origin/.github contents from main branch in this folders
+# and copy origin/examples contents and origin/.github contents from main branch in these folders
 
 with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
     gd.download_folders(["examples", ".github"]) # Same
@@ -114,8 +114,8 @@ with UGithubDownloader("honey-team/ufpy", "C:/Users/<name>/ufpy-tests") as gd:
 After changing `<name>` to your username and running this code you'll get this:
 
 > [!NOTE]
-> The repository code shown is from before merging this pull request
-> ([#37](https://github.com/honey-team/ufpy/pull/37)).
+> The repository code shown reflects the state before merging pull request
+> [#37](https://github.com/honey-team/ufpy/pull/37).
 > When this pull request was merged, repository was changed.
 
 ![Download all repository](.assets/download5.png)
