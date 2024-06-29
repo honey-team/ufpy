@@ -1,6 +1,5 @@
 import unittest
-from os import remove, mkdir
-from tempfile import gettempdir
+from os import remove, mkdir, getcwd
 
 import ufpy
 from ufpy import UGithubDownloader, download_file
@@ -11,8 +10,8 @@ class UGithubDownloadTestCase(unittest.TestCase):
         repo = 'honey-team/ufpy'
         file = 'README.md'
 
-        temp_dir = gettempdir()
-        download_path = f'{temp_dir}/ufpy-tests'
+        cwd_path = getcwd()
+        download_path = f'{cwd_path}/ufpy-tests'
         file_path = f'{download_path}/README.md'
 
         mkdir(download_path)
