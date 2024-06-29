@@ -7,7 +7,7 @@ tags:
 
 # `UDict` class
 
-!!! note
+!!! note "UDict as generic"
     You can use `UDict` as `Generic`, because of it, there are 3 `TypeVar`s: KT, VT, CDV.
 
     KT and VT is key type and value type. In inbuilt `dict` there are KT and VT type vars.
@@ -125,11 +125,37 @@ UDict's default value
     d.default = 'null'
     ```
 
+## reverse() -> UDict[KT, VT, CDV]
+
+Reverses (1) UDict and returns it.
+{ .annotate }
+
+1. Reverse UDict = reverse keys and values  
+   `#!python u{'hello': 1, 'hi': 2}` -> `#!python u{'hi': 2, 'hello': 1}` (reversed)
+
+!!! warning
+    `#!python reverse()` edits UDict. If you don't want to reverse UDict use `#!python reversed()` method instead.
+
+!!! example
+    ```python
+    d.reverse()
+    print(d) # prints reversed UDict
+    ```
+
+## reversed() -> UDict[KT, VT, CDV]
+
+Returns reversed UDict
+
+!!! example
+    ```python
+    print(d.reversed())
+    ```
+
 ## Magic methods
 
 Currently, UDict supports all these magic methods:
 
-### magic   _\_call__(func: Callable[[KT, VT], VT]) -> UDict[KT, VT, CDV]
+### _\_call__(func: Callable[[KT, VT], VT]) -> UDict[KT, VT, CDV]
 
 Returns new UDict, but all values generated with `func` function. First argument: key, second: value.
 
