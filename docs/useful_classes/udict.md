@@ -230,6 +230,15 @@ UDict value's index to find
     print(d.get(index=2)) # second value of UDict
     ```
 
+#### `value: VT`
+
+UDict key's value to find
+
+!!! example
+    ```python
+    print(d.get(value=1)) # if d = UDict{'hello': 1}, this will be 'hello'
+    ```
+
 ## Magic methods
 
 Currently, UDict supports all these magic methods:
