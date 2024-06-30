@@ -33,7 +33,7 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install mkdocs
+      - run: pip install mkdocs==1.1.2
       - run: pip install -r docs/requirements.txt
       - run: mkdocs gh-deploy --force
       - run: mike deploy --push --update-aliases ${{ steps.extract_branch.outputs.branch }} latest
