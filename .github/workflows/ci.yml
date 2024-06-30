@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     branches:
-      - 0.1 docs
+      - 0.1-docs
       - main
 
 permissions:
@@ -19,10 +19,6 @@ jobs:
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      - name: Extract branch name
-        shell: bash
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-        id: extract_branch
       - uses: actions/setup-python@v5
         with:
           python-version: 3.x
@@ -33,7 +29,5 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install mkdocs==1.1.2
       - run: pip install -r docs/requirements.txt
       - run: mkdocs gh-deploy --force
-      - run: mike deploy --push --update-aliases ${{ steps.extract_branch.outputs.branch }} latest
