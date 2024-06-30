@@ -54,8 +54,7 @@ extra:
 plugins:
   - search
   - tags
-  - social:
-      cards_layout: default
+  - social
 
 markdown_extensions:
   - abbr
