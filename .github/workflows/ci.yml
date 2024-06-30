@@ -18,12 +18,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.12
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
       - uses: actions/cache@v4
         with:
           key: mkdocs-material-${{ env.cache_id }}
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install -r docs/requirements.txt
-      - run: mkdocs gh-deploy --force
+      - name: Init caching
+        run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - name: Install requirements
+        run: pip install -r docs/requirements.txt
+      - name: Deploy mkdocs documentation
+        run: mkdocs gh-deploy --force
