@@ -34,5 +34,5 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: pip install -r docs/requirements.txt
-      - run: mike deploy --push --update-aliases ${{ steps.extract_branch.outputs.branch }} latest
       - run: mkdocs gh-deploy --force
+      - run: mike deploy --push --update-aliases ${{ steps.extract_branch.outputs.branch }} latest
