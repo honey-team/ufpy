@@ -127,14 +127,16 @@ UDict's default value
 
 ## reverse() -> UDict[KT, VT, CDV]
 
-Reverses (1) UDict and returns it.
+Reverses UDict and returns it. (1)
 { .annotate }
 
-1. Reverse UDict = reverse keys and values  
-   `#!python u{'hello': 1, 'hi': 2}` -> `#!python u{'hi': 2, 'hello': 1}` (reversed)
+1.  !!! question "How UDict is being reversing?"
+
+        Just is being reversing items  
+        `#!python u{'hello': 1, 'hi': 2}` -> `#!python u{'hi': 2, 'hello': 1}` (reversed)
 
 !!! warning
-    `#!python reverse()` edits UDict. If you don't want to reverse UDict use `#!python reversed()` method instead.
+    `#!python reverse()` edits UDict. If you don't want to reverse UDict use [`#!python reversed()`](#reversed-udictkt-vt-cdv) method instead.
 
 !!! example
     ```python
@@ -150,6 +152,54 @@ Returns reversed UDict
     ```python
     print(d.reversed())
     ```
+
+!!! tip "Get reversed UDict with inbuilt `#!python reversed()` and `#!python ~` operator"
+    You can get reversed UDict with inbuilt `#!python reversed()` and with invert operator (`~`).
+    !!! example
+        ```
+        print(~d)
+        print(reversed(d))
+        print(d.reversed() == reversed(d)) # True
+        ```
+    [Read more about `#!python reversed()` and `#!python ~` support in UDict](#magic-methods)
+
+## sort() -> UDict[KT, VT, CDV]
+
+Sorts UDict and returns it. (1)
+{ .annotate }
+
+1.  !!! question "How UDict is being sorting?"
+
+        Just are being sorting items by keys.  
+        `#!python u{'b': 1, 'a': 2}` -> `#!python u{'a': 2, 'b': 1}` (sorted)
+
+!!! warning
+    `#!python sort()` edits UDict. If you don't want to sort UDict use [`#!python sorted()`](#sorted-udictkt-vt-cdv) method instead.
+
+!!! example
+    ```python
+    print(d.sort())
+    ```
+
+## sorted() -> UDict[KT, VT, CDV]
+
+Returns sorted UDict
+
+!!! example
+    ```python
+    print(d.sorted())
+    ```
+
+##  get()
+
+```python
+def get(*, key: KT) -> VT | CDV
+def get(*, key: KT, default: DV) -> VT | DV
+def get(*, index: int) -> VT | CDV
+def get(*, index: int, default: DV) -> VT | DV
+def get(*, value: VT) -> KT | CDV
+def get(*, value: VT, default: DV) -> KT | DV
+```
 
 ## Magic methods
 

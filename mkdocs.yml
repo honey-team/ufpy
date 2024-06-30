@@ -48,10 +48,14 @@ extra:
     information: info
     useful class: useful
     useful feature: useful
+  version:
+    provider: mike
 
 plugins:
   - search
   - tags
+  - social:
+      cards_layout: default
 
 markdown_extensions:
   - abbr
