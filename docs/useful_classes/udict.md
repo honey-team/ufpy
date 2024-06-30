@@ -201,6 +201,35 @@ def get(*, value: VT) -> KT | CDV
 def get(*, value: VT, default: DV) -> KT | DV
 ```
 
+!!! failure "Using more than 1 argument"
+    If you use 0 or 2 or 3 of this arguments (`key`, `index`, `value`), method will raise `ValueError`
+
+Arguments:
+#### `key: KT`
+
+UDict value's key to find.
+
+!!! example
+    ```python
+    print(d.get(key='key')) # same that d['key']
+    ```
+
+#### `index: int`
+
+UDict value's index to find
+
+!!! warning
+    Indexes are starting from 1. Index of first element of UDict is 1.
+
+!!! failure "`index` argument more than UDict length"
+    If you use `index` argument make sure that `index` are less than UDict length. Otherwise `#!python get()`
+    will raise `IndexError`
+
+!!! example
+    ```python
+    print(d.get(index=2)) # second value of UDict
+    ```
+
 ## Magic methods
 
 Currently, UDict supports all these magic methods:
@@ -208,6 +237,12 @@ Currently, UDict supports all these magic methods:
 ### _\_call__(func: Callable[[KT, VT], VT]) -> UDict[KT, VT, CDV]
 
 Returns new UDict, but all values generated with `func` function. First argument: key, second: value.
+
+Arguments:
+#### `func: (KT, VT) -> VT`
+
+First argument of function is key, second is value. Returns new value
+    
 
 !!! example
     ```python
