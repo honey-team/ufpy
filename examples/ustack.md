@@ -12,7 +12,7 @@ from ufpy import Stack
 
 ## Create Stack
 
-For creating Stack you should use this code:
+To create a Stack, use the following code:
 ```python
 s = Stack() # blank stack
 s = Stack(1, 9, 2) # You can also provide elements as arguments
