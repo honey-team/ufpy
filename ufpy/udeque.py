@@ -103,6 +103,12 @@ class UDeque(Generic[VT]):
     def __str__(self) -> str:
         return str(self.__list)
 
-d = UDeque()
-d2 = UDeque(1, 2, 3)
-print(d2.end())
+    def __iter__(self) -> UDeque:
+        return self
+    
+    def __next__(self) -> VT:
+        if self.is_empty():
+            raise StopIteration
+        else:
+            value = self.popbegin()
+            return value
