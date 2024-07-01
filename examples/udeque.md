@@ -1,5 +1,4 @@
 # UDeque
-
 ## Introduction
 
 UDeque is class which is simplifying working with deque.
@@ -14,7 +13,7 @@ from ufpy import UDeque
 
 For creating UDeque you should use this code:
 ```python
-d = UDeque((1, 2, 3, 4, 5))
+d = UDeque(1, 2, 3, 4, 5)
 ```
 
 ## Get end/begin
@@ -91,7 +90,7 @@ d.popbegin(7) # [1, 2, 3, 4, 5]
 You can get the length of the deque using the built-in len() function.
 
 ```python
-d2 = UDeque((1, 2, 3, 4, 5))
+d2 = UDeque(1, 2, 3, 4, 5)
 len(d2) # 5
 ```
 
