@@ -2,7 +2,7 @@
 
 ## Introduction
 
-UDeque is class which is simplifying working with deque.
+UDeque is class which is simplifying working with pair.
 It has many methods, properties, magic methods.
 
 Firstly, import `UPair` from `ufpy`
