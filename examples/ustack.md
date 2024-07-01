@@ -132,7 +132,7 @@ You can use `copy()` method for copying `Stack`s:
 s.copy()
 ```
 
-You can also use `copy.copy()` function for copying `Stack`s:
+You can use the `copy.copy()` function to copy `Stack`s:
 ```python
 from copy import copy
 
