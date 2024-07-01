@@ -102,3 +102,21 @@ reserved(d2) # [5, 1]
 
 > [!NOTE]
 > `reserved()` returns `[end, begin]`
+
+## Iteration
+`UDeque()` suppots iteration:
+```python
+for var in d2:
+    print(var)
+# 1
+# 2
+# 3
+# 4
+# 5
+```
+
+> [!NOTE]
+> After using `for` your deque will be empty:
+> ```python
+> print(d2) # []
+> ```
