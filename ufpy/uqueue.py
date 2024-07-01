@@ -53,3 +53,6 @@ class UQueue(Generic[VT]):
             raise StopIteration
         else:
             return self.__list.pop(0)
+    
+    def __reserved__(self) -> UQueue:
+        return UQueue(*self.__list)
