@@ -9,13 +9,23 @@ install_requires = [
     'requests>=2.31.0',
 ]
 
+author = 'bleudev'
+author_email = 'aitiiigg1@gmail.com'
 organization_name = 'honey-team'
-author, author_email = 'bleudev', 'aitiiigg1@gmail.com'
 project_name = 'ufpy'
 github_url = f'https://github.com/{organization_name}/{project_name}'
 
+
 def __package(name: str) -> str:
     return f'{project_name}.{name}'
+
+
+def __gen_packages_list(*packages: str) -> list[str]:
+    res = [project_name]
+    for i in packages:
+        res.append(__package(i))
+    return res
+
 
 setup(
     name=project_name,
@@ -27,11 +37,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url=github_url,
-    packages=[
-        project_name,
-        __package('typ'),
-        __package('github'),
-    ],
+    packages=__gen_packages_list('typ', 'ustl', 'path', 'github'),
     classifiers=[
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.12',

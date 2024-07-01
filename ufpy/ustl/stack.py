@@ -7,21 +7,21 @@ from ufpy.math_op import r_generator, i_generator
 from ufpy.typ import AnyCollection, NumberLiteral, SupportsMul, SupportsTrueDiv, Empty
 
 __all__ = (
-    "UStack",
+    "Stack",
 )
 
 T = TypeVar("T")
 T2 = TypeVar("T2")
 
-def convert_to_stack(other: UStack[T] | AnyCollection[T] | T) -> UStack[T]:
-    if isinstance(other, UStack):
+def convert_to_stack(other: Stack[T] | AnyCollection[T] | T) -> Stack[T]:
+    if isinstance(other, Stack):
         return other
     if isinstance(other, (list, tuple)):
-        return UStack(iterable=other)
-    return UStack(other)
+        return Stack(iterable=other)
+    return Stack(other)
 
-def convert_to_list_for_mul_and_div(other: UStack[T] | AnyCollection[T] | T, __len: int = None) -> list[T]:
-    if isinstance(other, UStack):
+def convert_to_list_for_mul_and_div(other: Stack[T] | AnyCollection[T] | T, __len: int = None) -> list[T]:
+    if isinstance(other, Stack):
         return other.elements
     if isinstance(other, (list, tuple)):
         return list(other)
@@ -30,7 +30,7 @@ def convert_to_list_for_mul_and_div(other: UStack[T] | AnyCollection[T] | T, __l
 @cmp_generator
 @i_generator
 @r_generator
-class UStack(Generic[T]):
+class Stack(Generic[T]):
     """
     Class for simplifying working with stacks in Python.
     """
@@ -79,48 +79,48 @@ class UStack(Generic[T]):
         """
         return self.__elements.pop()
 
-    def push(self, *items: T) -> UStack[T]:
+    def push(self, *items: T) -> Stack[T]:
         """Append items to stack"""
         self.__elements.extend(items)
-        return UStack(iterable=self.__elements)
+        return Stack(iterable=self.__elements)
 
-    def remove(self, *items: T) -> UStack[T]:
+    def remove(self, *items: T) -> Stack[T]:
         for i in items:
             self.__elements.remove(i)
-        return UStack(iterable=self.__elements)
+        return Stack(iterable=self.__elements)
 
-    def clear(self) -> Empty[UStack]:
+    def clear(self) -> Empty[Stack]:
         del self.elements
         return self
 
     # copying
-    def copy(self) -> UStack[T]:
-        return UStack(iterable=self.__elements.copy())
+    def copy(self) -> Stack[T]:
+        return Stack(iterable=self.__elements.copy())
 
     def __copy__(self):
         return self.copy()
 
     # call
-    def __call__(self, func: Callable[[int, T], T2]) -> UStack[T2]:
+    def __call__(self, func: Callable[[int, T], T2]) -> Stack[T2]:
         elements = self.__elements.copy()
         for i, v in enumerate(elements):
             elements[i] = func(i, v)
-        return UStack(iterable=elements)
+        return Stack(iterable=elements)
 
     # math operations
-    def __add__(self, other: UStack[T2] | AnyCollection[T2] | T2) -> UStack[T | T2]:
+    def __add__(self, other: Stack[T2] | AnyCollection[T2] | T2) -> Stack[T | T2]:
         other = convert_to_stack(other)
         result = self.copy()
         return result.push(*other.elements)
 
-    def __sub__(self, other: UStack[T] | AnyCollection[T] | T) -> UStack[T]:
+    def __sub__(self, other: Stack[T] | AnyCollection[T] | T) -> Stack[T]:
         other = convert_to_stack(other)
         result = self.copy()
         return result.remove(*other.elements)
 
     def __mul__(
-        self: UStack[SupportsMul], other: UStack[NumberLiteral] | AnyCollection[NumberLiteral] | NumberLiteral
-    ) -> UStack[SupportsMul]:
+        self: Stack[SupportsMul], other: Stack[NumberLiteral] | AnyCollection[NumberLiteral] | NumberLiteral
+    ) -> Stack[SupportsMul]:
         other = convert_to_list_for_mul_and_div(other, len(self))
 
         def mul(i: int, v: SupportsMul) -> SupportsMul:
@@ -129,8 +129,8 @@ class UStack(Generic[T]):
         return self(mul)
 
     def __truediv__(
-        self: UStack[SupportsTrueDiv], other: UStack[NumberLiteral] | AnyCollection[NumberLiteral] | NumberLiteral
-    ) -> UStack[SupportsTrueDiv]:
+        self: Stack[SupportsTrueDiv], other: Stack[NumberLiteral] | AnyCollection[NumberLiteral] | NumberLiteral
+    ) -> Stack[SupportsTrueDiv]:
         other = convert_to_list_for_mul_and_div(other, len(self))
 
         def div(i: int, v: SupportsTrueDiv) -> SupportsTrueDiv:
@@ -148,7 +148,7 @@ class UStack(Generic[T]):
     def __bool__(self) -> bool:
         return not self.is_empty()
 
-    def __eq__(self, other: UStack[T2]) -> bool:
+    def __eq__(self, other: Stack[T2]) -> bool:
         return self.elements == other.elements
 
     # Transform to other types

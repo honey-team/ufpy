@@ -1,21 +1,22 @@
-# UStack
+# Stack
 
 ## Introduction
 
-UStack is list with possibility to get only top element with useful features. [Wiki](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
+Stack is list with possibility to get only top element with useful features. [Wiki](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
 
-Firstly, import `UStack` from `ufpy`
+Firstly, import `Stack` from `ufpy`
+
 ```python
-from ufpy import UStack
+from ufpy import Stack
 ```
 
-## Create UStack
+## Create Stack
 
-For creating UStack you should use this code:
+For creating Stack you should use this code:
 ```python
-s = UStack() # blank stack
-s = UStack(1, 9, 2) # You can also provide elements as arguments
-s = UStack(iterable=[9, 2, 8]) # Or with `iterable` kwarg
+s = Stack() # blank stack
+s = Stack(1, 9, 2) # You can also provide elements as arguments
+s = Stack(iterable=[9, 2, 8]) # Or with `iterable` kwarg
 ```
 
 ## Get / edit / delete top element
@@ -102,13 +103,13 @@ len(s)
 
 You can check that stack is empty using `is_empty()` method:
 ```python
-s = UStack()
+s = Stack()
 s.is_empty() # True
 ```
 
-Also, you can use `if UStack` syntax for checking that stack is not empty
+Also, you can use `if Stack` syntax for checking that stack is not empty
 ```python
-s = UStack()
+s = Stack()
 if s:
     print("Stack isn't empty!")
 else:
@@ -120,18 +121,18 @@ else:
 
 You can use `repr()` with stacks. Because of it, you can print stacks:
 ```python
-s = UStack(1, 9, 2)
+s = Stack(1, 9, 2)
 print(s) # s[1, 9, 2]
 ```
 
-## Copying of UStack
+## Copying of Stack
 
-You can use `copy()` method for copying `UStack`s:
+You can use `copy()` method for copying `Stack`s:
 ```python
 s.copy()
 ```
 
-You can also use `copy.copy()` function for copying `UStack`s:
+You can also use `copy.copy()` function for copying `Stack`s:
 ```python
 from copy import copy
 
