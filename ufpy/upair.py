@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Generic, TypeVar, Any
 
 __all__ = (
-    "UPair"
+    "UPair",
 )
 
 VT = TypeVar("VT")

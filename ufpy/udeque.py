@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TypeVar, Generic, Any
 
 __all__ = (
-    "UDeque"
+    "UDeque",
 )
 
 VT = TypeVar("VT")
