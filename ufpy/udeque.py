@@ -8,7 +8,7 @@ __all__ = (
 VT = TypeVar("VT")
 
 class UDeque(Generic[VT]):
-    def __init__(self, **__list):
+    def __init__(self, *__list):
         self.__list = list(__list)
 
     def addend(self, value: VT) -> VT:
@@ -102,3 +102,7 @@ class UDeque(Generic[VT]):
     
     def __str__(self) -> str:
         return str(self.__list)
+
+d = UDeque()
+d2 = UDeque(1, 2, 3)
+print(d2.end())
