@@ -107,7 +107,7 @@ s = Stack()
 s.is_empty() # True
 ```
 
-You can also use the `if Stack` syntax to check if the stack is not empty
+You can also use the `if Stack` syntax to check whether the stack is not empty
 ```python
 s = Stack()
 if s:
