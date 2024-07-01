@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Stack is a list with the possibility to get only the top element with useful features. [Wiki](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
+A Stack is a list that allows access only to the top element and includes several useful features. [Wiki](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
 
 Firstly, import `Stack` from `ufpy`
 
