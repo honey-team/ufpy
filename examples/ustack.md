@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Stack is list with possibility to get only top element with useful features. [Wiki](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
+Stack is a list with the possibility to get only the top element with useful features. [Wiki](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
 
 Firstly, import `Stack` from `ufpy`
 
@@ -107,7 +107,7 @@ s = Stack()
 s.is_empty() # True
 ```
 
-Also, you can use `if Stack` syntax for checking that stack is not empty
+You can also use the `if Stack` syntax to check if the stack is not empty
 ```python
 s = Stack()
 if s:

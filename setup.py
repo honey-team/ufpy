@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 from ufpy import __version__
 
@@ -16,17 +16,6 @@ project_name = 'ufpy'
 github_url = f'https://github.com/{organization_name}/{project_name}'
 
 
-def __package(name: str) -> str:
-    return f'{project_name}.{name}'
-
-
-def __gen_packages_list(*packages: str) -> list[str]:
-    res = [project_name]
-    for i in packages:
-        res.append(__package(i))
-    return res
-
-
 setup(
     name=project_name,
     version=__version__,
@@ -37,7 +26,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url=github_url,
-    packages=__gen_packages_list('typ', 'ustl', 'path', 'github'),
+    packages=find_packages(),
     classifiers=[
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.12',
