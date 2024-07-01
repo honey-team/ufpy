@@ -1,6 +1,19 @@
-__version__ = '1.0-alpha'
+__version__ = '0.1.2'
 
-from .cmp import *
-from .math_op import *
-from .udict import *
-from .utils import *
+from ufpy.cmp import *
+from ufpy.math_op import *
+from ufpy.udict import *
+from ufpy.ustack import *
+from ufpy.utils import *
+
+# Typing package
+__typ_version__ = '0.1'
+from ufpy.typ import *
+
+# Path package
+__path_version__ = '0.1'
+from ufpy.path import *
+
+# GitHub package
+__github_version__ = '0.1'
+from ufpy.github import *

@@ -88,7 +88,7 @@ d.popbegin(7) # [1, 2, 3, 4, 5]
 
 ## Get length of deque
 
-You can get length of dict using inbuilt `len()` function
+You can get the length of the deque using the built-in len() function.
 
 ```python
 d2 = UDeque((1, 2, 3, 4, 5))
@@ -96,11 +96,10 @@ len(d2) # 5
 ```
 
 ## Reserve
-To reserve deque's end and begin use inbuilt `reserved()` function
+To reserve the deque's end and beginning, use the built-in `reserved()` function
 ```python
 reserved(d2) # [5, 1]
 ```
 
 > [!NOTE]
 > `reserved()` returns `[end, begin]`
-Что написать ещё

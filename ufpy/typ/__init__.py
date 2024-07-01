@@ -1,2 +1,2 @@
-from .protocols import *
-from .type_alias import *
+from ufpy.typ.protocols import *
+from ufpy.typ.type_alias import *

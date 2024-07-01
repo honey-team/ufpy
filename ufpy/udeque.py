@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TypeVar, Generic, Iterable, Any
+from typing import TypeVar, Generic, Any
 
 __all__ = (
     "UDeque"
@@ -8,38 +8,54 @@ __all__ = (
 VT = TypeVar("VT")
 
 class UDeque(Generic[VT]):
-    def __init__(self, __list: Iterable[VT] = []):
+    def __init__(self, **__list):
         self.__list = list(__list)
 
-    def addend(self, value: VT):
-        self.__list.append(value)
+    def addend(self, value: VT) -> VT:
+        if self:
+            self.__list.append(value)
+            return value
+        else:
+            raise IndexError("index out of range")
 
-    def addbegin(self, value: VT):
-        self.__list.insert(0, value)
+    def addbegin(self, value: VT) -> VT:
+        if self:
+            self.__list.insert(0, value)
+            return value
+        else:
+            raise IndexError("index out of range")
 
-    def popend(self):
-        return self.__list.pop()
+    def popend(self) -> VT:
+        if self:
+            return self.__list.pop()
+        else:
+            raise IndexError("index out of range")
 
-    def popbegin(self):
-        return self.__list.pop(0)
+    def popbegin(self) -> VT:
+        if self:
+            return self.__list.pop(0)
+        else:
+            raise IndexError("index out of range")
     
-    def setend(self, value: VT):
-        self[1] = value
-
-    def setbegin(self, value: VT):
-        self[0] = value
-
-    def end(self) -> VT:
+    def setend(self, value: VT) -> VT:
         if self:
-            return self.__list[-1]
+            self[-1] = value
+            return value
         else:
-            return None
+            raise IndexError("index out of range")
 
-    def begin(self) -> VT:
+    def setbegin(self, value: VT) -> VT:
         if self:
-            return self.__list[0]
+            self[0] = value
+            return value
         else:
-            return None
+            raise IndexError("index out of range")
+
+    def end(self) -> Any:
+        return self.__list[-1] if self else None
+
+    def begin(self) -> Any:
+        return self.__list[0] if self else None
     
     def copy(self) -> UDeque:
         return UDeque(self.__list.copy())

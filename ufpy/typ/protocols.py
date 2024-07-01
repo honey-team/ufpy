@@ -4,10 +4,16 @@ __all__ = (
     'SupportsSetItem',
     'SupportsDelItem',
     'LikeDict',
+    'SupportsAdd',
+    'SupportsSub',
+    'SupportsMul',
+    'SupportsTrueDiv',
+    'SupportsMathOperations',
 )
 
 from typing import Protocol, Generic, TypeVar
 
+# Dicts/collections
 KT = TypeVar('KT')
 VT = TypeVar('VT')
 DV = TypeVar('DV')
@@ -35,5 +41,31 @@ class LikeDict(
     SupportsSetItem[KT, VT],
     SupportsDelItem[KT, VT],
     Generic[KT, VT]
+):
+    ...
+
+# math operations
+OT = TypeVar("OT")
+
+class SupportsAdd(Protocol[OT]):
+    def __add__(self, other: OT): ...
+
+class SupportsSub(Protocol[OT]):
+    def __sub__(self, other: OT): ...
+
+class SupportsMul(Protocol[OT]):
+    def __mul__(self, other: OT): ...
+
+class SupportsTrueDiv(Protocol[OT]):
+    def __truediv__(self, other: OT): ...
+
+# TODO: More math operations
+
+class SupportsMathOperations(
+    SupportsAdd[OT],
+    SupportsSub[OT],
+    SupportsMul[OT],
+    SupportsTrueDiv[OT],
+    Generic[OT]
 ):
     ...
