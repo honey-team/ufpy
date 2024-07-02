@@ -115,7 +115,7 @@ for var in d2:
 # 5
 ```
 
-> [!NOTE]
+> [!WARNING]
 > After using `for` your deque will be empty:
 > ```python
 > print(d2) # []

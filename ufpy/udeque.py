@@ -9,47 +9,41 @@ VT = TypeVar("VT")
 
 class UDeque(Generic[VT]):
     def __init__(self, *__list):
-        self.__list = list(__list)
+        self.__list: list[VT] = list(__list)
 
     def addend(self, value: VT) -> VT:
-        if self:
-            self.__list.append(value)
-            return value
-        else:
-            raise IndexError("index out of range")
+        self.__list.append(value)
+        return value
 
     def addbegin(self, value: VT) -> VT:
-        if self:
-            self.__list.insert(0, value)
-            return value
-        else:
-            raise IndexError("index out of range")
+        self.__list.insert(0, value)
+        return value
 
     def popend(self) -> VT:
         if self:
             return self.__list.pop()
         else:
-            raise IndexError("index out of range")
+            raise IndexError("list index out of range")
 
     def popbegin(self) -> VT:
         if self:
             return self.__list.pop(0)
         else:
-            raise IndexError("index out of range")
+            raise IndexError("list index out of range")
     
     def setend(self, value: VT) -> VT:
         if self:
             self[-1] = value
             return value
         else:
-            raise IndexError("index out of range")
+            raise IndexError("list index out of range")
 
     def setbegin(self, value: VT) -> VT:
         if self:
             self[0] = value
             return value
         else:
-            raise IndexError("index out of range")
+            raise IndexError("list index out of range")
 
     def end(self) -> Any:
         return self.__list[-1] if self else None
@@ -73,29 +67,22 @@ class UDeque(Generic[VT]):
         return not self.is_empty()
     
     def __getitem__(self, index: Any) -> VT:
-        if isinstance(index, int):
-            if index in (0, 1):
-                return self.__list[index]
-            else:
-                raise IndexError(f"{index} out of range (0, 1)")
+        if index in (0, -1):
+            return self.__list[index]
+        else:
+            raise IndexError(f"{index} out of range")
             
     def __setitem__(self, index: int, value: VT):
-        if isinstance(index, int):
-            if index == 0:
-                self.__list[index] = value
-            elif index == 1:
-                self.__list[-index] = value
-            else:
-                raise IndexError(f"{index} out of range (0, 1)")
+        if index in (0, -1):
+            self.__list[index] = value
+        else:
+            raise IndexError(f"{index} out of range")
             
     def __delitem__(self, index: int):
-        if isinstance(index, int):
-            if index == 0:
-                del self.__list[index]
-            elif index == 1:
-                del self.__list[-index]
-            else:
-                raise IndexError(f"{index} out of range (0, 1)")
+        if index in (0, -1):
+            del self.__list[index]
+        else:
+            raise IndexError(f"{index} out of range")
 
     def __reversed__(self) -> UDeque:
         return UDeque((self.end(), self.begin()))
@@ -105,10 +92,9 @@ class UDeque(Generic[VT]):
 
     def __iter__(self) -> UDeque:
         return self
-    
+
     def __next__(self) -> VT:
         if self.is_empty():
             raise StopIteration
         else:
-            value = self.popbegin()
-            return value
+            return self.popbegin()

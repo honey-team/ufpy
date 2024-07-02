@@ -10,7 +10,6 @@ VT = TypeVar("VT")
 class UQueue(Generic[VT]):
     def __init__(self, *__list):
         self.__list: list[VT] = list(__list)
-        self.__index = 0
 
     def pop(self) -> VT:
         return self.__list.pop(0)
@@ -27,11 +26,8 @@ class UQueue(Generic[VT]):
         return UQueue(self.__list.copy())
 
     def set_head(self, value: VT) -> VT:
-        if self:
-            self.__list[-1] = value
-            return value
-        else:
-            raise IndexError("Index out of range")
+        self.__list.insert(-1, value)
+        return value
 
     def is_empty(self) -> bool:
         return len(self) == 0
@@ -56,3 +52,15 @@ class UQueue(Generic[VT]):
     
     def __reserved__(self) -> UQueue:
         return UQueue(*self.__list)
+
+    def __getitem__(self, index: int) -> VT:
+        if index == -1:
+            return self.__list[index]
+        else:
+            raise IndexError(f"{index} out of range")
+            
+    def __delitem__(self, index: int):
+        if index == -1:
+            del self.__list[index]
+        else:
+            raise IndexError(f"{index} out of range")

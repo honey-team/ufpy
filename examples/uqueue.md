@@ -44,6 +44,13 @@ For deleting the first element use
 q.pop() # [2, 3, 4, 5, 7]
 ```
 
+> [!NOTE]
+> To delete end or begin you also can use `del <UQueue>[-1]`:
+> ```python
+> del q[-1] # [2, 3, 4, 5]
+> ```
+> But it is undesirable to use
+
 ## Get length of queue
 
 You can get the length of the queue using the built-in len() function.
@@ -71,7 +78,7 @@ for var in q2:
 # 5
 ```
 
-> [!NOTE]
+> [!WARNING]
 > After using `for` your queue will be empty:
 > ```python
 > print(q2) # []
