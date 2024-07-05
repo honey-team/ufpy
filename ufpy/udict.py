@@ -300,9 +300,15 @@ class UDict(Generic[KT, VT, CDV]):
     
     # Comparing
     def __cmp__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> int:
+        """
+        Returns `len(self) - len(other)`
+        """
         return len(self) - len(other)
     
     def __eq__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> bool:
+        """
+        Returns True if UDict.dictionary is equal to other UDict.dictionary / UDict.dictionary is equal to dict
+        """
         if isinstance(other, UDict):
             other = other.dictionary
         return self.__dict == other
