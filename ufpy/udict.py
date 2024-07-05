@@ -45,7 +45,7 @@ class UDict(Generic[KT, VT, CDV]):
     @property
     def dictionary(self) -> dict[KT, VT]:
         """
-        A regular Python Dictionary
+        UDict's dictionary. A regular Python Dictionary.
         """
         return self.__dict
     
