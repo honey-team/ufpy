@@ -145,7 +145,7 @@ class UDict(Generic[KT, VT, CDV]):
 
     def sorted(self) -> UDict[KT, VT, CDV]:
         """
-        Returns sorted UDict, but does'nt change it
+        Returns sorted UDict, but doesn't change it
         """
         keys = sorted(list(self.__dict.keys()))
         values = get_items_for_several_keys(self.__dict, keys)
