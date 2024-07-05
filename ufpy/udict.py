@@ -23,6 +23,9 @@ class _ClassDefault:
 @i_generator
 @r_generator
 class UDict(Generic[KT, VT, CDV]):
+    """
+    Class for simplifying working with dicts in Python.
+    """
     @overload
     def __init__(self, dictionary: AnyDict[KT, VT]): ...
     @overload
@@ -41,6 +44,9 @@ class UDict(Generic[KT, VT, CDV]):
     # dictionary
     @property
     def dictionary(self) -> dict[KT, VT]:
+        """
+        А regular Python Dictionary
+        """
         return self.__dict
     
     @dictionary.setter
@@ -52,6 +58,9 @@ class UDict(Generic[KT, VT, CDV]):
     # keys
     @property
     def keys(self) -> list[KT]:
+        """
+        All dict's keys
+        """
         return list(self.__dict.keys())
 
     @keys.setter
@@ -61,6 +70,9 @@ class UDict(Generic[KT, VT, CDV]):
     # values
     @property
     def values(self) -> list[VT]:
+        """
+        All dict's values
+        """
         return list(self.__dict.values())
 
     @values.setter
@@ -70,6 +82,9 @@ class UDict(Generic[KT, VT, CDV]):
     # items
     @property
     def items(self) -> list[tuple[KT, VT]]:
+        """
+        All dict's items
+        """
         return list(zip(self.keys, self.values))
 
     @items.setter
@@ -79,6 +94,9 @@ class UDict(Generic[KT, VT, CDV]):
     # default
     @property
     def default(self) -> CDV:
+        """
+        The value that will be returned when .get() function or the [] operator is called if the entered key is not in the UDict
+        """
         return self.__default
     
     @default.setter
@@ -98,10 +116,16 @@ class UDict(Generic[KT, VT, CDV]):
     
     # reverse
     def reverse(self) -> UDict[KT, VT, CDV]:
+        """
+        Reverses UDict and returns it.
+        """
         self.__dict = self.reversed().__dict
         return self
 
     def reversed(self) -> UDict[KT, VT, CDV]:
+        """
+        Returns reversed UDict, but not changes it
+        """
         keys, values = list(self.__dict.keys())[::-1], list(self.__dict.values())[::-1]
         return UDict(dict(list(zip(keys, values))))
 
@@ -113,10 +137,16 @@ class UDict(Generic[KT, VT, CDV]):
 
     # sort
     def sort(self) -> UDict[KT, VT, CDV]:
+        """
+        Sorts UDict and return it
+        """
         self.__dict = self.sorted().__dict
         return self
 
     def sorted(self) -> UDict[KT, VT, CDV]:
+        """
+        Returns sorted UDict, but not changes it
+        """
         keys = sorted(list(self.__dict.keys()))
         values = get_items_for_several_keys(self.__dict, keys)
         return UDict(dict(list(zip(keys, values))))
@@ -224,19 +254,32 @@ class UDict(Generic[KT, VT, CDV]):
 
     # Len, iterator and reversed version
     def __len__(self) -> int:
+        """Returns `len(self)`"""
         return len(self.__dict)
     
     def __iter__(self) -> Iterator[tuple[KT, VT]]:
+        """
+        Implements `iter(self)`.
+        """
         return iter(self.__dict.items())
     
     # Booleans
     def is_empty(self) -> bool:
+        """
+        Returns `True` if `len(self)` equals `0`
+        """
         return len(self) == 0
 
     def __bool__(self) -> bool:
+        """
+        Returns `False` if `len(self)` equals `0`
+        """
         return not self.is_empty()
 
     def __contains__(self, item: tuple[KT, VT] | list[KT | VT] | KT) -> bool:
+        """
+        Returns `True` if `item` is in `UDict`
+        """
         if isinstance(item, (list, tuple)):
             k, v = item
             return k in self.__dict and self.__dict.get(k, self.__default) == v
@@ -244,9 +287,15 @@ class UDict(Generic[KT, VT, CDV]):
     
     # Transform to other types
     def __repr__(self) -> str:
+        """
+        Transforms `UDict` to `str`
+        """
         return f'u{self.__dict}'
 
     def __hash__(self) -> int:
+        """
+        Returns UDict's hash
+        """
         return hash(self.__repr__())
     
     # Comparing
@@ -260,6 +309,9 @@ class UDict(Generic[KT, VT, CDV]):
     
     # Math operations
     def __add__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> UDict[KT, VT, CDV]:
+        """
+        Combines 2 UDict / 1 UDict and 1 Dictionary
+        """
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
@@ -270,8 +322,10 @@ class UDict(Generic[KT, VT, CDV]):
         return UDict(new_dict)
     
     def __sub__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> UDict[KT, VT, CDV]:
+        """
+        Subtracts from UDict another UDict / from UDict a regular dict
+        """
         new_dict = self.__dict.copy()
-        
         if isinstance(other, UDict):
             other: dict[KT, VT] = other.dictionary
         
@@ -283,6 +337,7 @@ class UDict(Generic[KT, VT, CDV]):
     def __mul__(
             self, other: dict[KT, float | int] | UDict[KT, float | int, DV] | float | int
     ) -> UDict[KT, VT, CDV]:
+        """Multiplies each value by another value with the same key"""
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
@@ -298,6 +353,9 @@ class UDict(Generic[KT, VT, CDV]):
     def __truediv__(
             self, other: dict[KT, float | int] | UDict[KT, float | int, DV] | float | int
     ) -> UDict[KT, VT, CDV]:
+        """
+        Divides each value by another value with the same key
+        """
         new_dict = self.__dict.copy()
         
         if isinstance(other, UDict):
