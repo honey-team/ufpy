@@ -95,7 +95,7 @@ class UDict(Generic[KT, VT, CDV]):
     @property
     def default(self) -> CDV:
         """
-        The value that will be returned when .get() function or the [] operator is called if the entered key is not in the UDict
+        The value that will be returned when .get() function or the [] operator are called if the entered key is not in the UDict
         """
         return self.__default
     
