@@ -45,7 +45,7 @@ class UDict(Generic[KT, VT, CDV]):
     @property
     def dictionary(self) -> dict[KT, VT]:
         """
-        А regular Python Dictionary
+        A regular Python Dictionary
         """
         return self.__dict
     
@@ -124,7 +124,7 @@ class UDict(Generic[KT, VT, CDV]):
 
     def reversed(self) -> UDict[KT, VT, CDV]:
         """
-        Returns reversed UDict, but not changes it
+        Returns reversed UDict, but doesn't change it
         """
         keys, values = list(self.__dict.keys())[::-1], list(self.__dict.values())[::-1]
         return UDict(dict(list(zip(keys, values))))
@@ -138,14 +138,14 @@ class UDict(Generic[KT, VT, CDV]):
     # sort
     def sort(self) -> UDict[KT, VT, CDV]:
         """
-        Sorts UDict and return it
+        Sorts UDict and returns it
         """
         self.__dict = self.sorted().__dict
         return self
 
     def sorted(self) -> UDict[KT, VT, CDV]:
         """
-        Returns sorted UDict, but not changes it
+        Returns sorted UDict, but does'nt change it
         """
         keys = sorted(list(self.__dict.keys()))
         values = get_items_for_several_keys(self.__dict, keys)
