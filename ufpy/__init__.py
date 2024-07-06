@@ -18,7 +18,7 @@ def __deprecated(deprecated_name: str, x, start_version: str, end_version: str):
     return new_func
 
 
-__version__ = '0.2-dev'
+__version__ = '0.2'
 from ufpy.cmp import *
 from ufpy.math_op import *
 from ufpy.udict import *
