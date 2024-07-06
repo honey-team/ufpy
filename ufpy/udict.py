@@ -25,6 +25,8 @@ class _ClassDefault:
 class UDict(Generic[KT, VT, CDV]):
     """
     Class for simplifying working with dicts in Python.
+    
+    Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict
     """
     @overload
     def __init__(self, dictionary: AnyDict[KT, VT]): ...
@@ -46,6 +48,8 @@ class UDict(Generic[KT, VT, CDV]):
     def dictionary(self) -> dict[KT, VT]:
         """
         UDict's dictionary. A regular Python Dictionary.
+        
+        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-dictionary-dictkt-vt
         """
         return self.__dict
     
@@ -60,6 +64,8 @@ class UDict(Generic[KT, VT, CDV]):
     def keys(self) -> list[KT]:
         """
         All dict's keys
+
+        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-keys-listkt
         """
         return list(self.__dict.keys())
 
@@ -72,6 +78,8 @@ class UDict(Generic[KT, VT, CDV]):
     def values(self) -> list[VT]:
         """
         All dict's values
+
+        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-values-listvt
         """
         return list(self.__dict.values())
 
@@ -84,6 +92,8 @@ class UDict(Generic[KT, VT, CDV]):
     def items(self) -> list[tuple[KT, VT]]:
         """
         All dict's items
+
+        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-items-listtuplekt-vt
         """
         return list(zip(self.keys, self.values))
 
@@ -96,6 +106,8 @@ class UDict(Generic[KT, VT, CDV]):
     def default(self) -> CDV:
         """
         The value that will be returned when .get() function or the [] operator are called if the entered key is not in the UDict
+
+        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-default-cdv
         """
         return self.__default
     
