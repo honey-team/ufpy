@@ -21,3 +21,26 @@ class UList(Generic[T]):
         if isinstance(value, UList):
             value = value.listing
         self.__list = list(value)
+
+    def __repr__(self) -> str:
+        return f'u{self.listing}'
+
+    def __add__(self, other: dict[T] | UList[T]) -> UList[T]:
+        if isinstance(other, int):
+            new_list = []
+            for i in self.listing:
+                new_list.append(int(i) + other)
+        elif isinstance(other, str):
+            new_list = []
+            for i in self.listing:
+                new_list.append(str(i) + other) 
+        elif isinstance(other, list):
+            new_list = self.listing.copy()
+            for i in other:
+                new_list.append(i)
+        elif isinstance(other, UList):
+            new_list = self.listing.copy()
+            for i in other.listing:
+                new_list.append(i)
+
+        return UList(new_list)
