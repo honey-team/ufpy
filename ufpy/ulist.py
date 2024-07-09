@@ -12,6 +12,12 @@ class UList(Generic[T]):
             __list = __list.listing
         self.__list = __list
 
+    def __neg__(self):
+        new_list = self.listing.copy()
+        new_list.reverse()
+        return UList(new_list)
+        
+
     def __getitem__(self, key: int) -> UList[T]:
         return self.listing[key]
 
