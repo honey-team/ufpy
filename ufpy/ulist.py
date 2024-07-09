@@ -1,20 +1,32 @@
 from __future__ import annotations
 
-from typing import TypeVar, Generic
+from typing import TypeVar, Generic, Callable
 
 from ufpy.typ import AnyCollection
 
 T = TypeVar('T')
 
 class UList(Generic[T]):
+    __starter = 0
     def __init__(self, __list: list[T] | UList[T]) -> None:
         if isinstance(__list, UList):
             __list = __list.listing
         self.__list = __list
 
+    def __getitem__(self, key: int) -> UList[T]:
+        return self.listing[key - self.__starter]
+
     @property
     def listing(self) -> list[T]:
         return self.__list
+    
+    @property
+    def starter(self):
+        return self.__starter
+    
+    @starter.setter
+    def starter(self, value):
+        self.__starter = value
 
     @listing.setter
     def listing(self, value: AnyCollection[T] | set[T] | UList[T]):
@@ -22,6 +34,12 @@ class UList(Generic[T]):
             value = value.listing
         self.__list = list(value)
 
+    def __call__(self, func: Callable[[T], T]) -> UList[T]:
+        new_dict = self.list
+        for k, v in self:
+            new_dict[k] = func(k, v)
+        return UList(new_dict)
+    
     def __repr__(self) -> str:
         return f'u{self.listing}'
 
