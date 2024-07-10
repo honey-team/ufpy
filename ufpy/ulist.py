@@ -58,26 +58,15 @@ class UList(Generic[T]):
     def __repr__(self) -> str:
         return f'u{self.listing}'
 
-    def __add__(self, other: dict[T] | UList[T] | int[T] | str[T]) -> UList[T]:
-        if isinstance(other, int):
-            new_list = []
-            for i in self.listing:
-                new_list.append(int(i) + other)
-        elif isinstance(other, str):
-            new_list = []
-            for i in self.listing:
-                new_list.append(str(i) + other) 
-        elif isinstance(other, list):
-            new_list = self.listing.copy()
-            for i in other:
-                new_list.append(i)
-        elif isinstance(other, UList):
-            new_list = self.listing.copy()
-            for i in other.listing:
-                new_list.append(i)
+    def __add__(self, other) -> UList[T]:
+        new_list = self.listing.copy()
+        new_list.append(other)
 
         return UList(new_list)
     
+    def __radd__(self, other) -> UList[T]:
+        return self + other
+
     def __sub__(self, other) -> UList[T]:
         new_list = self.listing.copy()
         new_list.remove(other)
