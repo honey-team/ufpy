@@ -2,7 +2,7 @@ __all__ = (
     'FunctionSequence',
 )
 
-from typing import Callable, TypeVar, Generic, Literal, overload
+from typing import Callable, TypeVar, Generic, Literal, overload, Any
 
 from ufpy.utils import mul
 
@@ -75,20 +75,35 @@ class FunctionSequence(Generic[VT, KT]):
 
         return r if len(r) > 1 else r[0]
 
-    @overload
-    def __getitem__(self, n: int) -> VT: ...
-    @overload
-    def __getitem__(self, n: slice) -> list[VT]: ...
     def __getitem__(self, n: int | slice):
         if isinstance(n, slice):
             start, end = x if (x := n.start) else 1, n.stop
-            print(start, end)
             return self(start, end)
         return self(n)
 
-    def s(self, n: int) -> VT:
-        return sum(self.__getitem__(slice(n)))
+    def __check_for_list(self, l_or_v: list | Any):
+        if isinstance(l_or_v, list):
+            return l_or_v
+        return [l_or_v]
 
-    def p(self, n: int) -> VT:
-        return mul(self.__getitem__(slice(n)))
+    @overload
+    def s(self, n: int) -> VT: ...
+    @overload
+    def s(self, start: int, end: int) -> VT: ...
+    def s(self, start_or_n: int, end: int = None) -> VT:
+        if end:
+            start = start_or_n
+        else:
+            start, end = 1, start_or_n
+        return sum(self.__check_for_list(self(start, end)))
 
+    @overload
+    def p(self, n: int) -> VT: ...
+    @overload
+    def p(self, start: int, end: int) -> VT: ...
+    def p(self, start_or_n: int, end: int = None) -> VT:
+        if end:
+            start = start_or_n
+        else:
+            start, end = 1, start_or_n
+        return mul(self.__check_for_list(self(start, end)))
