@@ -2,15 +2,17 @@ from __future__ import annotations
 
 from typing import TypeVar, Generic, Callable, SupportsIndex
 
-from ufpy.typ import AnyCollection
+from ufpy.typ import AnyCollection, Listable
 
 T = TypeVar('T')
 
+
 class UList(Generic[T]):
-    def __init__(self, __list: list[T] | UList[T]) -> None:
-        if isinstance(__list, UList):
-            __list = __list.listing
-        self.__list = __list
+    def __init__(self, *args: T, iterable: Listable[T] | UList[T] = None) -> None:
+        if iterable:
+            self.__list = list(iterable)
+        else:
+            self.__list = list(args)
 
     @property
     def listing(self) -> list[T]:
@@ -27,9 +29,12 @@ class UList(Generic[T]):
         new_list.reverse()
         return UList(new_list)
 
+    def __reversed__(self) -> UList[T]:
+        return self.reversed()
+
     def count(self, value: T) -> int:
         return self.__list.count(value)
-    
+
     def insert(self, index: SupportsIndex, object: T) -> None:
         self.__list.insert(index, object)
 
@@ -41,23 +46,23 @@ class UList(Generic[T]):
         self.__list = new_list
 
     def __call__(self, func: Callable[[T], T]) -> UList[T]:
-        new_dict = self.list
+        new_dict = self.__list
         for k, v in self:
             new_dict[k] = func(k, v)
         return UList(new_dict)
 
     def __getitem__(self, key: int) -> T:
         return self.__list[key]
-    
+
     def __repr__(self) -> str:
         return f'u{self.__list}'
 
     def __add__(self, other) -> UList[T]:
-        new_list = self.listing.copy()
+        new_list = self.listing
         new_list.append(other)
 
         return UList(new_list)
-    
+
     def __radd__(self, other) -> UList[T]:
         return self + other
 
