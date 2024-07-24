@@ -7,8 +7,8 @@ from typing import TypeVar, Generic, Callable, overload, Iterator
 from ufpy.cmp import cmp_generator
 from ufpy.math_op import generate_all_math_operations_magic_methods
 from ufpy.typ.protocols import Listable, Reversed, Sorted, SupportsNeg, SupportsIter, SupportsLT, SupportsGT
-from ufpy.typ.type_alias import AnyList, MathOperations
-from ufpy.utils import is_iterable
+from ufpy.typ.type_alias import AnyList, MathOperations, NumberLiteral
+from ufpy.utils import is_iterable, get_math_operation
 
 __all__ = (
     'UList',
@@ -45,7 +45,7 @@ class UList(Generic[T]):
 
     # call
     def __call__(self, func: Callable[[int, T], NT]) -> UList[NT]:
-        new_list = self.__list
+        new_list = self.listing
         for i, v in enumerate(self):
             new_list[i] = func(i, v)
         return UList(iterable=new_list)
@@ -178,65 +178,86 @@ class UList(Generic[T]):
         self.__list[self.__list.index(old)] = new
         return self
 
-    def append(self, *values: NT, to_start: bool = False) -> UList[T | NT]:
+    def append(self, *values: NT, to_start: bool = False, edit: bool = True) -> UList[T | NT]:
         """
         Appends values to UList and returns updated UList
 
         Args:
             *values: Values to append
             to_start: Append to start of UList? (optional)
+            edit: Edit UList when appending values? (optional)
 
         Returns: Updated UList
         """
-        if to_start:
-            self.__list = list(values) + self.__list
-        else:
-            self.__list.extend(values)
-        return self
+        values = list(values)
+        if edit:
+            if to_start:
+                self.__list = values + self.__list
+            else:
+                self.__list += values
+            return self
 
-    def remove(self, *values: T, from_end: bool = False) -> UList[T]:
+        l = self.listing
+        if to_start:
+            l = values + l
+        else:
+            l += values
+        return UList(iterable=l)
+
+    def remove(self, *values: T, from_end: bool = False, edit: bool = True) -> UList[T]:
         """
         Removes first occurrences of values from Ulist and returns updated UList.
 
         Args:
             *values: Values to remove
             from_end: Start search from end? (optional)
+            edit: Edit UList when removing values? (optional)
 
         Returns: Updated UList
         """
-        if from_end:
-            self.__list.reverse()
+        if edit:
+            if from_end:
+                self.__list.reverse()
+            for i in values:
+                self.__list.remove(i)
+            if from_end:
+                self.reverse()
+            return self
 
+        l = self.listing
+        if from_end:
+            l.reverse()
         for i in values:
-            self.__list.remove(i)
-
+            l.remove(i)
         if from_end:
-            self.reverse()
-        return self
+            l.reverse()
+        return UList(iterable=l)
 
-    def extend(self, iterable: AnyList[NT], to_start: bool = False) -> UList[T | NT]:
+    def extend(self, iterable: AnyList[NT], to_start: bool = False, edit: bool = True) -> UList[T | NT]:
         """
         Extend UList with iterable and returns updated Ulist. The equivalent of `append(*iterable, to_start=to_start)`
 
         Args:
             iterable: Iterable to use in extending
             to_start: Add elements of iterable to start of UList? (optional)
+            edit: Edit UList when extending values? (optional)
 
         Returns: Updated UList
         """
-        return self.append(*iterable, to_start=to_start)
+        return self.append(*iterable, to_start=to_start, edit=edit)
 
-    def reduce(self, iterable: AnyList[T], from_end: bool = False) -> UList[T]:
+    def reduce(self, iterable: AnyList[T], from_end: bool = False, edit: bool = True) -> UList[T]:
         """
         Reduce UList with iterable and returns updated UList. The equivalent of `reduce(*iterable, from_end=from_end)`
 
         Args:
             iterable: Iterable to use in reducing
             from_end: Remove elements of iterable from end of UList? (optional)
+            edit: Edit UList when reducing values? (optional)
 
         Returns: Updated UList
         """
-        return self.remove(*iterable, from_end=from_end)
+        return self.remove(*iterable, from_end=from_end, edit=edit)
 
     def __get_indexes_from_slice_or_int(self, index: int | slice) -> list[int]:
         if isinstance(index, slice):
@@ -315,20 +336,31 @@ class UList(Generic[T]):
 
     def __math__(
             self,
-            other: NT | Listable[NT] | int,
+            other: NT | Listable[NT] | NumberLiteral,
             math_op: MathOperations
     ) -> UList[T] | UList[T | NT]:
         if is_iterable(other):
             other = list(other)
         elif math_op in ['+', '-']:
             other = [other]
+        else:
+            other = [other for _ in range(len(self))]
         match math_op:
             case '+':
-                l = self.listing
-                l.extend(other)
-                return UList(iterable=l)
+                return self.extend(other, edit=False)
             case '-':
-                l = self.listing
-                for i in other:
-                    l.remove(i)
-                return UList(iterable=l)
+                return self.reduce(other, edit=False)
+            case _:
+                def f(i: int, v: T) -> NT:
+                    if i <= len(other):
+                        return get_math_operation(v, math_op)(other[i - 1])
+                    return v
+
+                return self(f)
+
+    def __radd__(self, other: NT | Listable[NT]) -> UList[T | NT]:
+        if is_iterable(other):
+            other = list(other)
+        else:
+            other = [other]
+        return self.extend(other, to_start=True, edit=False)
