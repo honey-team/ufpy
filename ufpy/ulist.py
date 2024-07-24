@@ -110,7 +110,6 @@ class UList(Generic[T]):
             stop: The index before which to complete the search for the index of the value (including itself) (optional)
 
         Returns: Index of value or `None` if index didn't find
-
         """
         try:
             return self.__list.index(value, start - 1, stop - 1) + 1
@@ -138,7 +137,6 @@ class UList(Generic[T]):
 
         Returns: Counts of provided values provided in dict[value, count]. If len(values) == 1 -> return integer which
         is count of value. If len(values) == 0 -> return counts of every item in UList
-
         """
         counter = Counter(self.__list)
         if len(values) == 1:
@@ -153,15 +151,43 @@ class UList(Generic[T]):
         return res
 
     def insert(self, index: int, *values: NT) -> UList[T | NT]:
+        """
+        Inserts values at index and returns updated UList
+
+        Args:
+            index: Index
+            *values: Values to insert
+
+        Returns: Updated UList
+        """
         for i, v in enumerate(values):
             self.__list.insert(index + i - 1, v)
         return self
 
     def replace(self, old: T, new: NT) -> UList[T | NT]:
+        """
+        Replaces old value with new and returns updated UList
+
+        Args:
+            old: Old value
+            new: New value
+
+        Returns: Updated UList
+
+        """
         self.__list[self.__list.index(old)] = new
         return self
 
     def append(self, *values: NT, to_start: bool = False) -> UList[T | NT]:
+        """
+        Appends values to UList and returns updated UList
+
+        Args:
+            *values: Values to append
+            to_start: Append to start of UList? (optional)
+
+        Returns: Updated UList
+        """
         if to_start:
             self.__list = list(values) + self.__list
         else:
@@ -169,6 +195,15 @@ class UList(Generic[T]):
         return self
 
     def remove(self, *values: T, from_end: bool = False) -> UList[T]:
+        """
+        Removes first occurrences of values from Ulist and returns updated UList.
+
+        Args:
+            *values: Values to remove
+            from_end: Start search from end? (optional)
+
+        Returns: Updated UList
+        """
         if from_end:
             self.__list.reverse()
 
@@ -180,9 +215,27 @@ class UList(Generic[T]):
         return self
 
     def extend(self, iterable: AnyList[NT], to_start: bool = False) -> UList[T | NT]:
+        """
+        Extend UList with iterable and returns updated Ulist. The equivalent of `append(*iterable, to_start=to_start)`
+
+        Args:
+            iterable: Iterable to use in extending
+            to_start: Add elements of iterable to start of UList? (optional)
+
+        Returns: Updated UList
+        """
         return self.append(*iterable, to_start=to_start)
 
     def reduce(self, iterable: AnyList[T], from_end: bool = False) -> UList[T]:
+        """
+        Reduce UList with iterable and returns updated UList. The equivalent of `reduce(*iterable, from_end=from_end)`
+
+        Args:
+            iterable: Iterable to use in reducing
+            from_end: Remove elements of iterable from end of UList? (optional)
+
+        Returns: Updated UList
+        """
         return self.remove(*iterable, from_end=from_end)
 
     def __get_indexes_from_slice_or_int(self, index: int | slice) -> list[int]:
@@ -217,11 +270,14 @@ class UList(Generic[T]):
             del self.__list[i - 1]
 
     def get(self, index: int) -> T:
+        """
+        Get value with index.
+        """
         return self[index]
 
     def __len__(self) -> int:
         """
-        Returns `len(self)`
+        Returns `len(self)`.
         """
         return len(self.__list)
 
@@ -234,19 +290,19 @@ class UList(Generic[T]):
     # Booleans
     def is_empty(self) -> bool:
         """
-        Returns `True` if `len(self)` equals `0`
+        Returns `True` if `len(self)` equals `0`.
         """
         return len(self) == 0
 
     def __bool__(self) -> bool:
         """
-        Returns `False` if `len(self)` equals `0`
+        Returns `False` if `len(self)` equals `0`.
         """
         return not self.is_empty()
 
     def __contains__(self, item: T) -> bool:
         """
-        Returns `True` if `item` is in `UDict`
+        Returns `True` if `item` is in `UDict`.
         """
         return item in self.__list
 
