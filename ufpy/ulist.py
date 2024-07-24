@@ -6,7 +6,7 @@ from typing import TypeVar, Generic, Callable, overload, Iterator
 
 from ufpy.cmp import cmp_generator
 from ufpy.math_op import generate_all_math_operations_magic_methods
-from ufpy.typ.protocols import Listable, Reversed, Sorted, SupportsNeg, SupportsIter
+from ufpy.typ.protocols import Listable, Reversed, Sorted, SupportsNeg, SupportsIter, SupportsLT, SupportsGT
 from ufpy.typ.type_alias import AnyList, MathOperations
 from ufpy.utils import is_iterable
 
@@ -60,11 +60,11 @@ class UList(Generic[T]):
         Reverses UList and returns it.
         """
         self.__list.reverse()
-        return UList(iterable=self.listing)
+        return self
 
     def reversed(self) -> Reversed[UList[T]]:
         """
-        Returns reversed UList, but doesn't change it
+        Returns reversed UList, but doesn't change it.
         """
         return UList(iterable=reversed(self.listing))
 
@@ -75,54 +75,115 @@ class UList(Generic[T]):
         return self.reversed()
 
     # sort
-    def sort(self) -> Sorted[UList[T]]:
-        self.__list.sort()
-        return UList(iterable=self.listing)
+    def sort(self, *, key: Callable[[T], SupportsLT | SupportsGT] = None, reverse: bool = False) -> Sorted[UList[T]]:
+        """
+        Sorts UList and returns it.
 
-    def sorted(self) -> Sorted[UList[T]]:
-        return UList(iterable=sorted(self.__list))
+        Args:
+            key: Function which takes each element of the UList and returns element to sort by (optional)
+            reverse: Need to reverse the order of the UList after sorting? (optional)
 
-    def index(self, value: T, start: int = 1, stop: int = sys.maxsize) -> int:
-        return self.__list.index(value, start - 1, stop - 1) + 1
+        Returns: Sorted UList
+        """
+        self.__list.sort(key=key, reverse=reverse)
+        return self
+
+    def sorted(self, *, key: Callable[[T], SupportsLT | SupportsGT] = None, reverse: bool = False) -> Sorted[UList[T]]:
+        """
+        Returns sorted UList, but doesn't change it.
+
+        Args:
+            key: Function which takes each element of the UList and returns element to sort by (optional)
+            reverse: Need to reverse the order of the UList after sorting? (optional)
+
+        Returns: Sorted UList
+        """
+        return UList(iterable=sorted(self.__list, key=key, reverse=reverse))
+
+    def index(self, value: T, start: int = 1, stop: int = sys.maxsize) -> int | None:
+        """
+        Returns index of value.
+
+        Args:
+            value: Value to obtain index
+            start: The index after which need to start searching for the index of the value (including itself) (optional)
+            stop: The index before which to complete the search for the index of the value (including itself) (optional)
+
+        Returns: Index of value or `None` if index didn't find
+
+        """
+        try:
+            return self.__list.index(value, start - 1, stop - 1) + 1
+        except ValueError:
+            return None
+
+    @overload
+    def count(self) -> dict[T, int]:
+        ...
 
     @overload
     def count(self, value: T) -> int:
         ...
 
     @overload
-    def count(self, value: AnyList[T]) -> dict[T, int]:
+    def count(self, *values: T) -> dict[T, int]:
         ...
 
-    def count(self, value: T | AnyList[T]) -> int | dict[T, int]:
-        counter = Counter(self.__list)
-        if is_iterable(value):
-            res = {}
-            for v in value:
-                res[v] = counter[v]
-            return res
-        return counter[value]
+    def count(self, *values: T) -> int | dict[T, int]:
+        """
+        Count number of values
 
-    def insert(self, index: int, value: T) -> T:
-        self.__list.insert(index, value)
-        return value
+        Args:
+            *values: Values to count.
+
+        Returns: Counts of provided values provided in dict[value, count]. If len(values) == 1 -> return integer which
+        is count of value. If len(values) == 0 -> return counts of every item in UList
+
+        """
+        counter = Counter(self.__list)
+        if len(values) == 1:
+            return counter[values[0]]
+        elif len(values) == 0:
+            counter_items = sorted(counter.items(), key=lambda x: x[1], reverse=True)
+            return dict(counter_items)
+
+        res = {}
+        for v in values:
+            res[v] = counter[v]
+        return res
+
+    def insert(self, index: int, *values: NT) -> UList[T | NT]:
+        for i, v in enumerate(values):
+            self.__list.insert(index + i - 1, v)
+        return self
 
     def replace(self, old: T, new: NT) -> UList[T | NT]:
         self.__list[self.__list.index(old)] = new
         return self
 
-    def extend(self, iterable: AnyList[NT]) -> UList[T | NT]:
-        self.__list.extend(iterable)
-        return self
-
-    def remove(self, value_or_iterable: T | AnyList[T]) -> UList[T]:
-        if is_iterable(value_or_iterable):
-            iterable = value_or_iterable
+    def append(self, *values: NT, to_start: bool = False) -> UList[T | NT]:
+        if to_start:
+            self.__list = list(values) + self.__list
         else:
-            iterable = [value_or_iterable]
-
-        for i in iterable:
-            self.__list.remove(i)
+            self.__list.extend(values)
         return self
+
+    def remove(self, *values: T, from_end: bool = False) -> UList[T]:
+        if from_end:
+            self.__list.reverse()
+
+        for i in values:
+            self.__list.remove(i)
+
+        if from_end:
+            self.reverse()
+        return self
+
+    def extend(self, iterable: AnyList[NT], to_start: bool = False) -> UList[T | NT]:
+        return self.append(*iterable, to_start=to_start)
+
+    def reduce(self, iterable: AnyList[T], from_end: bool = False) -> UList[T]:
+        return self.remove(*iterable, from_end=from_end)
 
     def __get_indexes_from_slice_or_int(self, index: int | slice) -> list[int]:
         if isinstance(index, slice):

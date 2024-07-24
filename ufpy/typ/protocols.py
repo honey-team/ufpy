@@ -1,11 +1,19 @@
 from __future__ import annotations
 
 __all__ = (
+    # Dicts/collections
     'SupportsGetItem',
     'SupportsGet',
     'SupportsSetItem',
     'SupportsDelItem',
     'SupportsIter',
+    # Comparing
+    'SupportsLT',
+    'SupportsGT',
+    'SupportsLE',
+    'SupportsGE',
+    'SupportsEQ',
+    'SupportsNE',
     # Math operations
     'SupportsAdd',
     'SupportsSub',
@@ -35,7 +43,7 @@ __all__ = (
 from typing import Protocol, Generic, TypeVar, Iterator, TYPE_CHECKING, runtime_checkable, Iterable
 
 if TYPE_CHECKING:
-    from ufpy.typ.type_alias import AnyBinaryCollection
+    pass
 
 # TypeVars
 
@@ -55,6 +63,7 @@ MRT = TypeVar('MRT')  # Math result type (used in math operation's magic method)
 T = TypeVar('T')  # Anything
 
 
+# Dicts and collections
 @runtime_checkable
 class SupportsGetItem(Protocol[KT, VT]):
     def __getitem__(self, key: KT) -> VT: ...
@@ -80,8 +89,49 @@ class SupportsIter(Protocol[IT]):
     def __iter__(self) -> Iterator[IT]: ...
 
 
-# Math operations
+# Comparing
+@runtime_checkable
+class SupportsLT(Protocol[OT]):
+    def __lt__(self, other: OT) -> bool: ...
 
+
+@runtime_checkable
+class SupportsGT(Protocol[OT]):
+    def __gt__(self, other: OT) -> bool: ...
+
+
+@runtime_checkable
+class SupportsLE(Protocol[OT]):
+    def __le__(self, other: OT) -> bool: ...
+
+
+@runtime_checkable
+class SupportsGE(Protocol[OT]):
+    def __ge__(self, other: OT) -> bool: ...
+
+
+@runtime_checkable
+class SupportsEQ(Protocol[OT]):
+    def __eq__(self, other: OT) -> bool: ...
+
+
+@runtime_checkable
+class SupportsNE(Protocol[OT]):
+    def __ne__(self, other: OT) -> bool: ...
+
+
+class SupportsComparing(
+    SupportsLT[OT],
+    SupportsGT[OT],
+    SupportsLE[OT],
+    SupportsGE[OT],
+    SupportsEQ[OT],
+    SupportsNE[OT]
+):
+    ...
+
+
+# Math operations
 @runtime_checkable
 class SupportsAdd(Protocol[OT]):
     def __add__(self, other: OT) -> MRT: ...
@@ -157,7 +207,6 @@ class SupportsBinaryOperations(
     ...
 
 
-@runtime_checkable
 class SupportsMathOperations(
     SupportsAdd[OT],
     SupportsSub[OT],
@@ -181,7 +230,6 @@ class SupportsNeg(Protocol):
 
 # TODO: More protocols for converting
 
-@runtime_checkable
 class Listable(
     SupportsIter[T],
     Iterable[T],
@@ -191,19 +239,17 @@ class Listable(
 
 
 # "Like"s
-@runtime_checkable
 class LikeDict(
     SupportsGet[KT, VT],
     SupportsGetItem[KT, VT],
     SupportsSetItem[KT, VT],
     SupportsDelItem[KT, VT],
-    Listable[KT | AnyBinaryCollection[KT, VT]],
+    Listable["KT | AnyBinaryCollection[KT, VT]"],
     Generic[KT, VT]
 ):
     ...
 
 
-@runtime_checkable
 class LikeList(
     SupportsGetItem[int, T],
     SupportsSetItem[int, T],
@@ -215,15 +261,12 @@ class LikeList(
 
 
 # Other
-@runtime_checkable
 class Reversed(
-    Protocol[T],
-    reversed[T]
+    Protocol[T]
 ):
     def __reversed__(self) -> T: ...
 
 
-@runtime_checkable
 class Sorted(
     Protocol[T]
 ):
