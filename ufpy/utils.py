@@ -3,6 +3,7 @@ __all__ = (
     'set_items_for_several_keys',
     'del_items_for_several_keys',
     'is_iterable',
+    'get_math_operation',
 )
 
 from collections.abc import Iterable
@@ -41,7 +42,7 @@ def is_iterable(o: object) -> bool:
 
 
 def get_math_operation(o: SupportsMathOperations, math_op: MathOperations) -> Callable[[Any], Any]:
-    match o:
+    match math_op:
         case '+':
             return o.__add__
         case '-':
