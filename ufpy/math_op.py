@@ -1,14 +1,91 @@
 __all__ = (
+    'math_generator',
     'i_generator',
     'r_generator',
+    'generate_all_math_operations_magic_methods',
 )
 
-from typing import Type, TypeVar
+from typing import TypeVar, Callable, Any
+
+from ufpy.typ.type_alias import MathOperations
+
+T = TypeVar('T', bound=type)
+OT = TypeVar('OT')
+MRT = TypeVar('MRT')
 
 
-T = TypeVar('T')
+def math_generator(t: type[T]) -> type[T]:
+    """
+    Generates math operation's magic methods for class with `__math__(self, other, math_operation)` method.
+    """
+    if '__math__' in t.__dict__:
+        math: Callable[[Any, OT, MathOperations], MRT] = t.__math__
 
-def i_generator(t: Type[T]) -> Type[T]:
+        if '__add__' not in t.__dict__:
+            def add(self, other: OT) -> MRT:
+                return math(self, other, '+')
+
+            t.__add__ = add  # +
+        if '__sub__' not in t.__dict__:
+            def sub(self, other: OT) -> MRT:
+                return math(self, other, '-')
+
+            t.__sub__ = sub  # -
+        if '__mul__' not in t.__dict__:
+            def mul(self, other: OT) -> MRT:
+                return math(self, other, '*')
+
+            t.__mul__ = mul  # *
+        if '__floordiv__' not in t.__dict__:
+            def floordiv(self, other: OT) -> MRT:
+                return math(self, other, '//')
+
+            t.__floordiv__ = floordiv  # //
+        if '__truediv__' not in t.__dict__:
+            def truediv(self, other: OT) -> MRT:
+                return math(self, other, '/')
+
+            t.__truediv__ = truediv  # /
+        if '__mod__' not in t.__dict__:
+            def mod(self, other: OT) -> MRT:
+                return math(self, other, '%')
+
+            t.__mod__ = mod  # %
+        if '__pow__' not in t.__dict__:
+            def _pow(self, other: OT) -> MRT:
+                return math(self, other, '**')
+
+            t.__pow__ = _pow  # **
+        if '__lshift__' not in t.__dict__:
+            def lshift(self, other: OT) -> MRT:
+                return math(self, other, '<<')
+
+            t.__lshift__ = lshift  # <<
+        if '__rshift__' not in t.__dict__:
+            def rshift(self, other: OT) -> MRT:
+                return math(self, other, '>>')
+
+            t.__rshift__ = rshift  # >>
+        if '__and__' not in t.__dict__:
+            def _and(self, other: OT) -> MRT:
+                return math(self, other, '&')
+
+            t.__and__ = _and  # &
+        if '__or__' not in t.__dict__:
+            def _or(self, other: OT) -> MRT:
+                return math(self, other, '|')
+
+            t.__or__ = _or  # |
+        if '__xor__' not in t.__dict__:
+            def xor(self, other: OT) -> MRT:
+                return math(self, other, '^')
+
+            t.__xor__ = xor  # ^
+
+    return t
+
+
+def i_generator(t: type[T]) -> type[T]:
     if '__add__' in t.__dict__:
         t.__iadd__ = t.__add__
     if '__sub__' in t.__dict__:
@@ -38,7 +115,8 @@ def i_generator(t: Type[T]) -> Type[T]:
     
     return t
 
-def r_generator(t: Type[T]) -> Type[T]:
+
+def r_generator(t: type[T]) -> type[T]:
     if '__add__' in t.__dict__:
         t.__radd__ = t.__add__
     if '__sub__' in t.__dict__:
@@ -66,4 +144,11 @@ def r_generator(t: Type[T]) -> Type[T]:
     if '__xor__' in t.__dict__:
         t.__rxor__ = t.__xor__
 
+    return t
+
+
+def generate_all_math_operations_magic_methods(t: type[T]) -> type[T]:
+    t = math_generator(t)  # Generate math operations
+    t = i_generator(t)  # Generate i methods
+    t = r_generator(t)  # Generate r methods
     return t

@@ -18,21 +18,22 @@ def __deprecated(deprecated_name: str, x, start_version: str, end_version: str):
     return new_func
 
 
-__version__ = '0.2-dev'
+__version__ = '0.3-dev'
 from ufpy.cmp import *
 from ufpy.math_op import *
 from ufpy.udict import *
-from ufpy.utils import *
 from ufpy.ulist import *
+from ufpy.utils import *
 
 # Typing package
-__typ_version__ = '0.1'
+__typ_version__ = '0.2'
 from ufpy.typ import *
 
 # Ustl package
 __ustl_version = '0.1'
 from ufpy.ustl import *
-UStack = __deprecated("UStack", Stack, '0.2', '0.5')
+
+UStack = __deprecated('UStack', Stack, '0.2', '0.5')
 
 # Path package
 __path_version__ = '0.1'
