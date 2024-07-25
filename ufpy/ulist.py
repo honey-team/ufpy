@@ -5,6 +5,7 @@ from collections import Counter
 from typing import TypeVar, Generic, Callable, overload, Iterator
 
 from ufpy.cmp import cmp_generator
+from ufpy.init import get_setting
 from ufpy.math_op import generate_all_math_operations_magic_methods
 from ufpy.typ.protocols import Listable, Reversed, Sorted, SupportsNeg, SupportsIter, SupportsLT, SupportsGT
 from ufpy.typ.type_alias import AnyList, MathOperations, NumberLiteral
@@ -47,7 +48,7 @@ class UList(Generic[T]):
     def __call__(self, func: Callable[[int, T], NT]) -> UList[NT]:
         new_list = self.listing
         for i, v in enumerate(self):
-            new_list[i] = func(i, v)
+            new_list[i] = func(i + get_setting('starting'), v)
         return UList(iterable=new_list)
 
     # make negative numbers
@@ -112,7 +113,8 @@ class UList(Generic[T]):
         Returns: Index of value or `None` if index didn't find
         """
         try:
-            return self.__list.index(value, start - 1, stop - 1) + 1
+            return self.__list.index(
+                value, start - get_setting('starting'), stop - get_setting('starting')) + get_setting('starting')
         except ValueError:
             return None
 
@@ -161,7 +163,7 @@ class UList(Generic[T]):
         Returns: Updated UList
         """
         for i, v in enumerate(values):
-            self.__list.insert(index + i - 1, v)
+            self.__list.insert(index + i - get_setting('starting'), v)
         return self
 
     def replace(self, old: T, new: NT) -> UList[T | NT]:
@@ -261,17 +263,18 @@ class UList(Generic[T]):
 
     def __get_indexes_from_slice_or_int(self, index: int | slice) -> list[int]:
         if isinstance(index, slice):
-            start, stop, step = index.indices(len(self) + 1)
-            res = list(range(start, stop + 1, step))
+            start, stop, step = index.indices(len(self))
+            res = list(range(start, stop + get_setting('starting'), step))
             return res
-        if index == 0:
-            raise IndexError("You can't use 0 as index in UList. Use 1 index instead.")
+        if index < get_setting('starting'):
+            raise IndexError("You can't use %d as index in UList. Use %d index instead." %
+                             (index, get_setting('starting')))
         return [index]
 
     def __getitem__(self, index: int | slice) -> T:
         indexes = self.__get_indexes_from_slice_or_int(index)
 
-        res = [self.__list[i - 1] for i in indexes]
+        res = [self.__list[i - get_setting('starting')] for i in indexes]
         return res if len(res) > 1 else res[0]
 
     def __setitem__(self, index: int | slice, value: NT | SupportsIter[NT]) -> None:
@@ -282,13 +285,13 @@ class UList(Generic[T]):
             values.extend([values[-1] for _ in range(len(indexes) - len(values) + 1)])
 
         for i, ind in enumerate(indexes):
-            self.__list[i - 1] = values[i]
+            self.__list[ind - get_setting('starting')] = values[i]
 
     def __delitem__(self, index: int | slice) -> None:
         indexes = self.__get_indexes_from_slice_or_int(index)
 
         for i in indexes:
-            del self.__list[i - 1]
+            del self.__list[i - get_setting('starting')]
 
     def get(self, index: int) -> T:
         """
@@ -353,7 +356,7 @@ class UList(Generic[T]):
             case _:
                 def f(i: int, v: T) -> NT:
                     if i <= len(other):
-                        return get_math_operation(v, math_op)(other[i - 1])
+                        return get_math_operation(v, math_op)(other[i - get_setting('starting')])
                     return v
 
                 return self(f)

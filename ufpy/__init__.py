@@ -19,6 +19,11 @@ def __deprecated(deprecated_name: str, x, start_version: str, end_version: str):
 
 
 __version__ = '0.3-dev'
+
+from ufpy.init import *
+
+init()
+
 from ufpy.cmp import *
 from ufpy.math_op import *
 from ufpy.udict import *

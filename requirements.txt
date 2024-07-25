@@ -1,1 +1,4 @@
 requests>=2.31.0
+ufpy>=0.1.2
+ujson>=5.10.0
+setuptools>=68.2.2
