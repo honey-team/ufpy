@@ -12,13 +12,23 @@
     </picture>
 </p>
 
-<!-- <img src="readme_assets/logo.svg" width="200" alt="logo" style="text-align: center"/> -->
-
-[![Pypi](https://img.shields.io/pypi/v/ufpy?style=flat&logo=pypi&logoColor=white&label&color=blue)](https://pypi.org/project/ufpy)
-[![Python version](https://img.shields.io/badge/3.12%2B-blue?logo=python&logoColor=white)](https://python.org)
-[![Docs](https://img.shields.io/badge/docs-blue?logo=material%20for%20mkdocs&logoColor=white)](https://honey-team.ru/ufpy-website)
-[![Pylint](https://img.shields.io/badge/pylint-blue)](https://pypi.org/project/pylint)
-[![Black](https://img.shields.io/badge/black-blue)](https://pypi.org/project/black)
+<p align=center>
+    <a href="https://pypi.org/project/ufpy">
+        <img src="https://img.shields.io/pypi/v/ufpy?style=flat&amp;logo=pypi&amp;logoColor=white&amp;label&amp;color=blue" alt="Pypi">
+    </a>
+    <a href="https://python.org">
+        <img src="https://img.shields.io/badge/3.12%2B-blue?logo=python&amp;logoColor=white" alt="Python version">
+    </a>
+    <a href="https://honey-team.ru/ufpy-website">
+        <img src="https://img.shields.io/badge/docs-blue?logo=material%20for%20mkdocs&amp;logoColor=white" alt="Docs">
+    </a>
+    <a href="https://pypi.org/project/pylint">
+        <img src="https://img.shields.io/badge/pylint-blue" alt="Pylint">
+    </a>
+    <a href="https://pypi.org/project/black">
+        <img src="https://img.shields.io/badge/black-blue" alt="Black">
+    </a>
+</p>
 
 # ufpy
 Ufpy (Useful Python) - package for Python with some useful features
