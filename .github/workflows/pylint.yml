@@ -15,9 +15,6 @@ on:
       - 'requirements.txt'
     branches:
       - main
-  
-permissions:
-  contents: write
 
 jobs:
   build:
@@ -43,8 +40,3 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files 'ufpy/*.py') --fail-under=7.0
-    - name: Update Pylint badge
-      uses: Silleellie/pylint-github-action@v2
-      with:
-        lint-path: ufpy
-        python-version: 3.12
