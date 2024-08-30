@@ -31,3 +31,43 @@
 </p>
 
 Ufpy (Useful Python) - package for Python with some useful features
+
+# Key features
+
+- Useful dict (UDict) for simplification working with dictionaries. [See more...](examples/udict.md)
+- Download GitHub's public repositories, its folders and files. [See more...](examples/github/download.md)
+- Some type alias and protocols
+- And more!
+
+# Installation
+
+## Install latest version
+
+To install `ufpy` with `pip` use this command in your shell
+```sh
+pip install ufpy
+```
+
+## Install specific version
+
+To install specific version of `ufpy` with `pip` use this command in your shell
+```sh
+# Replace version with your specific version
+pip install ufpy==version
+```
+
+## Install dev version
+
+To install dev version with `pip`:
+
+1. Clone this repository (you need to have installed `git`)
+2. Install library as cloned code
+
+```sh
+git clone https://github.com/honey-team/ufpy
+cd ufpy
+pip install .
+```
+
+After this you can remove `ufpy` directory
+
