@@ -1,6 +1,5 @@
 from setuptools import setup, find_packages
-
-from ufpy import __version__
+import re
 
 with open('README.md', 'r', encoding='utf-8') as mdf:
     long_description = mdf.read()
@@ -15,6 +14,17 @@ organization_name = 'honey-team'
 project_name = 'ufpy'
 github_url = f'https://github.com/{organization_name}/{project_name}'
 
+def derive_version() -> str: # this function is stolen from discord.py
+    version = ''
+    with open('ufpy/__init__.py') as f:
+        version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
+
+    if not version:
+        raise RuntimeError('version is not set')
+
+    return version
+
+__version__ = derive_version()
 
 setup(
     name=project_name,
