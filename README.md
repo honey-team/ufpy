@@ -52,22 +52,14 @@ pip install ufpy
 
 To install specific version of `ufpy` with `pip` use this command in your shell
 ```sh
-# Replace version with your specific version
+# Replace `version` with your specific version
 pip install ufpy==version
 ```
 
 ## Install dev version
 
-To install dev version with `pip`:
-
-1. Clone this repository (you need to have installed `git`)
-2. Install library as cloned code
-
+To install dev version with `pip` use this command in your shell
 ```sh
-git clone https://github.com/honey-team/ufpy
-cd ufpy
-pip install .
+pip install git+https://github.com/honey-team/ufpy.git
 ```
-
-After this you can remove `ufpy` directory
 
