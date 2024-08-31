@@ -5,7 +5,7 @@ from tempfile import gettempdir
 from typing import Iterable
 from zipfile import ZipFile
 
-from requests import get
+import requests
 
 from ufpy.path import UOpen
 
@@ -62,7 +62,7 @@ class UGithubDownloader:
 
     def __enter__(self):
         url = f'https://github.com/{self.__repo}/archive/{self.__branch}.zip'
-        r = get(url, timeout=10)
+        r = requests.get(url, timeout=10)
 
         if not r.ok:
             r.raise_for_status()
@@ -85,7 +85,7 @@ class UGithubDownloader:
         download_path = f'{self.__base_download_path}/{download_path}'
 
         url = f'https://raw.githubusercontent.com/{self.__repo}/{self.__branch}/{file_path}'
-        r = get(url)
+        r = requests.get(url)
 
         if not r.ok:
             r.raise_for_status()
