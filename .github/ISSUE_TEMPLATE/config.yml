@@ -3,10 +3,10 @@ blank_issues_enabled: true
 contact_links:
   - name: Discussions on GitHub
     url: https://github.com/honey-team/ufpy/discussions
-    about: You can also ask your question in GitHub discussions
+    about: Ask your question in GitHub discussions
   - name: Discord server
     url: https://discord.honey-team.ru
-    about: You can ask your question on this Discord Server
+    about: Ask your question on our official Discord Server (verified custom domain)
   - name: Telegram channel
     url: https://tg.honey-team.ru
-    about: You can also ask your question on this channel (in HoneyTeam Chat)
+    about: Ask your question on our official Telegram channel (in HoneyTeam Chat) (verified custom domain)

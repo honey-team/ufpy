@@ -8,13 +8,17 @@ assignees: ''
 
 ## Description of bug
 
-<!-- Type here description of bug -->
+<!-- Please provide a clear and concise description of the bug, including:
+- What you expected to happen
+- What actually happened
+- Steps to reproduce the issue -->
 
 ## Your code
 
 <!--
 You can provide link to repository or specific file in this repository
 Or your code (if it's small)
+Please ensure you do not share any sensitive information such as API keys or passwords.
 -->
 
 ## Versions
@@ -23,6 +27,6 @@ Or your code (if it's small)
 
 <!-- Type here your `python` version -->
 
-### `pip freeze`
+### `ufpy` and `requests`
 
-<!-- Type here output of pip freeze or only versions of `ufpy` and `requests` -->
+<!-- Please provide the version of `ufpy` and `requests` you're using -->
