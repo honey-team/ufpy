@@ -11,4 +11,4 @@
 
 ## Issue you want to close (optional)
 
-closes #<!-- type here the number of issue you want to close -->
+closes #<!-- type here id of issue you want to close -->
