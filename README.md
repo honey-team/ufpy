@@ -1,14 +1,14 @@
 <p align=center>
     <picture>
         <source
-            srcset="/readme_assets/logo_d.svg"
+            srcset="https://raw.githubusercontent.com/honey-team/ufpy/main/readme_assets/logo_d.svg"
             media="(prefers-color-scheme: dark), (min-width: 200px)"
         />
         <source
-            srcset="/readme_assets/logo_l.svg"
+            srcset="https://raw.githubusercontent.com/honey-team/ufpy/main/readme_assets/logo_l.svg"
             media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference), (min-width: 200px)"
         />
-        <img src="readme_assets/logo.svg" width="200" alt="Logo" style="text-align: center" />
+        <img src="https://raw.githubusercontent.com/honey-team/ufpy/main/readme_assets/logo.svg" width="200" alt="Logo" style="text-align: center" />
     </picture>
 </p>
 
