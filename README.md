@@ -30,7 +30,7 @@
     </a>
 </p>
 
-Ufpy (Useful Python) - package for Python with some useful features
+Ufpy (Useful Python) - package for Python with some useful features which can help you!
 
 # Key features
 
@@ -63,3 +63,14 @@ To install dev version with `pip` use this command in your shell
 pip install git+https://github.com/honey-team/ufpy.git
 ```
 
+# Contributing
+
+You can contribute to this project with [GitHub](https://github.com/honey-team/ufpy). Just fork this repository and open pull request!
+
+If you want to contribute to docs website, fork [website repository](https://honey-team/ufpy-website) and open pull request!
+
+# Support
+
+If you have a problem, open [discussion in GitHub](https://github.com/honey-team/ufpy/discussions).
+
+Enjoy `ufpy`! I'd like to see that my project will be using in your projects. Bye! :)
