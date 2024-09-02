@@ -71,6 +71,6 @@ If you want to contribute to docs website, fork [website repository](https://hon
 
 # Support
 
-If you have a problem, open [discussion in GitHub](https://github.com/honey-team/ufpy/discussions).
+If you have a problem or just have a question, open [discussion in GitHub](https://github.com/honey-team/ufpy/discussions). Also you can tell me your suggestions and ideas in this [discussions](https://github.com/honey-team/ufpy/discussions).
 
 Enjoy `ufpy`! I'd like to see that my project will be using in your projects. Bye! :)
