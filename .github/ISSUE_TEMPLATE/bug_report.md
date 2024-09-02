@@ -8,20 +8,21 @@ assignees: ''
 
 ## Description of bug
 
-Type here description of bug
+<!-- Type here description of bug -->
 
 ## Your code
 
-```py
-# Your code
-```
+<!--
+You can provide link to repository or specific file in this repository
+Or your code (if it's small)
+-->
 
 ## Versions
 
 ### Python
 
-Type here your `python` version
+<!-- Type here your `python` version -->
 
-### Requests
+### `pip freeze`
 
-Type here your `requests` version
+<!-- Type here output of pip freeze or only versions of `ufpy` and `requests` -->

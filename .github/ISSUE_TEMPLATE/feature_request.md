@@ -8,8 +8,8 @@ assignees: ''
 
 ## Description of new feature
 
-Type here description of bug
+<!-- Type here description of your new feature -->
 
 ## Suggest solution `(optional)`
 
-Type here solution for your new feature
+<!-- If you want, type here solution of your new feature -->
