@@ -67,7 +67,7 @@ pip install git+https://github.com/honey-team/ufpy.git
 
 You can contribute to this project with [GitHub](https://github.com/honey-team/ufpy). Just fork this repository and open pull request!
 
-If you want to contribute to docs website, fork [website repository](https://honey-team/ufpy-website) and open pull request!
+If you want to contribute to docs website, fork [website repository](https://github.com/honey-team/ufpy-website) and open pull request!
 
 # Support
 
