@@ -14,13 +14,13 @@
 
 <p align=center>
     <a href="https://pypi.org/project/ufpy">
-        <img src="https://img.shields.io/pypi/v/ufpy?style=flat&amp;logo=pypi&amp;logoColor=white&amp;label&amp;color=blue" alt="Pypi">
+        <img src="https://img.shields.io/pypi/v/ufpy?style=flat&logo=pypi&logoColor=white&label&color=blue" alt="Pypi">
     </a>
     <a href="https://python.org">
-        <img src="https://img.shields.io/badge/3.12%2B-blue?logo=python&amp;logoColor=white" alt="Python version">
+        <img src="https://img.shields.io/badge/3.12%2B-blue?logo=python&logoColor=white" alt="Python version">
     </a>
     <a href="https://honey-team.ru/ufpy-website">
-        <img src="https://img.shields.io/badge/docs-blue?logo=material%20for%20mkdocs&amp;logoColor=white" alt="Docs">
+        <img src="https://img.shields.io/badge/docs-blue?logo=material%20for%20mkdocs&logoColor=white" alt="Docs">
     </a>
     <a href="https://pypi.org/project/pylint">
         <img src="https://img.shields.io/badge/pylint-blue" alt="Pylint">
@@ -52,8 +52,8 @@ pip install ufpy
 
 To install specific version of `ufpy` with `pip` use this command in your shell
 ```sh
-# Replace `version` with your specific version
-pip install ufpy==version
+# Example: install ufpy 0.2
+pip install ufpy==0.2
 ```
 
 ## Install dev version
