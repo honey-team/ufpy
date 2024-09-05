@@ -1,18 +1,30 @@
-from setuptools import setup
-
-from ufpy import __version__
+from setuptools import setup, find_packages
+import re
 
 with open('README.md', 'r', encoding='utf-8') as mdf:
     long_description = mdf.read()
 
 install_requires = [
-
+    'requests>=2.31.0',
 ]
 
+author = 'bleudev'
+author_email = 'aitiiigg1@gmail.com'
 organization_name = 'honey-team'
-author, author_email = 'bleudev', 'aitiiigg1@gmail.com'
 project_name = 'ufpy'
 github_url = f'https://github.com/{organization_name}/{project_name}'
+
+def derive_version() -> str: # this function is stolen from discord.py
+    version = ''
+    with open('ufpy/__init__.py') as f:
+        version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
+
+    if not version:
+        raise RuntimeError('version is not set')
+
+    return version
+
+__version__ = derive_version()
 
 setup(
     name=project_name,
@@ -24,7 +36,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url=github_url,
-    packages=[project_name, f'{project_name}.typ'],
+    packages=find_packages(),
     classifiers=[
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.12',
