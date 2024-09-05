@@ -33,10 +33,13 @@ __ustl_version__ = '0.1'
 from ufpy.ustl import *
 UStack = __deprecated("UStack", Stack, '0.2', '0.5')
 
-# Path package
 __path_version__ = '0.1'
 from ufpy.path import *
 
 # GitHub package
 __github_version__ = '0.1'
 from ufpy.github import *
+
+# Algebra package
+__algebra_version__ = '0.1'
+from ufpy.algebra import *
