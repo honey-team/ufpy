@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = (
     'FunctionSequence',
 )
@@ -5,10 +7,15 @@ __all__ = (
 from typing import Callable, TypeVar, Generic, Literal, overload, Any
 
 from ufpy.utils import mul
+from ufpy.cmp import cmp_generator
 
 VT = TypeVar('VT', int, float, int | float)
 KT = TypeVar('KT', int, float, int | float)
 
+VT2 = TypeVar('VT2', int, float, int | float)
+KT2 = TypeVar('KT2', int, float, int | float)
+
+@cmp_generator
 class FunctionSequence(Generic[VT, KT]):
     def __resolve_item(self, kwarg: tuple[str, VT]) -> tuple[int, VT] | None:
         name, value = kwarg
@@ -63,14 +70,14 @@ class FunctionSequence(Generic[VT, KT]):
     def __call__(self, n: int) -> VT: ...
     @overload
     def __call__(self, start: int, end: int) -> list[VT]: ...
-    def __call__(self, start_or_end: int, end: int = None):
-        start = start_or_end
+    def __call__(self, start: int, end: int | None = None):
+        start1 = start
         if not end:
-            end = start_or_end
+            end = start
 
         r = []
 
-        for i in range(start, end+1):
+        for i in range(start1, end+1):
             r.append(self.__process_float(self.f(i)))
 
         return r if len(r) > 1 else r[0]
@@ -80,6 +87,9 @@ class FunctionSequence(Generic[VT, KT]):
             start, end = x if (x := n.start) else 1, n.stop
             return self(start, end)
         return self(n)
+    
+    def __cmp__(self, other: FunctionSequence[VT2, KT2]):
+        return self.k - other.k
 
     def __check_for_list(self, l_or_v: list | Any):
         if isinstance(l_or_v, list):
@@ -90,20 +100,16 @@ class FunctionSequence(Generic[VT, KT]):
     def s(self, n: int) -> VT: ...
     @overload
     def s(self, start: int, end: int) -> VT: ...
-    def s(self, start_or_n: int, end: int = None) -> VT:
-        if end:
-            start = start_or_n
-        else:
-            start, end = 1, start_or_n
+    def s(self, start: int, end: int | None = None) -> VT:
+        if end is None:
+            start, end = 1, start
         return sum(self.__check_for_list(self(start, end)))
 
     @overload
     def p(self, n: int) -> VT: ...
     @overload
     def p(self, start: int, end: int) -> VT: ...
-    def p(self, start_or_n: int, end: int = None) -> VT:
-        if end:
-            start = start_or_n
-        else:
-            start, end = 1, start_or_n
+    def p(self, start: int, end: int | None = None) -> VT:
+        if end is None:
+            start, end = 1, start
         return mul(self.__check_for_list(self(start, end)))
