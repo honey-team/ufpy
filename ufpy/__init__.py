@@ -34,7 +34,7 @@ from ufpy.ustl import *
 UStack = __deprecated("UStack", Stack, '0.2', '0.5')
 
 # Path package
-__path_version__ = '0.1'
+__path_version__ = '0.2'
 from ufpy.path import *
 
 # GitHub package
