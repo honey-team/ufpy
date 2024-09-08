@@ -164,6 +164,7 @@ cython_debug/
 
 # Tests
 tests.py
+tests.json
 
 # PyPi
 .pypirc
