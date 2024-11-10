@@ -47,7 +47,7 @@ class USet[T]:
     
     # Convert to other types
     def __repr__(self) -> str:
-        return f'u{self.set if self.set else '{}'}'
+        return f'u{self.set or '{}'}'
     
     def __str__(self) -> str:
         return repr(self.set) if self.set else '{}'
