@@ -27,7 +27,7 @@ class USet[T]:
     def __init__(self, *, iterable: Iterable[T], auto_update_U: bool) -> None: ...
 
     def __init__(self, *values: T, iterable: Optional[Iterable[T]] = None, auto_update_U: bool = True) -> None:
-        if USet.U == None and auto_update_U:
+        if USet.U is None and auto_update_U:
             USet.U = _U()
         
         self.__set = list(sorted(set(iterable))) if iterable else list(sorted(set(values)))
