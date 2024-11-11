@@ -1,12 +1,10 @@
 from __future__ import annotations
-from os import environ
 
 from ufpy.math_op import i_generator, r_generator
-from ufpy.utils import withrepr
+from ufpy.utils import is_iterable
 
 __all__ = (
     'USet',
-    'U'
 )
 
 from typing import Iterable, Iterator, Optional, TypeVar, overload
@@ -17,6 +15,8 @@ OT = TypeVar('OT')
 @i_generator
 @r_generator
 class USet[T]:
+    U: USet = None
+    
     @overload
     def __init__(self, *values: T) -> None: ...
     @overload
@@ -27,79 +27,101 @@ class USet[T]:
     def __init__(self, *, iterable: Iterable[T], auto_update_U: bool) -> None: ...
 
     def __init__(self, *values: T, iterable: Optional[Iterable[T]] = None, auto_update_U: bool = True) -> None:
-        self.__set = set(iterable) if iterable else set(values)
+        if USet.U == None and auto_update_U:
+            USet.U = _U()
+        
+        self.__set = list(sorted(set(iterable))) if iterable else list(sorted(set(values)))
         self.__auto_update_U = auto_update_U
         self.__update__()
         
     @property
     def set(self) -> set[T]:
-        return self.__set
+        return set(self.__set)
     
     @set.setter
     def set(self, value: Iterable[T]):
-        self.__set = set(value)
+        self.__set = list(value)
         self.__update__()
         
     # When USet updates (not required, that new USet must be not same that old one)
     def __update__(self):
         if self.__auto_update_U:
-            U(iterable=_get_U() | self)
+            USet.U |= self
     
     # Convert to other types
     def __repr__(self) -> str:
-        return f'u{self.set or '{}'}'
-    
-    def __str__(self) -> str:
-        return repr(self.set) if self.set else '{}'
-    
+        return 'u{' + ', '.join([str(i) for i in self.__set]) + '}'
+
     # Iteration
     def __iter__(self) -> Iterator[T]:
         return iter(self.__set)
     
     # Or
-    def __or__(self, other: Iterable[OT]) -> USet[T | OT]:
+    def _or(self, other: Iterable[OT] | OT) -> USet[T | OT]:
+        if not is_iterable(other):
+            other = [other]
         return USet(iterable=set(self) | set(other), auto_update_U=self.__auto_update_U)
+    
+    def __or__(self, other: Iterable[OT] | OT) -> USet[T | OT]:
+        return self._or(other)
 
-    def __add__(self, other: Iterable[OT]) -> USet[T | OT]:
-        return self | other
+    def __add__(self, other: Iterable[OT] | OT) -> USet[T | OT]:
+        return self._or(other)
 
     # Substract
-    def __sub__(self, other: Iterable[OT]) -> USet[T]:
+    def sub(self, other: Iterable[OT] | OT) -> USet[T]:
+        if not is_iterable(other):
+            other = [other]
         return USet(iterable=set(self) - set(other), auto_update_U=self.__auto_update_U)
     
-    def __div__(self, other: Iterable[OT]) -> USet[T]:
-        return self - other
+    def __sub__(self, other: Iterable[OT] | OT) -> USet[T]:
+        return self.sub(other)
+    
+    def __rsub__(self, other: Iterable[OT] | OT) -> USet[T]:
+        return USet(iterable=other if is_iterable(other) else [other]).sub(self)
+    
+    def __truediv__(self, other: Iterable[OT] | OT) -> USet[T]:
+        return self.sub(other)
     
     # And
-    def __and__(self, other: Iterable[OT]) -> USet:
+    def _and(self, other: Iterable[OT] | OT) -> USet:
+        if not is_iterable(other):
+            other = [other]
         return USet(iterable=set(self) & set(other), auto_update_U=self.__auto_update_U)
     
-    def __mul__(self, other: Iterable[OT]) -> USet:
-        return self & other
+    def __and__(self, other: Iterable[OT] | OT) -> USet:
+        return self._and(other)
+    
+    def __mul__(self, other: Iterable[OT] | OT) -> USet:
+        return self._and(other)
     
     # Not
+    def _not(self, s: Optional[USet[OT]] = None) -> USet[OT]:
+        return (s or USet.U) - self
+
     def __neg__(self) -> USet:
-        return _get_U() - self
+        return self._not()
+    
+    # Implication
+    def implicate(self, other: Iterable[OT] | OT) -> USet:
+        if not is_iterable(other):
+            other = [other]
+        return USet(iterable=(-self + other), auto_update_U=self.__auto_update_U)
+    
+    def __gt__(self, other: Iterable[OT] | OT) -> USet:
+        return self.implicate(other)
+    
+    def __ge__(self, other: Iterable[OT] | OT) -> USet:
+        return self > other
+    
+    def __lt__(self, other: Iterable[OT] | OT) -> USet:
+        other2 = USet(*(other if is_iterable(other) else [other]))
+        return other2.implicate(self)
+    
+    def __le__(self, other: Iterable[OT] | OT) -> USet:
+        return self < other
 
-environ["ufpy_USet_U"] = "{}"
 
-@overload
-def U(*values: T) -> None: ...
-@overload
-def U(*, iterable: Iterable[T]) -> None: ...
-
-@withrepr(lambda _: repr(_get_U()))
-def U(*values: T, iterable: Optional[Iterable[T]] = None) -> None:
-    environ["ufpy_USet_U"] = str(_get_U() + (USet(iterable=iterable, auto_update_U=False)
-                                             if iterable else
-                                             USet(*values, auto_update_U=False)))
-
-def _convert_type(s: str):
-    if "'" in s or '"' in s: return s.replace("'", '').replace('"', '')
-    elif s.replace('-', '').isdigit(): return int(s)
-    else: return s
-
-def _get_U():
-    s = environ["ufpy_USet_U"].replace('{', '').replace('}', '').replace('(', '').replace(')', '')
-    st = s.split(', ')
-    return USet(iterable=[x for i in st if (x := _convert_type(i))], auto_update_U=False)
+class _U(USet[T]):
+    def __init__(self, *values: T) -> None:
+        super().__init__(*values, auto_update_U=False)

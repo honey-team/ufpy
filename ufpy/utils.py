@@ -5,8 +5,7 @@ __all__ = (
     'withrepr'
 )
 
-from ast import Call
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable, TypeVar, Iterable
 import functools
 
 from ufpy.typ import SupportsGet, SupportsSetItem, SupportsDelItem, AnyCollection
@@ -53,3 +52,6 @@ def withrepr(f: Callable[[T], str]):
     def _wrap(func: T):
         return __reprwrapper(f, func)
     return _wrap
+
+def is_iterable(o: object) -> bool:
+    return isinstance(o, Iterable)
