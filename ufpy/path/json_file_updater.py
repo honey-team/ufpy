@@ -4,7 +4,9 @@ __all__ = (
     'JsonFileUpdater',
 )
 
+import io
 import os.path
+from io import BytesIO
 from typing import Any, Generic, TypeVar, TextIO, overload
 from ujson import dumps, loads
 
@@ -17,13 +19,15 @@ class JsonFileUpdater(Generic[VT]):
     def __init__(self, path: str, indent: int = 4): ...
     @overload
     def __init__(self, stream: ReadWriteIO[str | bytes], indent: int = 4): ...
-    def __init__(self, stream_or_path: str | ReadWriteIO[str | bytes], indent: int = 4) -> None:
+    @overload
+    def __init__(self, stream: BytesIO, indent: int = 4): ...
+    def __init__(self, stream_or_path: str | ReadWriteIO[str | bytes] | BytesIO, indent: int = 4) -> None:
         self.indent = indent
         self.__d: dict[str, VT] | None = None
 
         self.path = None
         self.stream = None
-        if hasattr(stream_or_path, 'write') and hasattr(stream_or_path, 'read'):
+        if isinstance(stream_or_path, BytesIO) or (hasattr(stream_or_path, 'write') and hasattr(stream_or_path, 'read')):
             self.stream = stream_or_path
         else:
             self.path = stream_or_path
@@ -35,7 +39,9 @@ class JsonFileUpdater(Generic[VT]):
     
     def __load(self) -> dict[str, VT]:
         if self.stream:
-            if not self.stream.read():
+            if isinstance(self.stream, BytesIO):
+                d = self.stream.getvalue().decode('utf-8')
+            elif not self.stream.read():
                 return {}
             else:
                 d = self.stream.read()
@@ -43,7 +49,11 @@ class JsonFileUpdater(Generic[VT]):
             with open(self.path, encoding='utf-8') as f:
                 d = f.read()
         if isinstance(d, bytes): d = d.decode('utf-8')
-        return loads(d)
+
+        if d:
+            return loads(d)
+        else:
+            return {}
     
     def __write(self, d: dict[str, VT]) -> None:
         d = dumps(
