@@ -4,6 +4,7 @@ __all__ = (
     'JsonFileUpdater',
 )
 
+import os.path
 from typing import Any, Generic, TypeVar
 from ujson import dumps, loads
 
@@ -14,6 +15,11 @@ class JsonFileUpdater(Generic[VT]):
         self.path = json_file_path
         self.indent = indent
         self.__d: dict[str, VT] | None = None
+
+        if not os.path.exists(self.path):
+            print(f'Warning: No such file or directory: {self.path}. JsonFileUpdater will create it automaticly.')
+            with open(self.path, encoding='utf-8', mode='x') as f:
+                f.write('{}')
     
     def __load(self) -> dict[str, VT]:
         with open(self.path, encoding='utf-8') as f:
