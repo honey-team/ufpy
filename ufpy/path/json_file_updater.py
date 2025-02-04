@@ -81,7 +81,7 @@ class JsonFileUpdater(Generic[VT]):
         return r
 
     def __getitem__(self, key: str) -> VT:
-        if self.__d == None:
+        if self.__d is None:
             d = self.__load()
         else:
             d = self.__d
@@ -91,7 +91,7 @@ class JsonFileUpdater(Generic[VT]):
         return self.__get_dict(key, d)[keys[-1]]
     
     def __setitem__(self, key: str, value: VT) -> None:
-        if self.__d == None:
+        if self.__d is None:
             d = self.__load()
             
             keys = key.split(' / ')
@@ -103,8 +103,6 @@ class JsonFileUpdater(Generic[VT]):
             
             d2 = self.__get_dict(key, d)
             d2[keys[-1]] = value
-            
-            self.__write(d)
         else:
             keys = key.split(' / ')
             
