@@ -71,7 +71,7 @@ class JsonFileUpdater(Generic[VT]):
                 f.write(d)
 
     def __get_dict(self, path: str, __dict: dict[str, Any]) -> dict[str, Any]:
-        if not ' / ' in path:
+        if ' / ' not in path:
             return __dict
         keys = path.split(' / ')[:-1]
 
