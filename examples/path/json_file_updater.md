@@ -76,7 +76,7 @@ print(j['hello / russian']) # eq. of j['hello']['russian']
 
 ## Create or edit items
 
-How with getting items, you can just use `JsonFileUpdater` how python dictionary.
+As with getting items, you can just use `JsonFileUpdater` how python dictionary.
 ```py
 with JsonFileUpdater('test.json') as j:
     j['testing_something'] = 'successfully'
