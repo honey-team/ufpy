@@ -48,9 +48,15 @@ class JsonFileUpdater(Generic[VT]):
 
         return loads(d)
     
-    def __write(self, d: dict[str, VT]) -> None:
+    def write(self, dictionary: dict[str, VT]) -> None:
+        """
+        Writes dictionary to file/stream/BytesIO
+
+        Arguments:
+            dictionary: Dictionary to write
+        """
         d = dumps(
-            d,
+            dictionary,
             ensure_ascii=False,
             indent=self.indent
         )
@@ -107,7 +113,7 @@ class JsonFileUpdater(Generic[VT]):
         return self
     
     def __exit__(self, exception_type, exception_value, traceback) -> None:
-        self.__write(self.__d)
+        self.write(self.__d)
         self.__d = None
     
     def __repr__(self) -> str:
