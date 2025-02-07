@@ -75,10 +75,12 @@ class JsonFileUpdater(Generic[VT]):
             return __dict
         keys = path.split(' / ')[:-1]
 
-        r = __dict
-        for i in keys:
-            r = r[i]
-        return r
+        current = __dict
+        for key in keys:
+            if not isinstance(current[key], dict):
+                raise TypeError(f"Path component '{key}' exists but is not a dictionary")
+            current = current[key]
+        return current
 
     def __getitem__(self, key: str) -> VT:
         if self.__d is None:
