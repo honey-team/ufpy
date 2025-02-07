@@ -82,7 +82,7 @@ with JsonFileUpdater('test.json') as j:
     j['testing_something'] = 'successfully'
 ```
 
-How you will get this `test.json` file:
+Now you will get this `test.json` file:
 ```json
 {
   "hello": {
