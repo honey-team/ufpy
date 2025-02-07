@@ -71,7 +71,7 @@ Also for items of dictionaries which is in items of json dictionary you can use 
 
 For example:
 ```py
-print(j['hello / russian']) # eq. of j['hello']['russian']
+print(j['hello / russian']) # equivalent to j['hello']['russian']
 ```
 
 ## Create or edit items
