@@ -38,19 +38,15 @@ class JsonFileUpdater(Generic[VT]):
                 f.write('{}')
     
     def __load(self) -> dict[str, VT]:
-        if self.stream:
-            if isinstance(self.stream, BytesIO):
-                d = self.stream.getvalue().decode('utf-8')
-            elif not self.stream.read():
-                return {}
-            else:
-                d = self.stream.read()
-        else:
+        if self.path:
             with open(self.path, encoding='utf-8') as f:
                 d = f.read()
-        if isinstance(d, bytes): d = d.decode('utf-8')
+        elif isinstance(self.stream, BytesIO):
+            d = self.stream.getvalue().decode('utf-8')
+        else:
+            d = self.stream.read()  # type: ignore[union-attr]
 
-        return loads(d) if d else {}
+        return loads(d)
     
     def __write(self, d: dict[str, VT]) -> None:
         d = dumps(
