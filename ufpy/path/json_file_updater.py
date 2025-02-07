@@ -124,7 +124,7 @@ class JsonFileUpdater(Generic[VT]):
         self.__d = None
     
     def __repr__(self) -> str:
-        if self.__d == None:
+        if self.__d is None:
             return dumps(
                 self.__load(),
                 ensure_ascii=False,
