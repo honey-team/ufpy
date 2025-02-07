@@ -50,10 +50,7 @@ class JsonFileUpdater(Generic[VT]):
                 d = f.read()
         if isinstance(d, bytes): d = d.decode('utf-8')
 
-        if d:
-            return loads(d)
-        else:
-            return {}
+        return loads(d) if d else {}
     
     def __write(self, d: dict[str, VT]) -> None:
         d = dumps(
