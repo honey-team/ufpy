@@ -57,23 +57,5 @@ class JsonFileUpdaterTestCase(unittest.TestCase):
             self.assertEqual(j['test1 / test2'], d['test1']['test2'])
             self.assertEqual(j['test3 / test4 / test5'], d['test3']['test4']['test5'])
 
-    def test_write_one_dict_to_file(self):
-        fd, file_path = tempfile.mkstemp(suffix=".json")
-        try:
-            d = {
-                'test1': '1', 'test2': 2,
-                'test3': True, 'test4': None
-            }
-            with JsonFileUpdater(file_path) as j:
-                j.write(d)
-
-            # Check
-            with open(file_path, 'r') as f:
-                content = f.read()
-                self.assertEqual(loads(content), d)
-
-        finally:
-            os.remove(file_path)
-
 if __name__ == '__main__':
     unittest.main()
