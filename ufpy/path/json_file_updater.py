@@ -46,7 +46,7 @@ class JsonFileUpdater(Generic[VT]):
         else:
             d = self.stream.read()  # type: ignore[union-attr]
 
-        return loads(d)
+        return loads(d) if d else {}
     
     def write(self, dictionary: dict[str, VT]) -> None:
         """
