@@ -9,6 +9,9 @@ __all__ = (
     'SupportsMul',
     'SupportsTrueDiv',
     'SupportsMathOperations',
+    'SupportsRead',
+    'SupportsWrite',
+    'ReadWriteIO'
 )
 
 from typing import Protocol, Generic, TypeVar
@@ -68,4 +71,17 @@ class SupportsMathOperations(
     SupportsTrueDiv[OT],
     Generic[OT]
 ):
+    ...
+
+# IO
+
+T = TypeVar('RT')
+
+class SupportsRead(Protocol[T]):
+    def read(self) -> T: ...
+
+class SupportsWrite(Protocol[T]):
+    def write(self, __data: T): ...
+
+class ReadWriteIO(SupportsRead[T], SupportsWrite[T]):
     ...
