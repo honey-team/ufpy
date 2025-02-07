@@ -90,28 +90,22 @@ class JsonFileUpdater(Generic[VT]):
         return self.__get_dict(key, d)[keys[-1]]
     
     def __setitem__(self, key: str, value: VT) -> None:
+        keys = key.split(' / ')
         if self.__d is None:
             d = self.__load()
-            
-            keys = key.split(' / ')
-            
             r = d
             for i in keys:
                 r.setdefault(i, {})
                 r = r[i]
-            
-            d2 = self.__get_dict(key, d)
-            d2[keys[-1]] = value
         else:
-            keys = key.split(' / ')
-            
             r = self.__d
             for i in keys:
                 r.setdefault(i, {})
                 r = r[i]
-            
-            d2 = self.__get_dict(key, self.__d)
-            d2[keys[-1]] = value
+            d = self.__d
+        d2 = self.__get_dict(key, d)
+        d2[keys[-1]] = value
+
     def __enter__(self) -> JsonFileUpdater:
         self.__d = self.__load()
         return self
