@@ -40,3 +40,7 @@ from ufpy.path import *
 # GitHub package
 __github_version__ = '0.1'
 from ufpy.github import *
+
+# Algebra package
+__algebra_version = '0.1'
+from ufpy.algebra import *

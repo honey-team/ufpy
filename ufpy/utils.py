@@ -2,9 +2,11 @@ __all__ = (
     'get_items_for_several_keys',
     'set_items_for_several_keys',
     'del_items_for_several_keys',
+    'withrepr'
 )
 
-from typing import TypeVar
+from typing import Any, Callable, TypeVar, Iterable
+import functools
 
 from ufpy.typ import SupportsGet, SupportsSetItem, SupportsDelItem, AnyCollection
 
@@ -31,3 +33,25 @@ def del_items_for_several_keys(o: SupportsDelItem[KT, VT], keys: AnyCollection[K
     for k in keys:
         del res[k]
     return res
+
+# Useful decorators
+
+class __reprwrapper:
+    def __init__(self, repr, func):
+        self._repr = repr
+        self._func = func
+        functools.update_wrapper(self, func)
+    def __call__(self, *args, **kw):
+        return self._func(*args, **kw)
+    def __repr__(self):
+        return self._repr(self._func)
+
+T = TypeVar('T', bound=Callable)
+
+def withrepr(f: Callable[[T], str]):
+    def _wrap(func: T):
+        return __reprwrapper(f, func)
+    return _wrap
+
+def is_iterable(o: object) -> bool:
+    return isinstance(o, Iterable)
