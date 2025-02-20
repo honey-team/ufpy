@@ -20,14 +20,12 @@ def get_items_for_several_keys(o: SupportsGet[KT, VT], keys: AnyCollection[KT], 
 def set_items_for_several_keys(
         o: SupportsSetItem[KT, VT], keys: AnyCollection[KT], values: AnyCollection[VT]
 ) -> SupportsSetItem[KT, VT]:
-    res = o
     for i, k in enumerate(keys):
-        res[k] = values[i]
-    return res
+        o[k] = values[i]
+    return o
 
 
 def del_items_for_several_keys(o: SupportsDelItem[KT, VT], keys: AnyCollection[KT]) -> SupportsDelItem[KT, VT]:
-    res = o
     for k in keys:
-        del res[k]
-    return res
+        del o[k]
+    return o
