@@ -7,8 +7,10 @@ __all__ = (
     'is_iterable',
     'avg',
     'mdn',
+    'mod',
 )
 
+from collections import Counter
 from typing import TypeVar, Iterable, overload, TYPE_CHECKING
 
 from ufpy.typ.protocols import SupportsSorted
@@ -86,4 +88,27 @@ def mdn(*items_or_iterables: SupportsSorted[T] | SupportsAvg) -> T | SupportsTru
         return l[len(l) // 2]
     return avg(l[len(l) // 2], l[len(l) // 2 - 1]) # Even lenght - avg(middle elements)
 
+@overload
+def mod(*items: T) -> T | Iterable[T]: ...
+@overload
+def mod(*iterables: Iterable[T]) -> T | Iterable[T]: ...
+@overload
+def mod(*items_and_iterables: T | Iterable[T]) -> T | Iterable[T]: ...
+def mod(*items_or_iterables: T | Iterable[T]) -> T | Iterable[T]:
+    """
+    Get mode of iterable or args
+    """
+    l = []
+    for i in items_or_iterables:
+        if is_iterable(i):
+            l += i
+        else:
+            l += [i]
+
+    counter = Counter(l)
+    ans = []
+    for k, v in counter.items():
+        if v == max(counter.values()):
+            ans.append(k)
+    return ans
 
