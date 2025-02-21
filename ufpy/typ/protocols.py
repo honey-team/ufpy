@@ -9,32 +9,41 @@ __all__ = (
     'SupportsMul',
     'SupportsTrueDiv',
     'SupportsMathOperations',
+    'SupportsLt',
+    'SupportsLe',
+    'SupportsEq',
+    'SupportsNe',
+    'SupportsGe',
+    'SupportsGt',
+    'SupportsCompare',
     'SupportsRead',
     'SupportsWrite',
-    'ReadWriteIO'
+    'ReadWriteIO',
+    'SupportsSorted',
 )
 
-from typing import Protocol, Generic, TypeVar
+from typing import Protocol, TypeVar, Iterable
 
 # Dicts/collections
+
 KT = TypeVar('KT')
 VT = TypeVar('VT')
 DV = TypeVar('DV')
 
 
-class SupportsGetItem(Protocol, Generic[KT, VT]):
+class SupportsGetItem(Protocol[KT, VT]):
     def __getitem__(self, key: KT) -> VT: ...
 
 
-class SupportsGet(Protocol, Generic[KT, VT]):
+class SupportsGet(Protocol[KT, VT]):
     def get(self, key: KT, default: DV) -> VT | DV: ...
 
 
-class SupportsSetItem(Protocol, Generic[KT, VT]):
+class SupportsSetItem(Protocol[KT, VT]):
     def __setitem__(self, key: KT, value: VT) -> None: ...
 
 
-class SupportsDelItem(Protocol, Generic[KT, VT]):
+class SupportsDelItem(Protocol[KT, VT]):
     def __delitem__(self, key: KT) -> None: ...
 
 
@@ -42,12 +51,12 @@ class LikeDict(
     SupportsGet[KT, VT],
     SupportsGetItem[KT, VT],
     SupportsSetItem[KT, VT],
-    SupportsDelItem[KT, VT],
-    Generic[KT, VT]
+    SupportsDelItem[KT, VT]
 ):
     ...
 
-# math operations
+# Math operations
+
 OT = TypeVar("OT")
 
 class SupportsAdd(Protocol[OT]):
@@ -68,14 +77,43 @@ class SupportsMathOperations(
     SupportsAdd[OT],
     SupportsSub[OT],
     SupportsMul[OT],
-    SupportsTrueDiv[OT],
-    Generic[OT]
+    SupportsTrueDiv[OT]
+):
+    ...
+
+# Compare
+
+class SupportsLt(Protocol[OT]):
+    def __lt__(self, other: OT) -> bool: ...
+
+class SupportsLe(Protocol[OT]):
+    def __le__(self, other: OT) -> bool: ...
+
+class SupportsEq(Protocol[OT]):
+    def __eq__(self, other: OT) -> bool: ...
+
+class SupportsNe(Protocol[OT]):
+    def __ne__(self, other: OT) -> bool: ...
+
+class SupportsGe(Protocol[OT]):
+    def __ge__(self, other: OT) -> bool: ...
+
+class SupportsGt(Protocol[OT]):
+    def __gt__(self, other: OT) -> bool: ...
+
+class SupportsCompare(
+    SupportsLt[OT],
+    SupportsLe[OT],
+    SupportsEq[OT],
+    SupportsNe[OT],
+    SupportsGe[OT],
+    SupportsGt[OT]
 ):
     ...
 
 # IO
 
-T = TypeVar('RT')
+T = TypeVar('T')
 
 class SupportsRead(Protocol[T]):
     def read(self) -> T: ...
@@ -85,3 +123,8 @@ class SupportsWrite(Protocol[T]):
 
 class ReadWriteIO(SupportsRead[T], SupportsWrite[T]):
     ...
+
+# Other
+
+class SupportsSorted(Protocol[T]):
+    def __sorted__(self) -> Iterable[T]: ...
