@@ -63,6 +63,9 @@ def avg(*items_or_iterables: SupportsAvg) -> SupportsTrueDiv[int | float]:
         if is_iterable(i): l += i
         else: l += [i]
 
+    if len(l) == 0:
+        raise ValueError("Please, give at least one argument. avg() can't find average value of empty iterable")
+
     return sum(l) / len(l)
 
 
