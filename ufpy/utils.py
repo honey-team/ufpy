@@ -54,13 +54,6 @@ def _flatten(*items_or_iterables: T | Iterable[T]) -> list[T]:
     return result
 
 
-@overload
-def avg(*items: SupportsTrueDiv[int]) -> SupportsTrueDiv[int | float] | T: ...
-@overload
-def avg(*iterables: Iterable[SupportsTrueDiv[int]]) -> SupportsTrueDiv[int | float] | T: ...
-@overload
-def avg(*items_and_iterables: SupportsTrueDiv[int] | Iterable[SupportsTrueDiv[int]])\
-        -> SupportsTrueDiv[int | float] | T: ...
 def avg(*items_or_iterables: SupportsAvg) -> SupportsTrueDiv[int | float]:
     """
     Get average value of iterable's or args's values
@@ -73,13 +66,7 @@ def avg(*items_or_iterables: SupportsAvg) -> SupportsTrueDiv[int | float]:
     return sum(l) / len(l)
 
 
-@overload
-def mdn(*items: SupportsCompare[SupportsTrueDiv[int]] | SupportsTrueDiv[int]) -> SupportsTrueDiv[int | float] | T: ...
-@overload
-def mdn(*iterables: Iterable[SupportsTrueDiv[int] | SupportsCompare[T]]) -> T | SupportsTrueDiv[int | float] | T: ...
-@overload
-def mdn(*items_and_iterables: SupportsCompare[T] | SupportsAvg) -> T | SupportsTrueDiv[int | float] | T: ...
-def mdn(*items_or_iterables: SupportsCompare[T] | SupportsAvg) -> T | SupportsTrueDiv[int | float] | T:
+def mdn(*items_or_iterables: SupportsCompare[T] | SupportsAvg) -> T | SupportsTrueDiv[int | float]:
     """
     Get median of iterable or args
     """
@@ -93,19 +80,10 @@ def mdn(*items_or_iterables: SupportsCompare[T] | SupportsAvg) -> T | SupportsTr
     return avg(l[len(l) // 2], l[len(l) // 2 - 1]) # Even length - avg(middle elements)
 
 
-@overload
-def mod(*items: T) -> T | Iterable[T]: ...
-@overload
-def mod(*iterables: Iterable[T]) -> T | Iterable[T]: ...
-@overload
-def mod(*items_and_iterables: T | Iterable[T]) -> T | Iterable[T]: ...
 def mod(*items_or_iterables: T | Iterable[T]) -> T | Iterable[T]:
     """
     Get mode of iterable or args
     """
     counter = Counter(_flatten(*items_or_iterables))
-    ans = []
-    for k, v in counter.items():
-        if v == max(counter.values()):
-            ans.append(k)
+    ans = [k for k, v in counter.items() if v == max(counter.values())]
     return ans[0] if len(ans) == 1 else ans
