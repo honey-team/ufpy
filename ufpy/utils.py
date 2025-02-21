@@ -110,5 +110,5 @@ def mod(*items_or_iterables: T | Iterable[T]) -> T | Iterable[T]:
     for k, v in counter.items():
         if v == max(counter.values()):
             ans.append(k)
-    return ans
+    return ans[0] if len(ans) == 1 else ans
 
