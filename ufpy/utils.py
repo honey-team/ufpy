@@ -104,8 +104,9 @@ def mod(*items_or_iterables: T | Iterable[T]) -> T | Iterable[T]:
     Get mode of iterable or args
     """
     counter = Counter(_flatten(*items_or_iterables))
+    max_freq = max(counter.values())
     ans = []
     for k, v in counter.items():
-        if v == max(counter.values()):
+        if v == max_freq:
             ans.append(k)
     return ans[0] if len(ans) == 1 else ans
