@@ -47,6 +47,13 @@ def is_iterable(o: object) -> bool:
     return isinstance(o, Iterable)
 
 
+def _flatten(*items_or_iterables: T | Iterable[T]) -> list[T]:
+    result = []
+    for item in items_or_iterables:
+        result += item if is_iterable(item) else [item]
+    return result
+
+
 @overload
 def avg(*items: SupportsTrueDiv[int]) -> SupportsTrueDiv[int | float] | T: ...
 @overload
@@ -58,10 +65,7 @@ def avg(*items_or_iterables: SupportsAvg) -> SupportsTrueDiv[int | float]:
     """
     Get average value of iterable's or args's values
     """
-    l = []
-    for i in items_or_iterables:
-        if is_iterable(i): l += i
-        else: l += [i]
+    l = _flatten(*items_or_iterables)
 
     if len(l) == 0:
         raise ValueError("Please, give at least one argument. avg() can't find average value of empty iterable")
@@ -72,24 +76,22 @@ def avg(*items_or_iterables: SupportsAvg) -> SupportsTrueDiv[int | float]:
 @overload
 def mdn(*items: SupportsCompare[SupportsTrueDiv[int]] | SupportsTrueDiv[int]) -> SupportsTrueDiv[int | float] | T: ...
 @overload
-def mdn(*iterables: Iterable[SupportsTrueDiv[int]] | SupportsSorted[T]) -> T | SupportsTrueDiv[int | float] | T: ...
+def mdn(*iterables: Iterable[SupportsTrueDiv[int] | SupportsCompare[T]]) -> T | SupportsTrueDiv[int | float] | T: ...
 @overload
-def mdn(*items_and_iterables: SupportsSorted[T] | SupportsAvg) -> T | SupportsTrueDiv[int | float] | T: ...
-def mdn(*items_or_iterables: SupportsSorted[T] | SupportsAvg) -> T | SupportsTrueDiv[int | float] | T:
+def mdn(*items_and_iterables: SupportsCompare[T] | SupportsAvg) -> T | SupportsTrueDiv[int | float] | T: ...
+def mdn(*items_or_iterables: SupportsCompare[T] | SupportsAvg) -> T | SupportsTrueDiv[int | float] | T:
     """
     Get median of iterable or args
     """
-    l = []
-    for i in items_or_iterables:
-        if is_iterable(i):
-            l += i
-        else:
-            l += [i]
-    l = sorted(l)
+    l = sorted(_flatten(*items_or_iterables))
 
-    if len(l) % 2 == 1: # Odd lenght - middle element
+    if len(l) == 0:
+        raise ValueError("Please, give at least one argument. mdn() can't find median of empty iterable")
+
+    if len(l) % 2 == 1: # Odd length - middle element
         return l[len(l) // 2]
-    return avg(l[len(l) // 2], l[len(l) // 2 - 1]) # Even lenght - avg(middle elements)
+    return avg(l[len(l) // 2], l[len(l) // 2 - 1]) # Even length - avg(middle elements)
+
 
 @overload
 def mod(*items: T) -> T | Iterable[T]: ...
@@ -101,17 +103,9 @@ def mod(*items_or_iterables: T | Iterable[T]) -> T | Iterable[T]:
     """
     Get mode of iterable or args
     """
-    l = []
-    for i in items_or_iterables:
-        if is_iterable(i):
-            l += i
-        else:
-            l += [i]
-
-    counter = Counter(l)
+    counter = Counter(_flatten(*items_or_iterables))
     ans = []
     for k, v in counter.items():
         if v == max(counter.values()):
             ans.append(k)
     return ans[0] if len(ans) == 1 else ans
-
