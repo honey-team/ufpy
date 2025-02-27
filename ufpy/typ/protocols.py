@@ -22,6 +22,8 @@ __all__ = (
     'SupportsSorted',
 )
 
+# pylint: disable=missing-class-docstring, too-few-public-methods, missing-function-docstring, too-many-ancestors
+
 from typing import Protocol, TypeVar, Iterable
 
 # Dicts/collections
