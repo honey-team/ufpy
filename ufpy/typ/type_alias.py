@@ -1,3 +1,7 @@
+"""
+Module with some useful type alias
+"""
+
 from typing import Never, Iterable
 
 from ufpy.typ.protocols import LikeDict, SupportsTrueDiv
@@ -15,6 +19,6 @@ type AnyDict[KT, VT] = dict[KT, VT] | LikeDict[KT, VT]
 
 type NumberLiteral = int | float
 
-type Empty[T] = T[Never]
+type Empty[T] = T[Never] # pylint: disable=unsubscriptable-object
 
 type SupportsAvg = SupportsTrueDiv[int] | Iterable[SupportsTrueDiv[int]]

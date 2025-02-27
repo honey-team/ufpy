@@ -6,21 +6,24 @@ from ufpy.cmp import cmp_generator
 from ufpy.math_op import r_generator, i_generator
 from ufpy.typ import AnyCollection, NumberLiteral, SupportsMul, SupportsTrueDiv, Empty
 
+# Marked for deletion in 0.5
+# pylint: disable=all
+
 __all__ = (
     "Stack",
 )
 
 T = TypeVar("T")
-T2 = TypeVar("T2")
+T2 = TypeVar("T2") # pylint: disable=invalid-name
 
-def convert_to_stack(other: Stack[T] | AnyCollection[T] | T) -> Stack[T]:
+def _convert_to_stack(other: Stack[T] | AnyCollection[T] | T) -> Stack[T]:
     if isinstance(other, Stack):
         return other
     if isinstance(other, (list, tuple)):
         return Stack(iterable=other)
     return Stack(other)
 
-def convert_to_list_for_mul_and_div(other: Stack[T] | AnyCollection[T] | T, __len: int = None) -> list[T]:
+def _convert_to_list_for_mul_and_div(other: Stack[T] | AnyCollection[T] | T, __len: int = None) -> list[T]:
     if isinstance(other, Stack):
         return other.elements
     if isinstance(other, (list, tuple)):
@@ -85,6 +88,9 @@ class Stack(Generic[T]):
         return Stack(iterable=self.__elements)
 
     def remove(self, *items: T) -> Stack[T]:
+        """
+        Remove elements from stack
+        """
         for i in items:
             self.__elements.remove(i)
         return Stack(iterable=self.__elements)
@@ -109,19 +115,19 @@ class Stack(Generic[T]):
 
     # math operations
     def __add__(self, other: Stack[T2] | AnyCollection[T2] | T2) -> Stack[T | T2]:
-        other = convert_to_stack(other)
+        other = _convert_to_stack(other)
         result = self.copy()
         return result.push(*other.elements)
 
     def __sub__(self, other: Stack[T] | AnyCollection[T] | T) -> Stack[T]:
-        other = convert_to_stack(other)
+        other = _convert_to_stack(other)
         result = self.copy()
         return result.remove(*other.elements)
 
     def __mul__(
         self: Stack[SupportsMul], other: Stack[NumberLiteral] | AnyCollection[NumberLiteral] | NumberLiteral
     ) -> Stack[SupportsMul]:
-        other = convert_to_list_for_mul_and_div(other, len(self))
+        other = _convert_to_list_for_mul_and_div(other, len(self))
 
         def mul(i: int, v: SupportsMul) -> SupportsMul:
             return v * other[i]
@@ -131,7 +137,7 @@ class Stack(Generic[T]):
     def __truediv__(
         self: Stack[SupportsTrueDiv], other: Stack[NumberLiteral] | AnyCollection[NumberLiteral] | NumberLiteral
     ) -> Stack[SupportsTrueDiv]:
-        other = convert_to_list_for_mul_and_div(other, len(self))
+        other = _convert_to_list_for_mul_and_div(other, len(self))
 
         def div(i: int, v: SupportsTrueDiv) -> SupportsTrueDiv:
             return v / other[i]

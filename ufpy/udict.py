@@ -1,3 +1,7 @@
+"""
+UDict is a class for simplyfing working with python dictionaries.
+"""
+
 from __future__ import annotations
 
 from typing import Generic, Iterator, overload, TypeVar, Callable
@@ -16,7 +20,7 @@ VT = TypeVar('VT')
 CDV = TypeVar('CDV')
 DV = TypeVar('DV')
 
-class _ClassDefault:
+class _ClassDefault: # pylint: disable=too-few-public-methods
     ...
 
 @cmp_generator
@@ -42,17 +46,18 @@ class UDict(Generic[KT, VT, CDV]):
             dictionary = dictionary.dictionary
         self.__dict = dictionary or kwargs
         self.__default = default
-    
+
     # dictionary
     @property
     def dictionary(self) -> dict[KT, VT]:
         """
         UDict's dictionary. A regular Python Dictionary.
         
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-dictionary-dictkt-vt
+        Online docs:
+        https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-dictionary-dictkt-vt
         """
         return self.__dict
-    
+
     @dictionary.setter
     def dictionary(self, value: AnyDict[KT, VT]):
         if isinstance(value, UDict):
@@ -79,7 +84,8 @@ class UDict(Generic[KT, VT, CDV]):
         """
         All dict's values
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-values-listvt
+        Online docs:
+        https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-values-listvt
         """
         return list(self.__dict.values())
 
@@ -93,24 +99,26 @@ class UDict(Generic[KT, VT, CDV]):
         """
         All dict's items
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-items-listtuplekt-vt
+        Online docs:
+        https://honey-team.ru/ufpy-website/main/useful_classes/udict/#property-settable-items-listtuplekt-vt
         """
         return list(zip(self.keys, self.values))
 
     @items.setter
     def items(self, value: AnyCollection[tuple[KT, VT] | list[KT | VT]]):
         self.__dict = dict(value)
-    
+
     # default
     @property
     def default(self) -> CDV:
         """
-        The value that will be returned when .get() function or the [] operator are called if the entered key is not in the UDict
+        The value that will be returned when .get() function or the [] operator are called
+        if the entered key is not in the UDict
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#property-settable-default-cdv
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#property-settable-default-cdv
         """
         return self.__default
-    
+
     @default.setter
     def default(self, value: CDV):
         self.__default = value
@@ -123,7 +131,8 @@ class UDict(Generic[KT, VT, CDV]):
         Args:
             func: First argument of function is key, second is value. Returns new value
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__call__func-callablekt-vt-vt-udictkt-vt-cdv
+        Online docs:
+        https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__call__func-callablekt-vt-vt-udictkt-vt-cdv
         """
         new_dict = self.__dict
         for k, v in self:
@@ -133,22 +142,22 @@ class UDict(Generic[KT, VT, CDV]):
     # reverse integers
     def __neg__(self) -> UDict[KT, VT, CDV]:
         return self(lambda k, v: -v)
-    
+
     # reverse
     def reverse(self) -> UDict[KT, VT, CDV]:
         """
         Reverses UDict and returns it.
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#reverse-udictkt-vt-cdv
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#reverse-udictkt-vt-cdv
         """
-        self.__dict = self.reversed().__dict
+        self.__dict = self.reversed().dictionary
         return self
 
     def reversed(self) -> UDict[KT, VT, CDV]:
         """
         Returns reversed UDict, but doesn't change it
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#reversed-udictkt-vt-cdv
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#reversed-udictkt-vt-cdv
         """
         keys, values = list(self.__dict.keys())[::-1], list(self.__dict.values())[::-1]
         return UDict(dict(list(zip(keys, values))))
@@ -164,16 +173,16 @@ class UDict(Generic[KT, VT, CDV]):
         """
         Sorts UDict and returns it
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#sort-udictkt-vt-cdv
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#sort-udictkt-vt-cdv
         """
-        self.__dict = self.sorted().__dict
+        self.__dict = self.sorted().dictionary
         return self
 
     def sorted(self) -> UDict[KT, VT, CDV]:
         """
         Returns sorted UDict, but doesn't change it
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#sorted-udictkt-vt-cdv
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#sorted-udictkt-vt-cdv
         """
         keys = sorted(list(self.__dict.keys()))
         values = get_items_for_several_keys(self.__dict, keys)
@@ -194,7 +203,7 @@ class UDict(Generic[KT, VT, CDV]):
             indexes = list(range(start, stop + 1, step))
             return [list(self.__dict.keys())[i - 1] for i in indexes]
         return [key]
-    
+
     def __getitem__(self, key: KT | int | slice) -> UDict[KT, VT, DV] | VT:
         keys = self.__get_keys_from_slice_or_int(key)
 
@@ -250,7 +259,7 @@ class UDict(Generic[KT, VT, CDV]):
         ValueError: You defined 0 or 2 or 3 params (from `key`, `index` and `value`)
         IndexError: index is bigger that length of dict
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#get
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#get
         """
         if key and index and value:
             raise ValueError(
@@ -288,24 +297,24 @@ class UDict(Generic[KT, VT, CDV]):
         """
         Implements `len(self)`
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__len__-int
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__len__-int
         """
         return len(self.__dict)
-    
+
     def __iter__(self) -> Iterator[tuple[KT, VT]]:
         """
         Implements `iter(self)`
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__iter__-iteratortuplekt-vt
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__iter__-iteratortuplekt-vt
         """
         return iter(self.__dict.items())
-    
+
     # Booleans
     def is_empty(self) -> bool:
         """
         Returns `True` if `len(self)` equals `0`
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#is_empty-bool
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#is_empty-bool
         """
         return len(self) == 0
 
@@ -313,7 +322,7 @@ class UDict(Generic[KT, VT, CDV]):
         """
         Returns `False` if `len(self)` equals `0`
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__bool__-bool
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__bool__-bool
         """
         return not self.is_empty()
 
@@ -321,19 +330,20 @@ class UDict(Generic[KT, VT, CDV]):
         """
         Returns `True` if `item` is in `UDict`
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__contains__item-tuplekt-vt-listkt-vt-kt-bool
+        Online docs:
+        https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__contains__item-tuplekt-vt-listkt-vt-kt-bool
         """
         if isinstance(item, (list, tuple)):
             k, v = item
             return k in self.__dict and self.__dict.get(k, self.__default) == v
         return item in self.__dict
-    
+
     # Transform to other types
     def __repr__(self) -> str:
         """
         Transforms `UDict` to `str`
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__repr__-str
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__repr__-str
         """
         return f'u{self.__dict}'
 
@@ -341,96 +351,102 @@ class UDict(Generic[KT, VT, CDV]):
         """
         Returns UDict's hash
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__hash__-int
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__hash__-int
         """
         return hash(self.__repr__())
-    
+
     # Comparing
     def __cmp__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> int:
         """
         Returns `len(self) - len(other)` (this method is used by `@cmp_generator`)
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__cmp__other-dictkt-vt-udictkt-vt-cdv-int
+        Online docs:
+        https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__cmp__other-dictkt-vt-udictkt-vt-cdv-int
         """
         return len(self) - len(other)
-    
+
     def __eq__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> bool:
         """
         Returns True if UDict.dictionary is equal to other UDict.dictionary / UDict.dictionary is equal to dict
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__eq__other-dictkt-vt-udictkt-vt-cdv-bool
+        Online docs:
+        https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__eq__other-dictkt-vt-udictkt-vt-cdv-bool
         """
         if isinstance(other, UDict):
             other = other.dictionary
         return self.__dict == other
-    
+
     # Math operations
     def __add__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> UDict[KT, VT, CDV]:
+        # pylint: disable=line-too-long
         """
         Combines 2 UDict / 1 UDict and 1 Dictionary
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__add__other-dictkt-vt-udictkt-vt-cdv-udictkt-vt-cdv
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__add__other-dictkt-vt-udictkt-vt-cdv-udictkt-vt-cdv
         """
         new_dict = self.__dict.copy()
-        
+
         if isinstance(other, UDict):
             other: dict[KT, VT] = other.dictionary
-        
+
         for k, v in other.items():
             new_dict[k] = v
         return UDict(new_dict)
-    
+
     def __sub__(self, other: dict[KT, VT] | UDict[KT, VT, CDV]) -> UDict[KT, VT, CDV]:
+        # pylint: disable=line-too-long
         """
         Subtracts from UDict another UDict / from UDict a regular dict
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__sub__other-dictkt-vt-udictkt-vt-cdv-udictkt-vt-cdv
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__sub__other-dictkt-vt-udictkt-vt-cdv-udictkt-vt-cdv
         """
         new_dict = self.__dict.copy()
         if isinstance(other, UDict):
             other: dict[KT, VT] = other.dictionary
-        
+
         for k, v in other.items():
             if new_dict.get(k) == v:
                 del new_dict[k]
         return UDict(new_dict)
-    
+
     def __mul__(
             self, other: dict[KT, float | int] | UDict[KT, float | int, DV] | float | int
     ) -> UDict[KT, VT, CDV]:
         """
         Multiplies each value by another value with the same key or all values by integer or float number
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__mul__other-dictkt-float-int-udictkt-float-int-dv-float-int-udictkt-supportsmul-cdv
+        Online docs:
+        https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__mul__other-dictkt-float-int-udictkt-float-int-dv-float-int-udictkt-supportsmul-cdv
         """
         new_dict = self.__dict.copy()
-        
+
         if isinstance(other, UDict):
             other: dict[KT, VT] = other.dictionary
         if isinstance(other, (int, float)):
-            other = dict([(k, other) for k in new_dict.keys()])
-        
+            other = {k: other for k in new_dict.keys()}
+
         for k, v in other.items():
             new_dict[k] *= v
-        
+
         return UDict(new_dict)
 
     def __truediv__(
             self, other: dict[KT, float | int] | UDict[KT, float | int, DV] | float | int
     ) -> UDict[KT, VT, CDV]:
+        # pylint: disable=line-too-long
         """
         Divides each value by another value with the same key or all values by integer or float number
 
-        Online docs: https://honey-team.github.io/ufpy-website/main/useful_classes/udict/#__truediv__other-dictkt-float-int-udictkt-float-int-dv-float-int-udictkt-supportstruediv-cdv
+        Online docs: https://honey-team.ru/ufpy-website/main/useful_classes/udict/#__truediv__other-dictkt-float-int-udictkt-float-int-dv-float-int-udictkt-supportstruediv-cdv
         """
         new_dict = self.__dict.copy()
-        
+
         if isinstance(other, UDict):
             other: dict[KT, VT] = other.dictionary
         if isinstance(other, (int, float)):
-            other = dict([(k, other) for k in new_dict.keys()])
-        
+            other = {k: other for k in new_dict.keys()}
+
         for k, v in other.items():
             new_dict[k] /= v
-        
+
         return UDict(new_dict)

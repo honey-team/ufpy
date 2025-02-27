@@ -1,3 +1,7 @@
+"""
+Module with generators of math operations magic methods (assigment and reverse) using basic ones
+"""
+
 __all__ = (
     'i_generator',
     'r_generator',
@@ -9,6 +13,10 @@ from typing import Type, TypeVar
 T = TypeVar('T')
 
 def i_generator(t: Type[T]) -> Type[T]:
+    """
+    Generate assignment magic methods using basic ones
+    """
+    # pylint: disable=too-many-branches
     if '__add__' in t.__dict__:
         t.__iadd__ = t.__add__
     if '__sub__' in t.__dict__:
@@ -35,10 +43,13 @@ def i_generator(t: Type[T]) -> Type[T]:
         t.__ior__ = t.__or__
     if '__xor__' in t.__dict__:
         t.__ixor__ = t.__xor__
-    
     return t
 
 def r_generator(t: Type[T]) -> Type[T]:
+    """
+    Generate reverse magic methods using basic ones
+    """
+    # pylint: disable=too-many-branches
     if '__add__' in t.__dict__:
         t.__radd__ = t.__add__
     if '__sub__' in t.__dict__:
@@ -65,5 +76,4 @@ def r_generator(t: Type[T]) -> Type[T]:
         t.__ror__ = t.__or__
     if '__xor__' in t.__dict__:
         t.__rxor__ = t.__xor__
-
     return t

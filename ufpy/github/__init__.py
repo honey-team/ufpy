@@ -1,3 +1,10 @@
+"""
+Library for simplifying working with GitHub.
+
+Key features:
+- Download repositories, files, folders from GitHub public repositories.
+"""
+
 # Download
 import ufpy.github.download
 from ufpy.github.download import UGithubDownloader
