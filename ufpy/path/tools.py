@@ -5,6 +5,9 @@ __all__ = (
 import os
 
 def number_of_files_with_extensions(path, extension) -> int:
+    """
+    Count number of files with specified extension in specified path.
+    """
     r = 0
     for p in os.listdir(path):
         if os.path.isdir(f'{path}/{p}'):
