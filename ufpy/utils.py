@@ -1,3 +1,7 @@
+"""
+Some useful utils
+"""
+
 from __future__ import annotations
 
 __all__ = (
@@ -16,6 +20,7 @@ from operator import mul as op_mul
 from collections import Counter
 from typing import TypeVar, Iterable, TYPE_CHECKING
 
+
 if TYPE_CHECKING:
     from ufpy import SupportsTrueDiv, SupportsCompare
     from ufpy.typ import SupportsGet, SupportsSetItem, SupportsDelItem, AnyCollection, SupportsAvg
@@ -30,24 +35,36 @@ def mul(iterable: Iterable[VT]) -> VT:
     return reduce(op_mul, iterable, 1)
 
 def get_items_for_several_keys(o: SupportsGet[KT, VT], keys: AnyCollection[KT], default: DV = None) -> list[VT | DV]:
+    """
+    Get items for several keys. You can also specify default value if key is missing
+    """
     return [o.get(k, default) for k in keys]
 
 
 def set_items_for_several_keys(
         o: SupportsSetItem[KT, VT], keys: AnyCollection[KT], values: AnyCollection[VT]
 ) -> SupportsSetItem[KT, VT]:
-    for i, k in enumerate(keys):
-        o[k] = values[i]
+    """
+    Set items for several keys
+    """
+    for k, v in zip(keys, values):
+        o[k] = v
     return o
 
 
 def del_items_for_several_keys(o: SupportsDelItem[KT, VT], keys: AnyCollection[KT]) -> SupportsDelItem[KT, VT]:
+    """
+    Delete items for several keys
+    """
     for k in keys:
         del o[k]
     return o
 
 
 def is_iterable(o: object) -> bool:
+    """
+    Check that object is iterable
+    """
     return isinstance(o, Iterable)
 
 

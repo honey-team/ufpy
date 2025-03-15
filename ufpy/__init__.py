@@ -1,8 +1,24 @@
+"""
+Library with some useful features like classes, functions and variables.
+
+Online docs: https://honey-team.ru/ufpy-website
+"""
+
+from ufpy.cmp import *
+from ufpy.math_op import *
+from ufpy.udict import *
+from ufpy.utils import *
+from ufpy.typ import *
+from ufpy.ustl import *
+from ufpy.path import *
+from ufpy.github import *
+
 # Deprecated
 def __deprecated(deprecated_name: str, x, start_version: str, end_version: str):
     """This is a decorator which can be used to mark functions
     as deprecated. It will result in a warning being emitted
     when the function is used."""
+    # pylint: disable=import-outside-toplevel
     from functools import wraps
     from warnings import warn, simplefilter
 
@@ -17,20 +33,7 @@ def __deprecated(deprecated_name: str, x, start_version: str, end_version: str):
         return x(*args, **kwargs)
     return new_func
 
-
-__version__ = '0.2.1.1'
-from ufpy.cmp import *
-from ufpy.math_op import *
-from ufpy.udict import *
-from ufpy.utils import *
-
-# Typing package
-__typ_version__ = '0.2'
-from ufpy.typ import *
-
-# Ustl package
-__ustl_version__ = '0.1'
-from ufpy.ustl import *
+Stack = __deprecated("Stack", Stack, '0.3', '0.5')
 UStack = __deprecated("UStack", Stack, '0.2', '0.5')
 
 # Path package
