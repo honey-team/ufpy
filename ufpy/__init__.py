@@ -25,7 +25,7 @@ from ufpy.udict import *
 from ufpy.utils import *
 
 # Typing package
-__typ_version__ = '0.1'
+__typ_version__ = '0.2'
 from ufpy.typ import *
 
 # Ustl package
