@@ -41,7 +41,7 @@ def cmp_generator(t: Type[T]) -> Type[T]:
     Online docs: soon!
     """
 
-    if not '__eq__' in t.__dict__:
+    if  '__eq__' not in t.__dict__:
         t.__eq__ = lambda self, x: t.__cmp__(self, x) == 0
     if not '__ne__' in t.__dict__:
         t.__ne__ = lambda self, x: t.__cmp__(self, x) != 0
