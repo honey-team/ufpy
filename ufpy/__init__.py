@@ -35,3 +35,15 @@ def __deprecated(deprecated_name: str, x, start_version: str, end_version: str):
 
 Stack = __deprecated("Stack", Stack, '0.3', '0.5')
 UStack = __deprecated("UStack", Stack, '0.2', '0.5')
+
+# Path package
+__path_version__ = '0.2'
+from ufpy.path import *
+
+# GitHub package
+__github_version__ = '0.1'
+from ufpy.github import *
+
+# Algebra package
+__algebra_version__ = '0.1'
+from ufpy.algebra import *
