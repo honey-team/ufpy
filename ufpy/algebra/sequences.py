@@ -138,7 +138,6 @@ class FunctionSequence(Generic[VT, KT]):
 
 
 class ArithmeticProgression(FunctionSequence[VT, KT], name_of_elements='a'):
-
     @property
     def d(self) -> KT:
         return self.k
@@ -151,8 +150,6 @@ class ArithmeticProgression(FunctionSequence[VT, KT], name_of_elements='a'):
         super().__init__(f, k_func, d, **kwargs)
 
 class GeometricProgression(FunctionSequence[VT, KT], name_of_elements='b'):
-
-
     @property
     def q(self) -> KT:
         return self.k
