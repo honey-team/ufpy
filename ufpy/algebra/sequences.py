@@ -47,7 +47,7 @@ class FunctionSequence(Generic[VT, KT]):
 
         if k:
             self.k = self.__process_float(k)
-            if len(el) >= 1:
+            if el:
                 i1, v1 = el[0]
                 self.first = self.__process_float(self.ref_func(1, self.k, v1, i1))
             return
@@ -71,11 +71,7 @@ class FunctionSequence(Generic[VT, KT]):
         if not end:
             end = start
 
-        r = []
-
-        for i in range(start1, end + 1):
-            r.append(self.__process_float(self.f(i)))
-
+        r = [self.__process_float(self.f(i)) for i in range(start1, end + 1)]
         return r if len(r) > 1 else r[0]
 
     def __getitem__(self, n: int | slice):
@@ -91,9 +87,7 @@ class FunctionSequence(Generic[VT, KT]):
         return self.k - other.k
 
     def __check_for_list(self, l_or_v: list | Any):
-        if isinstance(l_or_v, list):
-            return l_or_v
-        return [l_or_v]
+        return l_or_v if isinstance(l_or_v, list) else [l_or_v]
 
     @overload
     def s(self, n: int) -> VT:

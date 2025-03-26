@@ -35,10 +35,7 @@ class Fibonacci:
                 r.append(r[i - 1] + r[i - 2])
 
         # Return result
-        if start == end:
-            return r[-1]
-        else:
-            return r[start - 1:]
+        return r[-1] if start == end else r[start - 1:]
 
     def __getitem__(self, n: int | slice):
         if isinstance(n, slice):
@@ -55,9 +52,7 @@ class Fibonacci:
         return self
 
     def __check_for_list(self, l_or_v: list | Any):
-        if isinstance(l_or_v, list):
-            return l_or_v
-        return [l_or_v]
+        return l_or_v if isinstance(l_or_v, list) else [l_or_v]
 
     @overload
     def s(self, n: int) -> int: ...
