@@ -55,9 +55,7 @@ class Fibonacci:
         return self
 
     def __check_for_list(self, l_or_v: list | Any):
-        if isinstance(l_or_v, list):
-            return l_or_v
-        return [l_or_v]
+        return l_or_v if isinstance(l_or_v, list) else [l_or_v]
 
     @overload
     def s(self, n: int) -> int: ...
