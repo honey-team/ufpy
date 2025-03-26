@@ -47,7 +47,7 @@ class FunctionSequence(Generic[VT, KT]):
 
         if k:
             self.k = self.__process_float(k)
-            if len(el) >= 1:
+            if el:
                 i1, v1 = el[0]
                 self.first = self.__process_float(self.ref_func(1, self.k, v1, i1))
             return
