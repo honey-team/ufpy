@@ -35,10 +35,7 @@ class Fibonacci:
                 r.append(r[i - 1] + r[i - 2])
 
         # Return result
-        if start == end:
-            return r[-1]
-        else:
-            return r[start - 1:]
+        return r[-1] if start == end else r[start - 1:]
 
     def __getitem__(self, n: int | slice):
         if isinstance(n, slice):
