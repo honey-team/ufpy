@@ -21,7 +21,7 @@ class Fibonacci:
     def __call__(self, start: int, end: int) -> list[int]: ...
     def __call__(self, start_or_end: int, end: int = None):
         # Format input parameters
-        if not end:
+        if end is None:
             end = start_or_end
         start = start_or_end
 
