@@ -71,11 +71,7 @@ class FunctionSequence(Generic[VT, KT]):
         if not end:
             end = start
 
-        r = []
-
-        for i in range(start1, end + 1):
-            r.append(self.__process_float(self.f(i)))
-
+        r = [self.__process_float(self.f(i)) for i in range(start1, end + 1)]
         return r if len(r) > 1 else r[0]
 
     def __getitem__(self, n: int | slice):
