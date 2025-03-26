@@ -84,7 +84,10 @@ class FunctionSequence(Generic[VT, KT]):
             return self(start, end)
         return self(n)
 
-    def __cmp__(self, other: FunctionSequence[VT2, KT2]):
+    def __eq__(self, other: FunctionSequence[[VT2, KT2]]) -> bool:
+        return self.k == other.k and self[1] == other[1]
+
+    def __cmp__(self, other: FunctionSequence[VT2, KT2]) -> int:
         return self.k - other.k
 
     def __check_for_list(self, l_or_v: list | Any):

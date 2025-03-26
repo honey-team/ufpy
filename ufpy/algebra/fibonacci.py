@@ -9,6 +9,11 @@ from ufpy.utils import mul
 
 class Fibonacci:
     # 1, 1, 2, 3, 5, 8, ...
+    def __init__(self):
+        self.__n = 1
+
+    def reset(self):
+        self.__n = 1
 
     @overload
     def __call__(self, n: int) -> int: ...
@@ -40,6 +45,14 @@ class Fibonacci:
             start, end = x if (x := n.start) else 1, n.stop
             return self(start, end)
         return self(n)
+
+    def __next__(self):
+        item = self(self.__n)
+        self.__n += 1
+        return item
+
+    def __iter__(self):
+        return self
 
     def __check_for_list(self, l_or_v: list | Any):
         if isinstance(l_or_v, list):
