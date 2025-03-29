@@ -33,6 +33,8 @@ def __deprecated(deprecated_name: str, x, start_version: str, end_version: str):
         return x(*args, **kwargs)
     return new_func
 
+__version__ = '0.3.0.1'
+
 Stack = __deprecated("Stack", Stack, '0.3', '0.5')
 UStack = __deprecated("UStack", Stack, '0.2', '0.5')
 

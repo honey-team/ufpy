@@ -5,7 +5,11 @@ with open('README.md', 'r', encoding='utf-8') as mdf:
     long_description = mdf.read()
 
 install_requires = [
+    'setuptools',
+    'wheel',
     'requests>=2.31.0',
+    'ujson>=5.10',
+    'numpy',
 ]
 
 author = 'bleudev'
