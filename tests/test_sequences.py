@@ -1,5 +1,5 @@
 import unittest
-from ufpy import ArithmeticProgression, GeometricProgression, Fibonacci
+from ufpy import ArithmeticProgression, GeometricProgression, Fibonacci, ConflictError
 import numpy as np
 
 
@@ -45,7 +45,7 @@ class ArithmeticProgressionTestCase(unittest.TestCase):
             ArithmeticProgression(d=1)
 
     def test_conflict_init(self):
-        with self.assertRaises(Exception):
+        with self.assertRaises(ConflictError):
             ArithmeticProgression(a1=1, a2=3, d=1)
 
 class GeometricProgressionTestCase(unittest.TestCase):
@@ -74,6 +74,23 @@ class GeometricProgressionTestCase(unittest.TestCase):
                 l = b[m:n]
                 if not isinstance(l, list): l = [l]
                 self.assertEqual(b.p(m, n), np.prod(l))
+
+    def test_zero_and_negative_indices(self):
+        a = GeometricProgression(b1=1, q=2)
+        self.assertEqual(a[0], 2**(-1))
+        self.assertEqual(a[-1], 2**(-2))
+
+    def test_missing_b1_only(self):
+        with self.assertRaises(ValueError):
+            GeometricProgression(b1=1)
+
+    def test_missing_q_only(self):
+        with self.assertRaises(ValueError):
+            GeometricProgression(q=1)
+
+    def test_conflict_init(self):
+        with self.assertRaises(ConflictError):
+            GeometricProgression(b1=1, b2=3, q=2)
 
 
 class FibonacciTestCase(unittest.TestCase):

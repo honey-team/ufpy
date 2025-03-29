@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 __all__ = (
+    'ConflictError',
     'FunctionSequence',
     'ArithmeticProgression',
     'GeometricProgression'
@@ -18,6 +19,10 @@ KT = TypeVar('KT', int, float, int | float)
 VT2 = TypeVar('VT2', int, float, int | float)
 KT2 = TypeVar('KT2', int, float, int | float)
 
+
+class ConflictError(Exception):
+    def __init__(self, msg: str):
+        super().__init__(msg)
 
 @cmp_generator
 class FunctionSequence(Generic[VT, KT]):
@@ -50,7 +55,13 @@ class FunctionSequence(Generic[VT, KT]):
             if el:
                 i1, v1 = el[0]
                 self.first = self.__process_float(self.ref_func(1, self.k, v1, i1))
-            return
+
+                # Check all elements
+                for i, v in el:
+                    if self(i) != v:
+                        raise ConflictError(f"{self(i)} (f[{i}]) != {v} (provided in __init__)")
+                return
+            raise ValueError("__init__ got only k. Please provide any element of progression")
         if len(el) >= 2:
             (i1, v1), (i2, v2) = el[0], el[1]
             self.k = self.__process_float(self.__k_func(v1, v2, i1, i2))
