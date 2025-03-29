@@ -5,6 +5,7 @@ Some useful utils
 from __future__ import annotations
 
 __all__ = (
+    'mul',
     'get_items_for_several_keys',
     'set_items_for_several_keys',
     'del_items_for_several_keys',
@@ -14,6 +15,8 @@ __all__ = (
     'mod',
 )
 
+from functools import reduce
+from operator import mul as op_mul
 from collections import Counter
 from typing import TypeVar, Iterable, TYPE_CHECKING
 
@@ -27,6 +30,9 @@ VT = TypeVar('VT')
 DV = TypeVar('DV')
 T = TypeVar('T')
 
+
+def mul(iterable: Iterable[VT]) -> VT:
+    return reduce(op_mul, iterable, 1)
 
 def get_items_for_several_keys(o: SupportsGet[KT, VT], keys: AnyCollection[KT], default: DV = None) -> list[VT | DV]:
     """
