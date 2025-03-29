@@ -6,8 +6,8 @@ __all__ = (
     'GeometricProgression'
 )
 
-from typing import Callable, TypeVar, Generic, overload, Any
-from abc import ABC, abstractmethod
+from typing import Callable, Optional, TypeVar, Generic, overload, Any
+import numpy as np
 
 from ufpy.utils import mul
 from ufpy.cmp import cmp_generator
@@ -38,7 +38,7 @@ class FunctionSequence(Generic[VT, KT]):
         super().__init_subclass__(**kwargs)
         cls.__name_of_elements = name_of_elements
 
-    def __init__(self, f: Callable[[int, KT, VT, int], VT], k_func: Callable[[VT, VT, int, int], KT], k: KT = None, **kwargs: VT):
+    def __init__(self, f: Callable[[int, KT, VT, int], VT], k_func: Callable[[VT, VT, int, int], KT], k: Optional[KT] = None, **kwargs: VT):
         self.ref_func = f
         self.__k_func = k_func
         self.f = lambda n: self.ref_func(n, self.k, self.first, 1)
@@ -80,10 +80,10 @@ class FunctionSequence(Generic[VT, KT]):
             return self(start, end)
         return self(n)
 
-    def __eq__(self, other: FunctionSequence[[VT2, KT2]]) -> bool:
+    def __eq__(self, other: FunctionSequence[VT2, KT2]) -> bool:
         return self.k == other.k and self[1] == other[1]
 
-    def __cmp__(self, other: FunctionSequence[VT2, KT2]) -> int:
+    def __cmp__(self, other: FunctionSequence[VT2, KT2]) -> int | float:
         return self.k - other.k
 
     def __check_for_list(self, l_or_v: list | Any):
@@ -131,7 +131,7 @@ class FunctionSequence(Generic[VT, KT]):
         """
         if end is None:
             start, end = 1, start
-        return mul(self.__check_for_list(self(start, end)))
+        return np.prod(self.__check_for_list(self(start, end)))
 
 
 class ArithmeticProgression(FunctionSequence[VT, KT], name_of_elements='a'):
@@ -157,3 +157,4 @@ class GeometricProgression(FunctionSequence[VT, KT], name_of_elements='b'):
         def k_func(a_m: VT, a_n: VT, m: int, n: int) -> KT:
             return (a_n / a_m) ** (1 / (n - m))
         super().__init__(f, k_func, q, **kwargs)
+

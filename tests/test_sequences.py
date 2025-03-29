@@ -9,6 +9,7 @@ class ArithmeticProgressionTestCase(unittest.TestCase):
         b = ArithmeticProgression(a1=1, a2=2)
         self.assertEqual(a, b)
 
+
     def test_n(self):
         a = ArithmeticProgression(a1=1, d=10)
         for n in range(1, 11):
@@ -29,6 +30,23 @@ class ArithmeticProgressionTestCase(unittest.TestCase):
                 l = a[m:n]
                 if not isinstance(l, list): l = [l]
                 self.assertEqual(a.p(m, n), np.prod(l))
+
+    def test_zero_and_negative_indices(self):
+        a = ArithmeticProgression(a1=1, d=10)
+        self.assertEqual(a[0], 1 - 10)
+        self.assertEqual(a[-1], 1 - 20)
+
+    def test_missing_a1_only(self):
+        with self.assertRaises(ValueError):
+            ArithmeticProgression(a1=1)
+
+    def test_missing_d_only(self):
+        with self.assertRaises(ValueError):
+            ArithmeticProgression(d=1)
+
+    def test_conflict_init(self):
+        with self.assertRaises(Exception):
+            ArithmeticProgression(a1=1, a2=3, d=1)
 
 class GeometricProgressionTestCase(unittest.TestCase):
     def test_init(self):
