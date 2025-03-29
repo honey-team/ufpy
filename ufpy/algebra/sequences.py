@@ -27,7 +27,7 @@ class FunctionSequence(Generic[VT, KT]):
 
         if name.startswith(self.__name_of_elements) and (x := name.replace(self.__name_of_elements, '')).isdigit():
             if int(x) <= 0:
-                raise Exception("'n' must be bigger that 0!")
+                raise ValueError("'n' must be bigger that 0!")
             return int(x), value
         return None
 
@@ -56,7 +56,7 @@ class FunctionSequence(Generic[VT, KT]):
             self.k = self.__process_float(self.__k_func(v1, v2, i1, i2))
             self.first = self.__process_float(self.ref_func(1, self.k, v1, i1))
             return
-        raise Exception("__init__ can't get k")
+        raise ValueError("__init__ can't get k")
 
     @overload
     def __call__(self, n: int) -> VT:
