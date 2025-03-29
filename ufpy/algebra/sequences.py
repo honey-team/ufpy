@@ -45,7 +45,7 @@ class FunctionSequence(Generic[VT, KT]):
 
         el = [x for i in kwargs.items() if (x := self.__resolve_item(i))]
 
-        if k:
+        if k is not None:
             self.k = self.__process_float(k)
             if el:
                 i1, v1 = el[0]
