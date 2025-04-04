@@ -12,6 +12,7 @@ from ufpy.typ import *
 from ufpy.ustl import *
 from ufpy.path import *
 from ufpy.github import *
+from ufpy.debug import *
 
 # Deprecated
 def __deprecated(deprecated_name: str, x, start_version: str, end_version: str):
